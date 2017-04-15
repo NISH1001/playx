@@ -1,20 +1,10 @@
 #!/usr/bin/env python3
 
+from youtube import YoutubeMetadata
+
 import requests
 from bs4 import BeautifulSoup
 
-class YoutubeMetadata:
-    def __init__self(self):
-        self.title = ""
-        self.url = ""
-        self.description = ""
-        self.duration = ""
-
-    def display(self):
-        print("title : ", self.title)
-        print("url : ", self.url)
-        print("description : ", self.description)
-        print("duration : ", self.duration)
 
 def search(query):
     base_url = "https://www.youtube.com/"
