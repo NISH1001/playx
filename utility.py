@@ -3,6 +3,11 @@
 import subprocess
 import sys
 import os
+import shutil
+import time
+
+import urllib.request
+import requests
 
 def exe(command):
     command = command.strip()
@@ -18,6 +23,30 @@ def run_cvlc(stream_url):
     cli = "cvlc '{}'".format(stream_url)
     os.system(cli)
 
+def download(url, filename='test'):
+    # download the song here
+    print(url)
+    print("... download in progress... :D ")
+    try:
+        urllib.request.urlretrieve(url, filename+'.mp3')
+    except KeyboardInterrupt:
+        print(" -_- why y no wait for completion -_-")
+        return False
+    print("... downloaded 100%, perhaps ... :P")
+    return True
+
+def download2(url, filename="test"):
+    print(url)
+    data = requests.get(url).content
+    with open(filename+".mp3", "wb") as f:
+        f.write(data)
+
+def convert_to_mp3(filename):
+    print("Converting to mp3...Have patience...")
+    new_file = str(time.time()) + filename
+    cli = "ffmpeg -i {0} {1}".format(filename, new_file)
+    output, error = exe(cli)
+    shutil.move(new_file, filename)
 
 def main():
     pass
