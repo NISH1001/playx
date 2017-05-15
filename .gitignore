@@ -1,3 +1,11 @@
+#
+#
+# ignorance is bliss
+
+*.mp3
+*.mp4
+*.wav
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
