@@ -64,6 +64,9 @@ def remove_multiple_spaces(string):
 def replace_space(string, replacer):
     return re.sub(r"\s", replacer, string)
 
+def replace_character(string, character, replacer):
+    return re.sub(r"{}".format(character), replacer, string)
+
 def main():
     pass
 

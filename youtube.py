@@ -3,15 +3,15 @@
 """
     A module related to youtube.
 
-    Disclaimer : 
-        Following contents are injurious to your mind 
+    Disclaimer :
+        Following contents are injurious to your mind
         due to all those crawling shit
 """
 
 from bs4 import BeautifulSoup
 import requests
 
-from utility import exe, remove_multiple_spaces, replace_space
+from utility import exe, remove_multiple_spaces, replace_space, replace_character
 
 class YoutubeMetadata:
     SPACE = "#"
@@ -35,6 +35,11 @@ class YoutubeMetadata:
         print("url : ", self.url)
         print("description : ", self.description)
         print("duration : ", self.duration)
+
+    @staticmethod
+    def reverse_hash(song_name):
+        song_name = remove_multiple_spaces(song_name)
+        return replace_character(song_name, YoutubeMetadata.SPACE, " ")
 
 def get_youtube_streams(url):
     """
