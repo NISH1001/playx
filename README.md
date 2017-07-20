@@ -33,4 +33,17 @@ sudo apt-get install youtube-dl
 ------------
 
 ## Usage
-For now, the application is in development phase. Just run `main.py`. You can tinker with it if you like.
+For now, the application is in development phase. Just run `main.py` with song name as arguments. You can tinker with it if you like.  
+
+Example: 
+Play hotel california 
+
+```bash
+python3 main.py hotel california acousitc live
+```
+
+------------
+
+## TO-DO
+- caching of downloaded songs (if the song exists locally, play it right away else play from youtube)
+- speed up the whole **search->download->convert->play** process

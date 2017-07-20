@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+
+"""
+    A utility module for misc operations
+"""
+
 import subprocess
 import sys
 import os
@@ -20,6 +25,7 @@ def exe(command):
     return (output, error)
 
 def run_cvlc(stream_url):
+    print("Playing using vlc command line...")
     cli = "cvlc '{}'".format(stream_url)
     os.system(cli)
 
