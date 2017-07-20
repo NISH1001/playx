@@ -5,10 +5,11 @@
     A utility module for misc operations
 """
 
+import os
+import re
+import shutil
 import subprocess
 import sys
-import os
-import shutil
 import time
 
 import urllib.request
@@ -49,11 +50,19 @@ def download2(url, filename="test"):
 
 def convert_to_mp3(filename):
     print("Converting to mp3...Have patience...")
-    new_file = str(time.time()) + filename
+    directory = os.path.dirname(filename)
+    filename_base = os.path.basename(filename)
+    new_file = directory + "/" + str(time.time()) + filename_base
     cli = "ffmpeg -i {0} {1}".format(filename, new_file)
     #cli = "ffmpeg -i {0} -map 0:a:0 -b:a 96k {1}".format(filename, new_file)
     output, error = exe(cli)
     shutil.move(new_file, filename)
+
+def remove_multiple_spaces(string):
+    return re.sub(r'\s+', ' ', string)
+
+def replace_space(string, replacer):
+    return re.sub(r"\s", replacer, string)
 
 def main():
     pass

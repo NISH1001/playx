@@ -11,9 +11,10 @@
 from bs4 import BeautifulSoup
 import requests
 
-from utility import exe
+from utility import exe, remove_multiple_spaces, replace_space
 
 class YoutubeMetadata:
+    SPACE = "#"
     """
         A data store to store the information of a youtube video
     """
@@ -22,6 +23,12 @@ class YoutubeMetadata:
         self.url = ""
         self.description = ""
         self.duration = ""
+        self.hash = ""
+
+    def get_hash(self):
+        self.title = remove_multiple_spaces(self.title)
+        self.hash = replace_space(self.title, self.SPACE)
+        return self.hash
 
     def display(self):
         print("title : ", self.title)

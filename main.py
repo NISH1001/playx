@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from cache import Cache
 from youtube import get_youtube_streams, search_youtube
 from utility import download, download2, convert_to_mp3, run_cvlc
 
@@ -7,6 +8,7 @@ import sys
 
 def main():
     args = sys.argv[1:]
+    cache = Cache("~/.playx/")
     if len(args) > 0:
         song_name = ' '.join(args)
         videos = search_youtube(song_name)
@@ -15,8 +17,8 @@ def main():
         print(url)
         stream = get_youtube_streams(url)
         print(stream)
-        filename = "test"
-        download(stream['audio'], filename)
+        filename = cache.directory + "/" + video.get_hash()
+        download2(stream['audio'], filename)
         convert_to_mp3(filename + ".mp3")
         run_cvlc(filename + ".mp3")
 
