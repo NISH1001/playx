@@ -42,10 +42,10 @@ def download(url, filename='test'):
     print("... downloaded 100%, perhaps ... :P")
     return True
 
-def download2(url, filename="test"):
+def download2(url, filename="test.mp3"):
     print(url)
     data = requests.get(url).content
-    with open(filename+".mp3", "wb") as f:
+    with open(filename, "wb") as f:
         f.write(data)
 
 def convert_to_mp3(filename):
@@ -56,6 +56,7 @@ def convert_to_mp3(filename):
     cli = "ffmpeg -i {0} {1}".format(filename, new_file)
     #cli = "ffmpeg -i {0} -map 0:a:0 -b:a 96k {1}".format(filename, new_file)
     output, error = exe(cli)
+    print("Deleting the copy...")
     shutil.move(new_file, filename)
 
 def remove_multiple_spaces(string):

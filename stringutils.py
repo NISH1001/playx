@@ -6,7 +6,7 @@
 import difflib
 
 def get_closest_match(string_list, string):
-    closest_matches = difflib.get_close_matches(string, string_list, len(string_list), 0)
+    closest_matches = difflib.get_close_matches(string, string_list, len(string_list), 0.3)
     return closest_matches[0] if len(closest_matches)>0 else None
 
 def get_closest_match_ignorecase(string_list, string):
