@@ -42,8 +42,11 @@ Play hotel california
 python3 main.py hotel california acousitc live
 ```
 
+First, it tries to search locally. If not found, the song will be downloaded from youtube.
+
 ------------
 
 ## TO-DO
-- caching of downloaded songs (if the song exists locally, play it right away else play from youtube)
+- ~~caching of downloaded songs (if the song exists locally, play it right away else play from youtube)~~
 - speed up the whole **search->download->convert->play** process
+- stream/play while downloading the song

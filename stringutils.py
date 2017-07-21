@@ -16,6 +16,8 @@ def get_closest_match_ignorecase(string_list, string):
         This will ignore the cases
     """
     string_lower = string.lower().strip()
+    if not string_list:
+        return None
 
     # create a tuple of lowercased string and corresponding index
     # in the original list
