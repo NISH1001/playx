@@ -27,7 +27,7 @@ def exe(command):
 
 def run_cvlc(stream_url):
     print("Playing using vlc command line...")
-    cli = "cvlc '{}'".format(stream_url)
+    cli = 'cvlc "{}"'.format(stream_url)
     os.system(cli)
 
 def download(url, filename='test'):
