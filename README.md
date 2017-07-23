@@ -50,3 +50,4 @@ First, it tries to search locally. If not found, the song will be downloaded fro
 - ~~caching of downloaded songs (if the song exists locally, play it right away else play from youtube)~~
 - speed up the whole **search->download->convert->play** process
 - stream/play while downloading the song
+- play all the songs from the cache
