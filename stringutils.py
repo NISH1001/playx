@@ -4,6 +4,8 @@
 """
 
 import difflib
+import json
+import re
 
 def get_closest_match(string_list, string):
     closest_matches = difflib.get_close_matches(string, string_list, len(string_list), 0.3)
@@ -27,6 +29,21 @@ def get_closest_match_ignorecase(string_list, string):
         if string_matched == tup[0]:
             return string_list[tup[1]]
     return None
+
+def escape_characters(string):
+    return json.dumps(string)[1:-1]
+
+def escape_quotes(string):
+    return re.sub(r'"', '\\"', string)
+
+def remove_multiple_spaces(string):
+    return re.sub(r'\s+', ' ', string)
+
+def replace_space(string, replacer):
+    return re.sub(r"\s", replacer, string)
+
+def replace_character(string, character, replacer):
+    return re.sub(r"{}".format(character), replacer, string)
 
 def main():
     pass

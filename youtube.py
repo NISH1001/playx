@@ -10,8 +10,9 @@
 
 from bs4 import BeautifulSoup
 import requests
+from stringutils import remove_multiple_spaces, replace_space, replace_character, escape_quotes
 
-from utility import exe, remove_multiple_spaces, replace_space, replace_character
+from utility import exe 
 
 class YoutubeMetadata:
     SPACE = "#"
@@ -64,7 +65,8 @@ def search_youtube(query):
     """
     print("Searching youtube for the song : {}\nHave patience...".format(query))
     base_url = "https://www.youtube.com"
-    url = base_url + "/results?search_query=" + query
+    #url = base_url + "/results?search_query=" + query
+    url = base_url + "//results?sp=EgIQAVAU&q=" + query
     session = requests.session()
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")

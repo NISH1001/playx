@@ -30,6 +30,11 @@ def run_cvlc(stream_url):
     cli = 'cvlc "{}"'.format(stream_url)
     os.system(cli)
 
+def run_mplayer(stream_url):
+    print("Playing using mplayer...")
+    cli = 'mplayer "{}"'.format(stream_url)
+    os.system(cli)
+
 def download(url, filename='test'):
     # download the song here
     print(url)
@@ -43,7 +48,6 @@ def download(url, filename='test'):
     return True
 
 def download2(url, filename="test.mp3"):
-    print(url)
     data = requests.get(url).content
     with open(filename, "wb") as f:
         f.write(data)
@@ -58,15 +62,6 @@ def convert_to_mp3(filename):
     output, error = exe(cli)
     print("Deleting the copy...")
     shutil.move(new_file, filename)
-
-def remove_multiple_spaces(string):
-    return re.sub(r'\s+', ' ', string)
-
-def replace_space(string, replacer):
-    return re.sub(r"\s", replacer, string)
-
-def replace_character(string, character, replacer):
-    return re.sub(r"{}".format(character), replacer, string)
 
 def main():
     pass

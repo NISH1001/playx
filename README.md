@@ -7,7 +7,7 @@ Hopefully, it will be something that you can play anything from terminal.
 
 ## Dependencies
 It uses `python3` with libraries : `requests`, `beautifulsoup`. These can be installed using **pip** for python3.  
-The OS level dependencies are: `ffmpeg`, `vlc`, `youtube-dl`
+The OS level dependencies are: `ffmpeg`, `mplayer`, `youtube-dl`
 
 ```bash
 pip install requests beautifulsoup4
@@ -18,7 +18,7 @@ sudo apt install ffmpeg libav-tools x264 x265
 ```
 
 ```bash
-sudo apt-get install vlc
+sudo apt-get install mplayer 
 ```
 
 ```bash
