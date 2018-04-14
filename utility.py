@@ -35,6 +35,11 @@ def run_mplayer(stream_url):
     cli = 'mplayer "{}"'.format(stream_url)
     os.system(cli)
 
+def run_mpv(stream_url):
+    print("Playing using mpv...")
+    cli = 'mpv "{}"'.format(stream_url)
+    os.system(cli)
+
 def download(url, filename='test'):
     # download the song here
     print(url)

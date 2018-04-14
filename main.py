@@ -3,7 +3,7 @@
 from cache import Cache
 from songfinder import search_song, SongSource
 from stringutils import escape_characters
-from utility import download, download2, convert_to_mp3, run_cvlc, run_mplayer
+from utility import download, download2, convert_to_mp3, run_cvlc, run_mplayer, run_mpv
 from youtube import get_youtube_streams, search_youtube
 
 import sys
@@ -29,7 +29,7 @@ def main():
         else:
             return
         url = escape_characters(url)
-        run_mplayer(url)
+        run_mpv(url)
 
 
     else:
