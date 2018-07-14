@@ -25,52 +25,19 @@ def exe(command):
     error = error.decode('utf-8').strip()
     return (output, error)
 
-def run_cvlc(stream_url):
-    print("Playing using vlc command line...")
-    cli = 'cvlc "{}"'.format(stream_url)
+
+def run_mpd(url):
+    """Nana."""
+    cm1 = 'mpc pause'
+    cm2 = 'mpc clear'
+    cm3 = 'mpc insert "{}"'.format(url)
+    cm4 = 'mpc play'
+    cli = cm1 + '&&' + cm2 + '&&' + cm3 + '&&' + cm4
     os.system(cli)
 
-def run_mplayer(stream_url):
-    print("Playing using mplayer...")
-    cli = 'mplayer "{}"'.format(stream_url)
-    os.system(cli)
-
-def run_mpv(stream_url):
-    print("Playing using mpv...")
-    cli = 'mpv "{}"'.format(stream_url)
-    os.system(cli)
-
-def download(url, filename='test'):
-    # download the song here
-    print(url)
-    print("... download in progress... :D ")
-    try:
-        urllib.request.urlretrieve(url, filename+'.mp3')
-    except KeyboardInterrupt:
-        print(" -_- why y no wait for completion -_-")
-        return False
-    print("... downloaded 100%, perhaps ... :P")
-    return True
-
-def download2(url, filename="test.mp3"):
-    data = requests.get(url).content
-    with open(filename, "wb") as f:
-        f.write(data)
-
-def convert_to_mp3(filename):
-    print("Converting to mp3...Have patience...")
-    directory = os.path.dirname(filename)
-    filename_base = os.path.basename(filename)
-    new_file = directory + "/" + str(time.time()) + filename_base
-    cli = "ffmpeg -i {0} {1}".format(filename, new_file)
-    #cli = "ffmpeg -i {0} -map 0:a:0 -b:a 96k {1}".format(filename, new_file)
-    output, error = exe(cli)
-    print("Deleting the copy...")
-    shutil.move(new_file, filename)
 
 def main():
     pass
 
 if __name__ == "__main__":
     main()
-

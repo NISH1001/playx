@@ -10,15 +10,16 @@
 
 from bs4 import BeautifulSoup
 import requests
-from stringutils import remove_multiple_spaces, replace_space, replace_character, escape_quotes
+from stringutils import remove_multiple_spaces, replace_space, replace_character
 
-from utility import exe 
+from utility import exe
+
 
 class YoutubeMetadata:
+    """A data store to store the information of a youtube video."""
+
     SPACE = "#"
-    """
-        A data store to store the information of a youtube video
-    """
+
     def __init__self(self):
         self.title = ""
         self.url = ""
@@ -33,14 +34,13 @@ class YoutubeMetadata:
 
     def display(self):
         print("title : ", self.title)
-        print("url : ", self.url)
-        print("description : ", self.description)
         print("duration : ", self.duration)
 
     @staticmethod
     def reverse_hash(song_name):
         song_name = remove_multiple_spaces(song_name)
         return replace_character(song_name, YoutubeMetadata.SPACE, " ")
+
 
 def get_youtube_streams(url):
     """
@@ -58,6 +58,7 @@ def get_youtube_streams(url):
     url['video'] = stream_urls[0]
     print("Fetched stream urls...")
     return url
+
 
 def search_youtube(query):
     """
@@ -94,4 +95,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
