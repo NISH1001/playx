@@ -3,7 +3,7 @@
 """Definitions to interact with playlists."""
 
 from main import stream
-from utility import isON
+from utility import is_on
 from time import sleep
 
 
@@ -27,5 +27,5 @@ def read_playlist(file):
         type = check_type(song)
         stream(type, song)
         # show_menu()
-        while isON():
+        while is_on():
             sleep(0.5)

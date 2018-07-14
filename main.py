@@ -11,8 +11,8 @@ def parse():
     """Parse the arguments."""
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('SONG_NAME', help="Name of the song to download.",
-                        default=None, nargs='?', type=str)
+    parser.add_argument('--name', help="Name of the song to download.",
+                        default=None, nargs='+', type=str)
     parser.add_argument('--url',
                         help="Youtube song link.")
     parser.add_argument('-p', '--playlist',
@@ -21,15 +21,15 @@ def parse():
     return args
 
 
-def stream(type, value=None):
+def stream(search_type, value=None):
     """Start streaming the song."""
-    if type == 'name':
+    if search_type == 'name':
         song = value
         result = search_song(song)
         print("Song found in youtube...")
         result.display()
         stream = get_youtube_streams(result.url)
-    elif type == 'url':
+    elif search_type == 'url':
         stream = get_youtube_streams(value)
 
     run_mpd(stream['audio'])
@@ -44,7 +44,7 @@ def main():
     elif args.playlist is not None:
         playlist.read_playlist(args.playlist)
     else:
-        stream('name', args.SONG_NAME)
+        stream('name', ' '.join(args.name))
 
 
 if __name__ == "__main__":

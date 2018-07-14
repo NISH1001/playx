@@ -50,7 +50,7 @@ def get_status():
         return False
 
 
-def isON():
+def is_on():
     """Check if mpc is on."""
     status = get_status()
     if status == 'Playing' or status == 'Paused':
@@ -62,4 +62,4 @@ def isON():
 
 
 if __name__ == '__main__':
-    print(isON())
+    print(is_on())
