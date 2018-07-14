@@ -3,24 +3,38 @@
 from songfinder import search_song
 from utility import run_mpd
 from youtube import get_youtube_streams
-import vlc
+import argparse
 
 import sys
 
 
+def parse():
+    """Parse the arguments."""
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('SONG_NAME', help="Name of the song to download.",
+                        default=None, nargs='?', type=str)
+    parser.add_argument('--url',
+                        help="Youtube song link.")
+
+    args = parser.parse_args()
+    return args
+
+
 def main():
     """Search the song in youtube and stream through mpd."""
-    args = sys.argv[1:]
-    if len(args) > 0:
-        song = ' '.join(args)
+    args = parse()
+
+    if args.url is not None:
+        stream = get_youtube_streams(args.url)
+    else:
+        song = args.SONG_NAME
         result = search_song(song)
         print("Song found in youtube...")
         result.display()
-        stream = get_youtube_streams(result.url)
-        # input(stream['audio'])
-        run_mpd(stream['audio'])
-    else:
-        print("Lol! That is a retarded command just like me...")
+
+    # input(stream['audio'])
+    run_mpd(stream['audio'])
 
 
 if __name__ == "__main__":
