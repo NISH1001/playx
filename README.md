@@ -12,13 +12,9 @@ The OS level dependencies are: `mpd` and `mpc`
 ```sh
 pip install requests beautifulsoup4
 ```
+Get <a href = https://github.com/MusicPlayerDaemon/mpc>MPC</a> from here.
 
-```sh
-# Install mpc
-yaourt -S mpc
-```
-
-> Get <a href = https://github.com/MusicPlayerDaemon/MPD>MPD</a> from here.
+Get <a href = https://github.com/MusicPlayerDaemon/MPD>MPD</a> from here.
 
 > **Note**: These dependencies in linux can be installed in other variants.  
 > For *arch linux*, you can use **pacman** package manager accordingly.

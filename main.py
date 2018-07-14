@@ -3,6 +3,7 @@
 from songfinder import search_song
 from utility import run_mpd
 from youtube import get_youtube_streams
+import vlc
 
 import sys
 
