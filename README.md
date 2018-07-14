@@ -25,14 +25,13 @@ Get <a href = https://github.com/MusicPlayerDaemon/MPD>MPD</a> from here.
 For now, the application is in development phase.  
 
 ```sh
-usage: python main.py [-h] [--url URL] [-p PLAYLIST] [SONG_NAME]
-
-positional arguments:
-  SONG_NAME             Name of the song to download.
+usage: main.py [-h] [--name NAME [NAME ...]] [--url URL] [-p PLAYLIST]
 
 optional arguments:
   -h, --help            show this help message and exit
-  --url URL             Youtube song link.
+  --name NAME [NAME ...], -n NAME [NAME ...]
+                        Name of the song to download. Words separated by space
+  --url URL, -u URL     Youtube song link.
   -p PLAYLIST, --playlist PLAYLIST
                         Path to playlist
 

@@ -11,9 +11,10 @@ def parse():
     """Parse the arguments."""
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--name', help="Name of the song to download.",
+    parser.add_argument('--name', '-n',
+                        help="Name of the song to download. Words separated by space",
                         default=None, nargs='+', type=str)
-    parser.add_argument('--url',
+    parser.add_argument('--url', '-u',
                         help="Youtube song link.")
     parser.add_argument('-p', '--playlist',
                         help="Path to playlist")
