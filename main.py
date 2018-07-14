@@ -3,9 +3,8 @@
 from songfinder import search_song
 from utility import run_mpd
 from youtube import get_youtube_streams
+import playlist
 import argparse
-
-import sys
 
 
 def parse():
@@ -16,9 +15,24 @@ def parse():
                         default=None, nargs='?', type=str)
     parser.add_argument('--url',
                         help="Youtube song link.")
-
+    parser.add_argument('-p', '--playlist',
+                        help="Path to playlist")
     args = parser.parse_args()
     return args
+
+
+def stream(type, value=None):
+    """Start streaming the song."""
+    if type == 'name':
+        song = value
+        result = search_song(song)
+        print("Song found in youtube...")
+        result.display()
+        stream = get_youtube_streams(result.url)
+    elif type == 'url':
+        stream = get_youtube_streams(value)
+
+    run_mpd(stream['audio'])
 
 
 def main():
@@ -26,15 +40,11 @@ def main():
     args = parse()
 
     if args.url is not None:
-        stream = get_youtube_streams(args.url)
+        stream('url', args.url)
+    elif args.playlist is not None:
+        playlist.read_playlist(args.playlist)
     else:
-        song = args.SONG_NAME
-        result = search_song(song)
-        print("Song found in youtube...")
-        result.display()
-
-    # input(stream['audio'])
-    run_mpd(stream['audio'])
+        stream('name', args.SONG_NAME)
 
 
 if __name__ == "__main__":
