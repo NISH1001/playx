@@ -9,6 +9,7 @@ due to all those crawling shit
 from bs4 import BeautifulSoup
 import requests
 from stringutils import remove_multiple_spaces, replace_space, replace_character
+from cache import Cache
 
 from utility import exe
 
@@ -76,6 +77,16 @@ def search_youtube(query):
         youtube_metadata.duration = duration.get_text() if duration else "uknown duration"
         videos.append(youtube_metadata)
     return videos
+
+
+def grab_link(value):
+    """Return the audio link of the song."""
+    stream = get_youtube_streams(value)
+    # Start downloading
+    Cache.dw(value)
+    value = stream['audio']
+
+    return value
 
 
 def main():

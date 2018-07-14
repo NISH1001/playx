@@ -4,6 +4,7 @@
 import os
 import subprocess
 import time
+from shutil import copy
 
 
 def exe(command):
@@ -18,7 +19,7 @@ def exe(command):
     return (output, error)
 
 
-def run_mpd(url):
+def run_mpd(url, play_type):
     """Run the song in mpd."""
     # Pause mpd
     cm1 = 'mpc pause'
@@ -27,11 +28,47 @@ def run_mpd(url):
     cm2 = 'mpc clear'
     exe(cm2)
     # Insert the song
-    cm3 = 'mpc insert {}'.format(url)
+    if play_type == 'local':
+        # Move the song to mpd dir
+        move_to_mpd_dir(url)
+        os.chdir(find_mpd_dir())
+        cm3 = 'mpc insert {}'.format('temp.mp3')
+    else:
+        cm3 = 'mpc insert {}'.format(url)
     exe(cm3)
     # Play the song
     cm4 = 'mpc play'
     exe(cm4)
+    if play_type == 'local':
+        os.remove(os.path.join(find_mpd_dir(), 'temp.mp3'))
+
+
+def find_mpd_dir():
+    """Find the mpd music directory."""
+    home = os.path.expanduser('~')
+    path = os.path.join(home, '.config', 'mpd', 'mpd.conf')
+
+    stream = open(path, 'r')
+    while True:
+        nana = stream.readline()
+        if not nana:
+            break
+        if 'music_directory' in nana and '#' not in nana:
+            nana = nana[nana.index('"') + 1:-2]
+            nana = os.path.expanduser(nana)
+            return nana
+
+    return False
+
+
+def move_to_mpd_dir(name):
+    """Move the song to mpd_dir."""
+    mpd_dir = find_mpd_dir()
+
+    if not mpd_dir:
+        pass
+    else:
+        copy(name, os.path.join(mpd_dir, 'temp.mp3'))
 
 
 def toggle():
