@@ -22,14 +22,16 @@ def run_mpd(url):
     """Run the song in mpd."""
     # Pause mpd
     cm1 = 'mpc pause'
+    exe(cm1)
     # Clear the playlist
     cm2 = 'mpc clear'
+    exe(cm2)
     # Insert the song
-    cm3 = 'mpc insert "{}"'.format(url)
+    cm3 = 'mpc insert {}'.format(url)
+    exe(cm3)
     # Play the song
     cm4 = 'mpc play'
-    cli = cm1 + '&&' + cm2 + '&&' + cm3 + '&&' + cm4
-    os.system(cli)
+    exe(cm4)
 
 
 def toggle():
