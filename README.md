@@ -1,20 +1,28 @@
 # playx  
 
-Search and play any song from terminal.  
-Hopefully, it will be something that you can play anything from terminal.
+Search and play any song from terminal.
 
 ---------
 
-## Dependencies
-It uses `python3` with libraries : `requests`, `beautifulsoup`. These can be installed using **pip** for python3.  
-The OS level dependencies are: `mpd` and `mpc`
+## Requirements
+
+1. Python3.x
+
+2. MPD
+
+3. MPC
+
+
+## Installation
+
+ * Run following to install python modules
 
 ```sh
-pip install requests beautifulsoup4
+pip install -r requirements.txt
 ```
-Get <a href = https://github.com/MusicPlayerDaemon/mpc>MPC</a> from here.
+ * Get <a href = https://github.com/MusicPlayerDaemon/mpc>MPC</a> from here.
 
-Get <a href = https://github.com/MusicPlayerDaemon/MPD>MPD</a> from here.
+ * Get <a href = https://github.com/MusicPlayerDaemon/MPD>MPD</a> from here.
 
 > **Note**: These dependencies in linux can be installed in other variants.  
 > For *arch linux*, you can use **pacman** package manager accordingly.
