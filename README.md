@@ -22,13 +22,20 @@ Get <a href = https://github.com/MusicPlayerDaemon/MPD>MPD</a> from here.
 ------------
 
 ## Usage
-For now, the application is in development phase. Just run `main.py` with song name as arguments. You can tinker with it if you like.  
+For now, the application is in development phase.  
 
-Example:
-Play hotel california
+```sh
+usage: python main.py [-h] [--url URL] [-p PLAYLIST] [SONG_NAME]
 
-```bash
-python3 main.py hotel california acousitc live
+positional arguments:
+  SONG_NAME             Name of the song to download.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --url URL             Youtube song link.
+  -p PLAYLIST, --playlist PLAYLIST
+                        Path to playlist
+
 ```
 
 ------------
