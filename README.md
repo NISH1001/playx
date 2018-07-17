@@ -1,3 +1,7 @@
+<h1 align=center>
+<img src="logo/1024 bg.svg" width=100%>
+</h1>
+
 # playx  
 
 Search and play any song from terminal.  
