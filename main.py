@@ -3,7 +3,7 @@
 """Main function for playx."""
 
 from songfinder import search
-from utility import run_mpd
+from utility import direct_to_play
 from youtube import grab_link
 import playlist
 import argparse
@@ -46,7 +46,7 @@ def stream(search_type, value=None):
     if not is_local:
         result.display()
 
-    run_mpd(value, 'local' if is_local else None)
+    direct_to_play(value, 'local' if is_local else None)
 
 
 def main():

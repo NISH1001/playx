@@ -4,7 +4,7 @@
 import os
 import subprocess
 import time
-from shutil import copy
+import pyglet
 
 
 def exe(command):
@@ -19,8 +19,22 @@ def exe(command):
     return (output, error)
 
 
-def run_mpd(url, play_type):
+def direct_to_play(url, play_type):
+    """Direct the song to be played according to the play_type."""
+    if play_type == 'local':
+        # Pass to play with pyglet
+        run_pyglet(url)
+    else:
+        # Else run with mpd to stream
+        run_mpd(url)
+
+
+def run_mpd(url):
     """Run the song in mpd."""
+    # Check if mpd is on or not
+    if not is_on():
+        cm = 'mpd'
+        exe(cm)
     # Pause mpd
     cm1 = 'mpc pause'
     exe(cm1)
@@ -28,47 +42,37 @@ def run_mpd(url, play_type):
     cm2 = 'mpc clear'
     exe(cm2)
     # Insert the song
-    if play_type == 'local':
-        # Move the song to mpd dir
-        move_to_mpd_dir(url)
-        os.chdir(find_mpd_dir())
-        cm3 = 'mpc insert {}'.format('temp.mp3')
-    else:
-        cm3 = 'mpc insert {}'.format(url)
+    cm3 = 'mpc insert {}'.format(url)
     exe(cm3)
     # Play the song
     cm4 = 'mpc play'
     exe(cm4)
-    if play_type == 'local':
-        os.remove(os.path.join(find_mpd_dir(), 'temp.mp3'))
 
 
-def find_mpd_dir():
-    """Find the mpd music directory."""
-    home = os.path.expanduser('~')
-    path = os.path.join(home, '.config', 'mpd', 'mpd.conf')
+def run_pyglet(path):
+    """Run pyglet to play the song."""
+    current_dir = os.getcwd()
+    try:
+        # Before doing the following move to the dir
+        dirname = os.path.dirname(path)
+        song_name = os.path.basename(path)
+        print(song_name)
+        os.chdir(dirname)
+        song = pyglet.resource.media(song_name)
+        song.play()
 
-    stream = open(path, 'r')
-    while True:
-        nana = stream.readline()
-        if not nana:
-            break
-        if 'music_directory' in nana and '#' not in nana:
-            nana = nana[nana.index('"') + 1:-2]
-            nana = os.path.expanduser(nana)
-            return nana
+        # Before playing check if mpd is running
+        if is_on():
+            cm = 'mpd --kill'
+            exe(cm)
+        # Now simply start pyglet
+        pyglet.app.run()
 
-    return False
-
-
-def move_to_mpd_dir(name):
-    """Move the song to mpd_dir."""
-    mpd_dir = find_mpd_dir()
-
-    if not mpd_dir:
-        pass
-    else:
-        copy(name, os.path.join(mpd_dir, 'temp.mp3'))
+        # Move to the prev dir
+        os.chdir(current_dir)
+        return True
+    except KeyboardInterrupt:
+        os.chdir(current_dir)
 
 
 def toggle():
@@ -96,8 +100,6 @@ def is_on():
         return True
     else:
         return False
-
-    time.sleep(0.5)
 
 
 if __name__ == '__main__':
