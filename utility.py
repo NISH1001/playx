@@ -3,7 +3,7 @@
 
 import os
 import subprocess
-import time
+import vlc
 import pyglet
 
 
@@ -31,6 +31,7 @@ def direct_to_play(url, play_type):
 
 def run_mpd(url):
     """Run the song in mpd."""
+    input(url)
     # Check if mpd is on or not
     if not is_on():
         cm = 'mpd'
@@ -51,14 +52,8 @@ def run_mpd(url):
 
 def run_pyglet(path):
     """Run pyglet to play the song."""
-    current_dir = os.getcwd()
     try:
-        # Before doing the following move to the dir
-        dirname = os.path.dirname(path)
-        song_name = os.path.basename(path)
-        print(song_name)
-        os.chdir(dirname)
-        song = pyglet.resource.media(song_name)
+        song = pyglet.media.load(path, streaming=True)
         song.play()
 
         # Before playing check if mpd is running
@@ -68,11 +63,9 @@ def run_pyglet(path):
         # Now simply start pyglet
         pyglet.app.run()
 
-        # Move to the prev dir
-        os.chdir(current_dir)
         return True
     except KeyboardInterrupt:
-        os.chdir(current_dir)
+        pass
 
 
 def toggle():
