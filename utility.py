@@ -57,9 +57,8 @@ def run_pyglet(path):
         song.play()
 
         # Before playing check if mpd is running
-        if is_on():
-            cm = 'mpd --kill'
-            exe(cm)
+        if get_status().lower() == 'playing':
+            toggle()
         # Now simply start pyglet
         pyglet.app.run()
 
