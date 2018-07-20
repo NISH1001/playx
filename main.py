@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 
-from songfinder import search_song
-from utility import run_mpd
-from youtube import get_youtube_streams
+"""Main function for playx."""
+
+from songfinder import search
+from utility import direct_to_play
+from youtube import grab_link
 import playlist
 import argparse
+from search import search_locally
 
 
 def parse():
@@ -12,11 +15,12 @@ def parse():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--name', '-n',
-                        help="Name of the song to download. Words separated by space",
+                        help="Name of the song to download.\
+                         Words separated by space",
                         default=None, nargs='+', type=str)
     parser.add_argument('--url', '-u',
                         help="Youtube song link.")
-    parser.add_argument('-p', '--playlist',
+    parser.add_argument('--playlist', '-p',
                         help="Path to playlist")
     args = parser.parse_args()
     return args
@@ -24,16 +28,26 @@ def parse():
 
 def stream(search_type, value=None):
     """Start streaming the song."""
-    if search_type == 'name':
-        song = value
-        result = search_song(song)
-        print("Song found in youtube...")
-        result.display()
-        stream = get_youtube_streams(result.url)
-    elif search_type == 'url':
-        stream = get_youtube_streams(value)
+    is_local = False
+    # No matter if a link or name we need to search
+    result = search(value)
 
-    run_mpd(stream['audio'])
+    if search_type == 'url':
+        value = result.title
+
+    local_res = search_locally(value)
+
+    if len(local_res) != 0:
+        value = local_res
+        is_local = True
+    else:
+        value = grab_link(result.url)
+
+    if not is_local:
+        result.display()
+
+    print(value)
+    direct_to_play(value, 'local' if is_local else None)
 
 
 def main():
