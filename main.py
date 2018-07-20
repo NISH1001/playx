@@ -46,6 +46,7 @@ def stream(search_type, value=None):
     if not is_local:
         result.display()
 
+    print(value)
     direct_to_play(value, 'local' if is_local else None)
 
 

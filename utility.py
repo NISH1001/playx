@@ -23,7 +23,8 @@ def direct_to_play(url, play_type):
     """Direct the song to be played according to the play_type."""
     if play_type == 'local':
         # Pass to play with pyglet
-        run_pyglet(url)
+        # run_pyglet(url)
+        run_mpv(url)
     else:
         # Else run with mpd to stream
         run_mpd(url)
@@ -55,9 +56,9 @@ def run_pyglet(path):
     try:
         song = pyglet.media.load(path, streaming=True)
         song.play()
-
+        status = get_status()
         # Before playing check if mpd is running
-        if get_status().lower() == 'playing':
+        if type(status) is str and get_status().lower() == 'playing':
             toggle()
         # Now simply start pyglet
         pyglet.app.run()
@@ -66,6 +67,10 @@ def run_pyglet(path):
     except KeyboardInterrupt:
         pass
 
+def run_mpv(stream_url):
+    print("Playing using mpv...")
+    cli = 'mpv "{}"'.format(stream_url)
+    os.system(cli)
 
 def toggle():
     """Toggle mpd."""

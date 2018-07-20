@@ -24,6 +24,7 @@ class Cache:
     def dw(link):
         """Download the song."""
         dw = Cache(link)
+        print("Downloading from {}".format(link))
         dw_thread = threading.Thread(target=dw.GRAB_SONG)
         dw_thread.start()
 
