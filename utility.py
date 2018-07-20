@@ -3,7 +3,8 @@
 
 import os
 import subprocess
-import time
+import vlc
+import pyglet
 
 
 def exe(command):
@@ -18,18 +19,52 @@ def exe(command):
     return (output, error)
 
 
+def direct_to_play(url, play_type):
+    """Direct the song to be played according to the play_type."""
+    if play_type == 'local':
+        # Pass to play with pyglet
+        run_pyglet(url)
+    else:
+        # Else run with mpd to stream
+        run_mpd(url)
+
+
 def run_mpd(url):
     """Run the song in mpd."""
+    input(url)
+    # Check if mpd is on or not
+    if not is_on():
+        cm = 'mpd'
+        exe(cm)
     # Pause mpd
     cm1 = 'mpc pause'
+    exe(cm1)
     # Clear the playlist
     cm2 = 'mpc clear'
+    exe(cm2)
     # Insert the song
-    cm3 = 'mpc insert "{}"'.format(url)
+    cm3 = 'mpc insert {}'.format(url)
+    exe(cm3)
     # Play the song
     cm4 = 'mpc play'
-    cli = cm1 + '&&' + cm2 + '&&' + cm3 + '&&' + cm4
-    os.system(cli)
+    exe(cm4)
+
+
+def run_pyglet(path):
+    """Run pyglet to play the song."""
+    try:
+        song = pyglet.media.load(path, streaming=True)
+        song.play()
+
+        # Before playing check if mpd is running
+        if get_status().lower() == 'playing':
+            toggle()
+        # Now simply start pyglet
+        pyglet.app.run()
+
+        return True
+    except KeyboardInterrupt:
+        pass
 
 
 def toggle():
@@ -57,8 +92,6 @@ def is_on():
         return True
     else:
         return False
-
-    time.sleep(0.5)
 
 
 if __name__ == '__main__':

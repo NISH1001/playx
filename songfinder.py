@@ -4,11 +4,8 @@
 from youtube import search_youtube
 
 
-def search_song(song):
-    """Search the song locally at first.
-
-    If not found, search in youtube
-    """
+def search(song):
+    """Search the song in youtube."""
     videos = search_youtube(song)
     video = videos[0]
     return video

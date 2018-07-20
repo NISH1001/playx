@@ -1,0 +1,4 @@
+youtube_dl==2018.3.20
+requests==2.18.4
+bs4==0.0.1
+pyglet==1.3.2
