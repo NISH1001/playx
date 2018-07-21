@@ -16,15 +16,18 @@ def exe(command):
     error = error.decode('utf-8').strip()
     return (output, error)
 
-
-def direct_to_play(url, play_type):
+def direct_to_play(url):
     """Direct the song to be played according to the play_type."""
     run_mpv(url)
-
 
 def run_mpv(stream_url):
     print("Playing using mpv...")
     cli = 'mpv "{}"'.format(stream_url)
+    os.system(cli)
+
+def run_mpv_dir(directory):
+    print("Playing using mpv from directory :: {}".format(directory))
+    cli = 'mpv "{}"'.format(directory)
     os.system(cli)
 
 if __name__ == '__main__':

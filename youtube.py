@@ -54,7 +54,6 @@ def get_youtube_streams(url):
     url['video'] = stream_urls[0]
     return url
 
-
 def search_youtube(query):
     """Behold the greatest magic trick ever : crawl and crawl."""
     print("Searching youtube for :: {}".format(query))
