@@ -9,7 +9,7 @@ Search and play any song from terminal.
 ---------
 
 # Philosophy
-Play any songs that come in your mind. 
+Play any songs that come in your mind.
 > Hoping to make it an awesome music assistant
 ---------
 
@@ -57,6 +57,8 @@ optional arguments:
   --name NAME [NAME ...], -n NAME [NAME ...]
                         Name of the song to download. Words separated by space
   --url URL, -u URL     Youtube song link.
+  --play-cache          Play all songs from the cache.
+  --lyrics, -l          Show lyircs of the song.
 ```
 
 ------------
