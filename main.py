@@ -5,7 +5,6 @@
 from songfinder import search
 from utility import direct_to_play
 from youtube import grab_link
-import playlist
 import argparse
 from cache import search_locally
 
@@ -20,8 +19,6 @@ def parse():
                         default=None, nargs='+', type=str)
     parser.add_argument('--url', '-u',
                         help="Youtube song link.")
-    parser.add_argument('--playlist', '-p',
-                        help="Path to playlist")
     args = parser.parse_args()
     return args
 
@@ -52,8 +49,6 @@ def main():
 
     if args.url is not None:
         stream('url', args.url)
-    elif args.playlist is not None:
-        playlist.read_playlist(args.playlist)
     else:
         stream('name', ' '.join(args.name))
 

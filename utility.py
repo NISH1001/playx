@@ -3,8 +3,6 @@
 
 import os
 import subprocess
-import vlc
-import pyglet
 
 
 def exe(command):
@@ -21,83 +19,14 @@ def exe(command):
 
 def direct_to_play(url, play_type):
     """Direct the song to be played according to the play_type."""
-    if play_type == 'local':
-        # Pass to play with pyglet
-        # run_pyglet(url)
-        run_mpv(url)
-    else:
-        # Else run with mpd to stream
-        run_mpd(url)
+    run_mpv(url)
 
-
-def run_mpd(url):
-    """Run the song in mpd."""
-    input(url)
-    # Check if mpd is on or not
-    if not is_on():
-        cm = 'mpd'
-        exe(cm)
-    # Pause mpd
-    cm1 = 'mpc pause'
-    exe(cm1)
-    # Clear the playlist
-    cm2 = 'mpc clear'
-    exe(cm2)
-    # Insert the song
-    cm3 = 'mpc insert {}'.format(url)
-    exe(cm3)
-    # Play the song
-    cm4 = 'mpc play'
-    exe(cm4)
-
-
-def run_pyglet(path):
-    """Run pyglet to play the song."""
-    try:
-        song = pyglet.media.load(path, streaming=True)
-        song.play()
-        status = get_status()
-        # Before playing check if mpd is running
-        if type(status) is str and get_status().lower() == 'playing':
-            toggle()
-        # Now simply start pyglet
-        pyglet.app.run()
-
-        return True
-    except KeyboardInterrupt:
-        pass
 
 def run_mpv(stream_url):
     print("Playing using mpv...")
     cli = 'mpv "{}"'.format(stream_url)
     os.system(cli)
 
-def toggle():
-    """Toggle mpd."""
-    cm = 'mpc toggle'
-    os.system(cm)
-
-
-def get_status():
-    """Return the status of mpd."""
-    status, error = exe('mpc status')
-
-    if 'playing' in status:
-        return 'Playing'
-    elif 'paused' in status:
-        return 'Paused'
-    else:
-        return False
-
-
-def is_on():
-    """Check if mpc is on."""
-    status = get_status()
-    if status == 'Playing' or status == 'Paused':
-        return True
-    else:
-        return False
-
-
 if __name__ == '__main__':
-    print(is_on())
+    url = "https://r7---sn-bvvbax-3uhl.googlevideo.com/videoplayback?ip=110.44.120.206&ei=qsFSW7DmE6jMoQP3ppSICg&sparams=clen%2Cdur%2Cei%2Cgir%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Ckeepalive%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Crequiressl%2Csource%2Cexpire&id=o-ANRsypPRJvgkydFW-5_ZV_zCT8JsLhV5Unh1mGiXB0WR&keepalive=yes&clen=3253260&requiressl=yes&gir=yes&nh=EAQ%2C&initcwndbps=427500&pl=23&dur=208.881&source=youtube&lmt=1468126594841376&ipbits=0&itag=251&fvip=1&mime=audio%2Fwebm&key=yt6&expire=1532171786&mm=31%2C26&mn=sn-bvvbax-3uhl%2Csn-i3beln7s&c=WEB&ms=au%2Conr&mt=1532150082&mv=m&signature=8D3E161749FBB351BACDC6AB97DF578C330E5A7F.85CA648C3E09F32DE7F882023747D84D8D288C1A&ratebypass=yes"
+    run_mpv(url)

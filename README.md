@@ -12,10 +12,9 @@ Search and play any song from terminal.
 
 1. Python3.x
 
-2. MPD
+2. pip3
 
-3. MPC
-
+3. MPV
 
 ## Installation
 
@@ -24,9 +23,10 @@ Search and play any song from terminal.
 ```sh
 pip install -r requirements.txt
 ```
- * Get <a href = https://github.com/MusicPlayerDaemon/mpc>MPC</a> from here.
 
- * Get <a href = https://github.com/MusicPlayerDaemon/MPD>MPD</a> from here.
+ * Get <a href = https://mpv.io/>MPV (website)</a> from here.
+
+ * Get <a href = https://github.com/mpv-player/mpv>MPV (github)</a> from here.
 
 > **Note**: These dependencies in linux can be installed in other variants.  
 > For *arch linux*, you can use **pacman** package manager accordingly.
@@ -44,9 +44,6 @@ optional arguments:
   --name NAME [NAME ...], -n NAME [NAME ...]
                         Name of the song to download. Words separated by space
   --url URL, -u URL     Youtube song link.
-  -p PLAYLIST, --playlist PLAYLIST
-                        Path to playlist
-
 ```
 
 ------------
