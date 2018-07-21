@@ -5,6 +5,7 @@
 from songfinder import search
 from utility import direct_to_play, run_mpv_dir
 from youtube import grab_link
+from lyrics import search_lyricswikia
 import argparse
 from cache import (
     Cache, search_locally
@@ -38,12 +39,17 @@ def stream(search_type, value=None):
     """
     # if query by name -> search locally
     if search_type == 'name':
-        local_res = search_locally(value)
-        if local_res:
-            value = local_res
+        match = search_locally(value)
+        if match:
+            value = match[1]
+            title = match[0]
         else:
             result = search(value)
+            result.display()
+            title = result.title
             value = grab_link(result.url)
+        lyric = search_lyricswikia(title)
+        print("----\n{}\n----".format(lyric))
     else:
         # if url just grab the stream url (no caching is done)
         value = grab_link(value)

@@ -44,7 +44,7 @@ def replace_space(string, replacer):
     return re.sub(r"\s", replacer, string)
 
 def remove_punct(string):
-    return re.sub(r"[-_!,'()]+", ' ', string)
+    return re.sub(r"[-:_!,'()]+", ' ', string)
 
 def replace_character(string, character, replacer):
     return re.sub(r"{}".format(character), replacer, string)
@@ -65,6 +65,15 @@ def urlencode(text):
         encoded = urllib.parse.urlencode(q)
         encoded = encoded[2::]
     return encoded
+
+def remove_stopwords(string):
+    stopwords = ['the', 'in', 'of', 'at']
+    res = []
+    tokens = string.split()
+    for token in tokens:
+        if token not in stopwords:
+            res.append(token)
+    return ' '.join(res)
 
 def main():
     pass
