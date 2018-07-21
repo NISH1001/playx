@@ -25,10 +25,13 @@ def parse():
     parser.add_argument('--play-cache',
                         action='store_true',
                         help="Play all songs from the cache.")
+    parser.add_argument('--lyrics', '-l',
+                        action='store_true',
+                        help="Show lyircs of the song.")
     args = parser.parse_args()
     return args
 
-def stream(search_type, value=None):
+def stream(search_type, value=None, show_lyrics=False):
     """
         Start streaming the song.
         First search in the local cache.
@@ -48,8 +51,10 @@ def stream(search_type, value=None):
             result.display()
             title = result.title
             value = grab_link(result.url)
-        lyric = search_lyricswikia(title)
-        print("----\n{}\n----".format(lyric))
+
+        if show_lyrics:
+            lyric = search_lyricswikia(title)
+            print("----\n{}\n----".format(lyric))
     else:
         # if url just grab the stream url (no caching is done)
         value = grab_link(value)
@@ -66,9 +71,9 @@ def main():
     args = parse()
 
     if args.url is not None:
-        stream('url',args.url)
+        stream('url', args.url, args.lyrics)
     elif args.name:
-        stream('name', ' '.join(args.name))
+        stream('name', ' '.join(args.name), args.lyrics)
     elif args.play_cache:
         cache = Cache("~/.playx/")
         stream_cache_all(cache)
