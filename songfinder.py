@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""It is a module that wraps cache and youtube."""
+"""It is an abstract module for searching songs"""
 
 from youtube import search_youtube
 

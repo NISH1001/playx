@@ -42,8 +42,16 @@ def remove_multiple_spaces(string):
 def replace_space(string, replacer):
     return re.sub(r"\s", replacer, string)
 
+def remove_punct(string):
+    return re.sub(r"[-_!,'()]+", ' ', string)
+
 def replace_character(string, character, replacer):
     return re.sub(r"{}".format(character), replacer, string)
+
+def compute_jaccard(tokens1, tokens2):
+    union = set(tokens1).union(tokens2)
+    intersect = set(tokens1).intersection(tokens2)
+    return len(intersect)/len(union)
 
 def main():
     pass

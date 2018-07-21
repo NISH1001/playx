@@ -32,7 +32,7 @@ class YoutubeMetadata:
 
     def display(self):
         """Be informative."""
-        print("Playing: ", self.title)
+        print("Title: ", self.title)
         print("Duration: ", self.duration)
 
     @staticmethod
@@ -57,6 +57,7 @@ def get_youtube_streams(url):
 
 def search_youtube(query):
     """Behold the greatest magic trick ever : crawl and crawl."""
+    print("Searching youtube for :: {}".format(query))
     base_url = "https://www.youtube.com"
     url = base_url + "//results?sp=EgIQAVAU&q=" + query
     response = requests.get(url)

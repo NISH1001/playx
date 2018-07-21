@@ -7,7 +7,7 @@ from utility import direct_to_play
 from youtube import grab_link
 import playlist
 import argparse
-from search import search_locally
+from cache import search_locally
 
 
 def parse():
@@ -25,28 +25,24 @@ def parse():
     args = parser.parse_args()
     return args
 
-
 def stream(search_type, value=None):
-    """Start streaming the song."""
+    """
+        Start streaming the song.
+        First search in the local cache.
+        If no song is found in the cache, search in the youtube.
+
+        Fow now, the search in the cache happens based on individual words.
+        This will be later improved
+    """
     is_local = False
-    # No matter if a link or name we need to search
-    result = search(value)
-
-    if search_type == 'url':
-        value = result.title
-
     local_res = search_locally(value)
-
-    if len(local_res) != 0:
+    if local_res:
         value = local_res
         is_local = True
     else:
+        result = search(value)
         value = grab_link(result.url)
 
-    if not is_local:
-        result.display()
-
-    print(value)
     direct_to_play(value, 'local' if is_local else None)
 
 
