@@ -6,6 +6,7 @@
 import difflib
 import json
 import re
+import urllib.parse
 
 def get_closest_match(string_list, string):
     closest_matches = difflib.get_close_matches(string, string_list, len(string_list), 0.3)
@@ -52,6 +53,18 @@ def compute_jaccard(tokens1, tokens2):
     union = set(tokens1).union(tokens2)
     intersect = set(tokens1).intersection(tokens2)
     return len(intersect)/len(union)
+
+def urlencode(text):
+    """
+        Url encode the text
+    """
+    q = {}
+    encoded = ""
+    if(text):
+        q['q'] = text
+        encoded = urllib.parse.urlencode(q)
+        encoded = encoded[2::]
+    return encoded
 
 def main():
     pass
