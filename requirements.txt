@@ -1,7 +1,3 @@
-pyglet==1.3.2
 youtube_dl==2018.3.20
-fuzzywuzzy==0.16.0
-python_vlc==3.0.102
 requests==2.18.4
 beautifulsoup4==4.6.0
-vlc==0.0.0
