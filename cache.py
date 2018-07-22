@@ -1,10 +1,11 @@
 """Definitions related to caching the song."""
 
-import youtube_dl
 import os
 import threading
 import glob
 import sys
+import requests
+from shutil import copyfileobj
 from stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords
 )
@@ -46,10 +47,11 @@ class Cache:
         return os.path.join(self.dir, song_name)
 
     def search(self, song_name):
+        """Return results of search_tokens."""
         return self._search_tokens(song_name)
 
     def _search_tokens(self, song_name):
-        """Search song in the cache based on each word matching"""
+        """Search song in the cache based on each word matching."""
         print("Searching in the cache at :: {}".format(self.dir))
         song_name = remove_stopwords(remove_multiple_spaces(song_name).lower())
         tokens1 = song_name.split()
@@ -64,43 +66,35 @@ class Cache:
             tokens2 = name.split()
             dist = compute_jaccard(tokens1, tokens2)
             res.append((song_name, song, title, dist))
-        res = sorted(res, key = lambda x : x[-1], reverse = True)
-        if res and res[0][-1]>0:
+        res = sorted(res, key=lambda x: x[-1], reverse=True)
+        if res and res[0][-1] > 0:
             return res[0][2], self.get_full_location(res[0][1])
         else:
             return None
 
     @staticmethod
-    def dw(link):
+    def dw(link, name):
         """Download the song."""
         dw = Cache()
-        print("Downloading from {}".format(link))
-        dw_thread = threading.Thread(target=dw.GRAB_SONG, args=(link,))
+        print("Downloading {}".format(name))
+        dw_thread = threading.Thread(target=dw.dw_song, args=(link, name))
         dw_thread.start()
 
-    def GRAB_SONG(self, link):
-        """Return true if the song is downloaded else false."""
-        ydl_opts = {
-            'format': 'bestaudio',
-            'quiet': True,
-            'outtmpl': os.path.join(self.dir, '%(title)s.%(ext)s'),
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec':  'mp3',
-                'preferredquality': '320'
-            }]
-        }
-
-        # Download the song with youtube-dl
+    def dw_song(self, link, name):
+        """Download the song."""
         try:
-            ydl = youtube_dl.YoutubeDL(ydl_opts)
-            ydl.download([link])
-            return True
-        except TimeoutError:
-            print('Timed Out! Are you connected to internet?\a')
+            path = os.path.join(self.dir, name)
+            # Start downloading the song
+            response = requests.get(link, stream=True)
+            with open(path, 'wb') as out_file:
+                copyfileobj(response.raw, out_file)
+
+            del response
+
+            return name
+        except Exception:
             return False
-        else:
-            return False
+
 
 def search_locally(song=None):
     """To be used by other files."""
