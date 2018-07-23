@@ -50,7 +50,7 @@ def stream(search_type, value=None, show_lyrics=False):
             result = search(value)
             result.display()
             title = result.title
-            value = grab_link(result.url)
+            value = grab_link(result.url, title)
 
         if show_lyrics:
             lyric = search_lyricswikia(title)
