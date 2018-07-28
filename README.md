@@ -2,15 +2,13 @@
 <img src="logo/1024 bg.svg" width=100%>
 </h1>
 
+## Search and play any song from terminal.
+
 # playx in action
 
 ![GIF](https://i.imgur.com/42mEHQ5.gif)
 
 # playx  
-
-Search and play any song from terminal.
-
----------
 
 1. [Philosophy](#philosophy)
 2. [Requirements](#requirements)
