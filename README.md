@@ -50,7 +50,7 @@ pip install -r requirements.txt
 
 ------------
 
-## Feaures
+## Features
 
 - play by query
 - play by youtube url
