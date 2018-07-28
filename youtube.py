@@ -79,11 +79,11 @@ def search_youtube(query):
     return videos
 
 
-def grab_link(value, title):
+def grab_link(value, title=None):
     """Return the audio link of the song."""
     stream = get_youtube_streams(value)
     # Start downloading
-
+    if title is None: title = value
     title = title + '.mp3'
     value = stream['audio']
     Cache.dw(value, title)

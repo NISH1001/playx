@@ -7,6 +7,7 @@ from utility import direct_to_play, run_mpv_dir
 from youtube import grab_link
 from lyrics import search_lyricswikia
 import argparse
+import re
 from cache import (
     Cache, search_locally
 )
@@ -15,13 +16,9 @@ from cache import (
 def parse():
     """Parse the arguments."""
     parser = argparse.ArgumentParser()
-
-    parser.add_argument('--name', '-n',
-                        help="Name of the song to download.\
-                         Words separated by space",
-                        default=None, nargs='+', type=str)
-    parser.add_argument('--url', '-u',
-                        help="Youtube song link.")
+    parser.add_argument('song',
+                        help="Name or youtube link of song to download",
+                        default=None, type=str, nargs="*")
     parser.add_argument('--play-cache',
                         action='store_true',
                         help="Play all songs from the cache.")
@@ -29,7 +26,7 @@ def parse():
                         action='store_true',
                         help="Show lyircs of the song.")
     args = parser.parse_args()
-    return args
+    return parser, args
 
 def stream(search_type, value=None, show_lyrics=False):
     """
@@ -66,17 +63,23 @@ def stream_cache_all(cache):
     run_mpv_dir(cache.dir)
 
 
+def is_song_url(song):
+    return re.match(r"^(?:https?(?:\:\/\/)?)?(?:www\.)?(?:youtu\.be|youtube\.com)/(?:watch\?v=)?[a-zA-Z0-9_-]{11}$", song)
+
+
 def main():
     """Search the song in youtube and stream through mpd."""
-    args = parse()
-
-    if args.url is not None:
-        stream('url', args.url, args.lyrics)
-    elif args.name:
-        stream('name', ' '.join(args.name), args.lyrics)
-    elif args.play_cache:
+    parser, args = parse()
+    args.song = ' '.join(args.song)
+    if not args.song and args.play_cache:
         cache = Cache("~/.playx/")
         stream_cache_all(cache)
+    if is_song_url(args.song):
+        stream('url', args.song, args.lyrics)
+    elif not args.song:
+        parser.print_help()
+    else:
+        stream('name', args.song, args.lyrics)
 
 
 if __name__ == "__main__":
