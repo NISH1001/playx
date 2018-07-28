@@ -2,11 +2,23 @@
 <img src="logo/1024 bg.svg" width=100%>
 </h1>
 
+# playx in action
+
+![GIF](https://i.imgur.com/42mEHQ5.gif)
+
 # playx  
 
 Search and play any song from terminal.
 
 ---------
+
+1. [Philosophy](#philosophy)
+2. [Requirements](#requirements)
+3. [Installation](#installation)
+4. [Features](#features)
+5. [Usage](#usage)
+6. [TO-DO](#to-do)
+7. [Acknowledgements](#acknowledgements)
 
 # Philosophy
 Play any songs that come in your mind.
