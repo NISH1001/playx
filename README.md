@@ -69,3 +69,10 @@ optional arguments:
 - ~~stream/play while downloading the song~~
 - ~~play all the songs from the cache~~
 - ~~search lyrics~~
+- log activity
+- use logs to create simple recommendations
+
+
+## Acknowledgements
+- Thanks to [Deepjyoti Barman](https://github.com/deepjyoti30) for parallelizing streaming + downloading (and other improvements)
+- Thanks to [Mirza Zulfan](https://github.com/mirzazulfan) for logo for `playx`. It's neat (and cool)
