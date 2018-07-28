@@ -60,15 +60,15 @@ pip install -r requirements.txt
 For now, the application is in development phase.  
 
 ```sh
-usage: main.py [-h] [--name NAME [NAME ...]] [--url URL]
+usage: main.py [-h] [--play-cache] [--lyrics] [song [song ...]]
+
+positional arguments:
+  song          name or youtube link of song to download
 
 optional arguments:
-  -h, --help            show this help message and exit
-  --name NAME [NAME ...], -n NAME [NAME ...]
-                        Name of the song to download. Words separated by space
-  --url URL, -u URL     Youtube song link.
-  --play-cache          Play all songs from the cache.
-  --lyrics, -l          Show lyircs of the song.
+  -h, --help    show this help message and exit
+  --play-cache  play all songs from the cache.
+  --lyrics, -l  show lyircs of the song.
 ```
 
 ------------
