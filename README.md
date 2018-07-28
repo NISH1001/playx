@@ -50,7 +50,7 @@ pip install -r requirements.txt
 For now, the application is in development phase.  
 
 ```sh
-usage: main.py [-h] [--name NAME [NAME ...]] [--url URL] [-p PLAYLIST]
+usage: main.py [-h] [--name NAME [NAME ...]] [--url URL]
 
 optional arguments:
   -h, --help            show this help message and exit
