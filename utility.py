@@ -3,6 +3,7 @@
 
 import os
 import subprocess
+from lyrics import search_lyricswikia
 
 
 def exe(command):
@@ -16,8 +17,13 @@ def exe(command):
     error = error.decode('utf-8').strip()
     return (output, error)
 
-def direct_to_play(url):
+
+def direct_to_play(url, show_lyrics, title):
     """Direct the song to be played according to the play_type."""
+    if show_lyrics:
+        lyric = search_lyricswikia(title)
+        print("----\n{}\n----".format(lyric))
+
     run_mpv(url)
 
 def run_mpv(stream_url):

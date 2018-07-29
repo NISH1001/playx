@@ -19,7 +19,6 @@ from youtube import (
 )
 
 from songfinder import search
-from lyrics import search_lyricswikia
 from stringutils import is_song_url
 
 
@@ -33,55 +32,89 @@ def parse():
     parser.add_argument('song',
                         help="Name or youtube link of song to download",
                         default=None, type=str, nargs="*")
-    parser.add_argument('--play-cache',
+    parser.add_argument('-p', '--play-cache',
                         action='store_true',
                         help="Play all songs from the cache.")
-    parser.add_argument('--no-cache',
+    parser.add_argument('-n', '--no-cache',
                         action='store_true',
                         help="Don't download the song for later use.")
-    parser.add_argument('--lyrics', '-l',
+    parser.add_argument('-d', '--dont-cache-search',
+                        action='store_true',
+                        help="Don't search the song in the cache.")
+    parser.add_argument('-l', '--lyrics',
                         action='store_true',
                         help="Show lyircs of the song.")
     args = parser.parse_args()
     return parser, args
 
 
-def stream(search_type, value=None, show_lyrics=False, no_cache=False):
-    """
-        Start streaming the song.
-        First search in the local cache.
-        If no song is found in the cache, search in the youtube.
+def online_search(value, no_cache):
+    """Search the song online."""
+    result = search(value)
+    if result is None:
+        return print("No results found")
+    result.display()
+    title = result.title
+    value = grab_link(result.url, title, no_cache)
+    return value
 
-        Fow now, the search in the cache happens based on individual words.
-        This will be later improved
+
+def get_value(value, no_cache):
+    """Get the value of the song."""
+    value = online_search(value, no_cache)
+    if value is None:
+        print("No audio attached to video")
+        exit(-1)
+    else:
+        return value
+
+
+def stream_from_name(value=None, show_lyrics=False, no_cache=False,
+                     dont_cache_search=False):
+    """Start streaming the song.
+
+    First search in the local cache.
+    If no song is found in the cache, search in the youtube.
     """
-    # if query by name -> search locally
-    if search_type == 'name':
+    # Need to check if searching locally is forbidden
+    if not dont_cache_search:
         match = search_locally(value)
         if match:
             value = match[1]
             title = match[0]
         else:
-            result = search(value)
-            if result is None:
-                return print("No results found")
-            result.display()
-            title = result.title
-            value = grab_link(result.url, title, no_cache)
-            if value is None:
-                return print("No audio attached to video")
-
-        if show_lyrics:
-            lyric = search_lyricswikia(title)
-            print("----\n{}\n----".format(lyric))
+            value = get_value(value, no_cache)
     else:
-        # if url just grab the stream url (no caching is done)
-        title = get_youtube_title(value)
-        value = grab_link(value, title, no_cache)
-        if value is None:
-            return print("No audio attached to video")
+        value = get_value(value, no_cache)
 
-    direct_to_play(value)
+    direct_to_play(value, show_lyrics, title)
+
+
+def stream_from_url(url, show_lyrics=False, no_cache=False,
+                    dont_cache_search=False):
+    """Stream the song using the url.
+
+    Before searching the stream, get the title of the song
+    If local search is not forbidden, search it locally
+    """
+    result = search(url)
+    if result is None:
+        return print("No results found")
+    result.display()
+    title = result.title
+
+    # Now search the song locally
+    if not dont_cache_search:
+        match = search_locally(title)
+        if match:
+            # Change the value to local path
+            value = match[1]
+        else:
+            value = grab_link(result.url, title, no_cache)
+    else:
+        value = grab_link(result.url, title, no_cache)
+
+    direct_to_play(value, show_lyrics, title)
 
 
 def stream_cache_all(cache):
@@ -96,11 +129,14 @@ def main():
         cache = Cache("~/.playx/")
         stream_cache_all(cache)
     if is_song_url(args.song):
-        stream('url', args.song, args.lyrics, args.no_cache)
+        # In case the song is a url
+        stream_from_url(args.song, args.lyrics, args.no_cache,
+                        args.dont_cache_search)
     elif not args.song:
         parser.print_help()
     else:
-        stream('name', args.song, args.lyrics, args.no_cache)
+        stream_from_name(args.song, args.lyrics, args.no_cache,
+                         args.dont_cache_search)
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ due to all those crawling shit
 
 from bs4 import BeautifulSoup
 import requests
-from stringutils import remove_multiple_spaces, replace_space, replace_character
+from stringutils import replace_space, replace_character
 from cache import Cache
 
 from utility import exe
@@ -94,4 +94,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    search_youtube("Pehla nasha once again")
