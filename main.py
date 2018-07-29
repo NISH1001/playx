@@ -36,13 +36,17 @@ def parse():
     parser.add_argument('--play-cache',
                         action='store_true',
                         help="Play all songs from the cache.")
+    parser.add_argument('--no-cache',
+                        action='store_true',
+                        help="Don't download the song for later use.")
     parser.add_argument('--lyrics', '-l',
                         action='store_true',
                         help="Show lyircs of the song.")
     args = parser.parse_args()
     return parser, args
 
-def stream(search_type, value=None, show_lyrics=False):
+
+def stream(search_type, value=None, show_lyrics=False, no_cache=False):
     """
         Start streaming the song.
         First search in the local cache.
@@ -63,7 +67,7 @@ def stream(search_type, value=None, show_lyrics=False):
                 return print("No results found")
             result.display()
             title = result.title
-            value = grab_link(result.url, title)
+            value = grab_link(result.url, title, no_cache)
             if value is None:
                 return print("No audio attached to video")
 
@@ -73,7 +77,7 @@ def stream(search_type, value=None, show_lyrics=False):
     else:
         # if url just grab the stream url (no caching is done)
         title = get_youtube_title(value)
-        value = grab_link(value, title)
+        value = grab_link(value, title, no_cache)
         if value is None:
             return print("No audio attached to video")
 
@@ -92,11 +96,11 @@ def main():
         cache = Cache("~/.playx/")
         stream_cache_all(cache)
     if is_song_url(args.song):
-        stream('url', args.song, args.lyrics)
+        stream('url', args.song, args.lyrics, args.no_cache)
     elif not args.song:
         parser.print_help()
     else:
-        stream('name', args.song, args.lyrics)
+        stream('name', args.song, args.lyrics, args.no_cache)
 
 
 if __name__ == "__main__":
