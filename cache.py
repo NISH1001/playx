@@ -55,19 +55,26 @@ class Cache:
         """Search song in the cache based on simple each word matching."""
         print("Searching in the cache at :: {}".format(self.dir))
         song_name = remove_stopwords(remove_multiple_spaces(song_name).lower())
+        # input("song_name: " + song_name)
         tokens1 = song_name.split()
+        # input("tokens1: " + str(tokens1))
         cached_songs = self.list_mp3()
 
         res = []
         for song in cached_songs:
             name = os.path.splitext(song)[0].lower()
+            # input("name: " + str(name))
             title = name
             name = remove_punct(name)
             name = remove_multiple_spaces(name)
+            # input("name: " + name)
             tokens2 = name.split()
+            # input("tokens2: " + str(tokens2))
             match = check_keywords(tokens1, tokens2)
+            # input("match: " + str(match))
             if match:
                 dist = compute_jaccard(tokens1, tokens2)
+                # input(dist)
                 res.append((song_name, song, title, dist))
         res = sorted(res, key=lambda x: x[-1], reverse=True)
         if res and res[0][-1] > 0:
