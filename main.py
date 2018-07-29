@@ -55,11 +55,12 @@ def stream(search_type, value=None, show_lyrics=False):
         else:
             result = search(value)
             if result is None:
-                print("No results found")
-                return
+                return print("No results found")
             result.display()
             title = result.title
             value = grab_link(result.url, title)
+            if value is None:
+                return print("No audio attached to video")
 
         if show_lyrics:
             lyric = search_lyricswikia(title)
@@ -68,6 +69,8 @@ def stream(search_type, value=None, show_lyrics=False):
         # if url just grab the stream url (no caching is done)
         title = get_youtube_title(value)
         value = grab_link(value, title)
+        if value is None:
+            return print("No audio attached to video")
 
     direct_to_play(value)
 
