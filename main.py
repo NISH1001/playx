@@ -85,7 +85,7 @@ def main():
     args.song = ' '.join(args.song)
     if not args.song and args.play_cache:
         cache = Cache("~/.playx/")
-        stream_cache_all(cache)
+        return stream_cache_all(cache)
     if is_song_url(args.song):
         stream('url', args.song, args.lyrics)
     elif not args.song:
