@@ -68,6 +68,7 @@ positional arguments:
 optional arguments:
   -h, --help    show this help message and exit
   --play-cache  play all songs from the cache.
+  --no-cache    Don't download the song for later use.
   --lyrics, -l  show lyircs of the song.
 ```
 
