@@ -1,17 +1,26 @@
 #!/usr/bin/env python3
 
-"""Main function for playx."""
+"""
+    Main function for playx.
+"""
 
-from songfinder import search
-from utility import direct_to_play, run_mpv_dir
-from youtube import grab_link
-from lyrics import search_lyricswikia
 import argparse
-import re
+
 from cache import (
     Cache, search_locally
 )
 
+from utility import (
+    direct_to_play, run_mpv_dir
+)
+
+from youtube import (
+    grab_link, get_youtube_title
+)
+
+from songfinder import search
+from lyrics import search_lyricswikia
+from stringutils import is_song_url
 
 def parse():
     """Parse the arguments."""
@@ -54,17 +63,14 @@ def stream(search_type, value=None, show_lyrics=False):
             print("----\n{}\n----".format(lyric))
     else:
         # if url just grab the stream url (no caching is done)
-        value = grab_link(value)
+        title = get_youtube_title(value)
+        value = grab_link(value, title)
 
     direct_to_play(value)
 
 
 def stream_cache_all(cache):
     run_mpv_dir(cache.dir)
-
-
-def is_song_url(song):
-    return re.match(r"^(?:https?(?:\:\/\/)?)?(?:www\.)?(?:youtu\.be|youtube\.com)/(?:watch\?v=)?[a-zA-Z0-9_-]{11}$", song)
 
 
 def main():

@@ -17,29 +17,15 @@ from utility import exe
 class YoutubeMetadata:
     """A data store to store the information of a youtube video."""
 
-    SPACE = "#"
-
     def __init__self(self):
         self.title = ""
         self.url = ""
         self.duration = ""
-        self.hash = ""
-
-    def get_hash(self):
-        self.title = remove_multiple_spaces(self.title)
-        self.hash = replace_space(self.title, self.SPACE)
-        return self.hash
 
     def display(self):
         """Be informative."""
         print("Title: ", self.title)
         print("Duration: ", self.duration)
-
-    @staticmethod
-    def reverse_hash(song_name):
-        song_name = remove_multiple_spaces(song_name)
-        return replace_character(song_name, YoutubeMetadata.SPACE, " ")
-
 
 def get_youtube_streams(url):
     """Get both audio & vidoe stream urls for youtube using youtube-dl.
@@ -53,6 +39,12 @@ def get_youtube_streams(url):
     url['audio'] = stream_urls[1]
     url['video'] = stream_urls[0]
     return url
+
+def get_youtube_title(url):
+    print("Getting title for :: {}".format(url))
+    cli = "youtube-dl -e {}".format(url)
+    output, error = exe(cli)
+    return output
 
 def search_youtube(query):
     """Behold the greatest magic trick ever : crawl and crawl."""
@@ -79,7 +71,7 @@ def search_youtube(query):
     return videos
 
 
-def grab_link(value, title=None):
+def grab_link(value, title):
     """Return the audio link of the song."""
     stream = get_youtube_streams(value)
     # Start downloading
@@ -92,9 +84,9 @@ def grab_link(value, title=None):
 
 def main():
     """Run on program call."""
-    url = "https://www.youtube.com/watch?v=-qfCrYwdqCA"
+    url = "https://www.youtube.com/watch?v=erywPdFfORE"
+    title = get_youtube_title(url)
     urls = get_youtube_streams(url)
-    print(urls)
 
 
 if __name__ == "__main__":
