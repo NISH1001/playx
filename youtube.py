@@ -36,7 +36,10 @@ def get_youtube_streams(url):
     output, error = exe(cli)
     stream_urls = output.split("\n")
     url = {}
-    url['audio'] = stream_urls[1]
+    try:
+        url['audio'] = stream_urls[1]
+    except IndexError:
+        url['audio'] = None
     url['video'] = stream_urls[0]
     return url
 
@@ -75,8 +78,8 @@ def grab_link(value, title):
     """Return the audio link of the song."""
     stream = get_youtube_streams(value)
     # Start downloading
-    if title is None: title = value
     title = title + '.mp3'
+    if stream['audio'] is None: return None
     value = stream['audio']
     Cache.dw(value, title)
     return value
