@@ -54,6 +54,9 @@ def stream(search_type, value=None, show_lyrics=False):
             title = match[0]
         else:
             result = search(value)
+            if result is None:
+                print("No results found")
+                return
             result.display()
             title = result.title
             value = grab_link(result.url, title)
