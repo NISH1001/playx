@@ -79,6 +79,10 @@ class Cache:
     def dw(link, name):
         """Download the song."""
         dw = Cache()
+        # check if song is already downloaded...
+        songs = dw.list_mp3()
+        if name in songs:
+            return
         print("Downloading {}".format(name))
         dw_thread = threading.Thread(target=dw.dw_song, args=(link, name))
         dw_thread.start()
