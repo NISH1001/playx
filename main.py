@@ -22,9 +22,14 @@ from songfinder import search
 from lyrics import search_lyricswikia
 from stringutils import is_song_url
 
+
 def parse():
     """Parse the arguments."""
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="playx - Search and play\
+                                     any song that comes to your mind.\n\
+                                     If you have any issues, raise an issue in\
+                                     the github\
+                                     (https://github.com/NISH1001/playx) page")
     parser.add_argument('song',
                         help="Name or youtube link of song to download",
                         default=None, type=str, nargs="*")
