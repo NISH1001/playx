@@ -56,7 +56,7 @@ def online_search(value, no_cache):
     result.display()
     title = result.title
     value = grab_link(result.url, title, no_cache)
-    return value
+    return value, title
 
 
 def get_value(value, no_cache):
@@ -66,7 +66,7 @@ def get_value(value, no_cache):
         print("No audio attached to video")
         exit(-1)
     else:
-        return value
+        return value[0], value[1]
 
 
 def stream_from_name(value=None, show_lyrics=False, no_cache=False,
@@ -83,9 +83,9 @@ def stream_from_name(value=None, show_lyrics=False, no_cache=False,
             value = match[1]
             title = match[0]
         else:
-            value = get_value(value, no_cache)
+            value, title = get_value(value, no_cache)
     else:
-        value = get_value(value, no_cache)
+        value, title = get_value(value, no_cache)
 
     direct_to_play(value, show_lyrics, title)
 
