@@ -44,14 +44,16 @@ def replace_space(string, replacer):
     return re.sub(r"\s", replacer, string)
 
 def remove_punct(string):
-    return re.sub(r"[-:_!,'()]+", ' ', string)
+    return re.sub(r"[-:_!,.'()#]+", ' ', string)
 
 def replace_character(string, character, replacer):
     return re.sub(r"{}".format(character), replacer, string)
 
 def compute_jaccard(tokens1, tokens2):
     union = set(tokens1).union(tokens2)
+    # input(union)
     intersect = set(tokens1).intersection(tokens2)
+    # input(intersect)
     return len(intersect)/len(union)
 
 def urlencode(text):
@@ -81,7 +83,14 @@ def check_keywords(tokens1, tokens2):
         is in tokens2 list
     """
     res = [token in tokens2 for token in tokens1]
-    return sum(res) == len(tokens1)
+    # input(res)
+    # input(sum(res))
+    percent_true = sum(res)/len(res)
+    # input(percent_true)
+    if percent_true > .66:
+        return True
+    else:
+        return False
 
 def is_song_url(song):
     return re.match(r"^(?:https?(?:\:\/\/)?)?(?:www\.)?(?:youtu\.be|youtube\.com)/(?:watch\?v=)?[a-zA-Z0-9_-]{11}$", song)
