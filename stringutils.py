@@ -83,6 +83,9 @@ def check_keywords(tokens1, tokens2):
     res = [ token in tokens2 for token in tokens1 ]
     return sum(res) == len(tokens1)
 
+def is_song_url(song):
+    return re.match(r"^(?:https?(?:\:\/\/)?)?(?:www\.)?(?:youtu\.be|youtube\.com)/(?:watch\?v=)?[a-zA-Z0-9_-]{11}$", song)
+
 def main():
     pass
 
