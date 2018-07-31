@@ -36,7 +36,11 @@ If there are many *logical changes*, write detailed description on the body part
 This can be done by just using `git commit` command that opens up the default text editor.  
 The first "non-commented" line line denotes the summary of the commit, which is generally done 
 by `git commit -m <commit message>`. The summary is followed by an empty line and then a paragraph 
-where description resides.
+where description resides.  
+
+Have a look at [this](https://github.com/NISH1001/playx/commit/9fd464b6849a0a4ea960d36168c861f069cfa37a) 
+commit message for a reference.
+
 
 # Python
 -------------
