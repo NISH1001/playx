@@ -33,10 +33,10 @@ Play any songs that come in your mind.
 
 ## Installation
 
- * Run following to install python modules
+ * Run the following command in the root directory to install playx.
 
-```sh
-pip install -r requirements.txt
+```
+pip install -e .
 ```
 
  * Get <a href = https://mpv.io/>MPV (website)</a> from here.
@@ -59,8 +59,11 @@ pip install -r requirements.txt
 ## Usage
 For now, the application is in development phase.  
 
-```sh
-usage: main.py [-h] [-p] [-n] [-d] [-l] [song [song ...]]
+```
+usage: playx [-h] [-p] [-n] [-d] [-l] [song [song ...]]
+
+playx - Search and play any song that comes to your mind. If you have any
+issues, raise an issue in the github (https://github.com/NISH1001/playx) page
 
 positional arguments:
   song                  Name or youtube link of song to download
@@ -72,7 +75,6 @@ optional arguments:
   -d, --dont-cache-search
                         Don't search the song in the cache.
   -l, --lyrics          Show lyircs of the song.
-
 ```
 
 ------------
