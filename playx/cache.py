@@ -6,7 +6,7 @@ import glob
 import sys
 import requests
 from shutil import copyfileobj
-from stringutils import (
+from .stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
     check_keywords
 )

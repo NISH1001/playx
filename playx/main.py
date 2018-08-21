@@ -6,20 +6,20 @@
 
 import argparse
 
-from cache import (
+from .cache import (
     Cache, search_locally
 )
 
-from utility import (
+from .utility import (
     direct_to_play, run_mpv_dir
 )
 
-from youtube import (
+from .youtube import (
     grab_link, get_youtube_title
 )
 
-from songfinder import search
-from stringutils import is_song_url
+from .songfinder import search
+from .stringutils import is_song_url
 
 
 def parse():
