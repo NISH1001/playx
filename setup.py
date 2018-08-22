@@ -1,7 +1,7 @@
 from setuptools import setup
 
-with open('LICENSE') as l:
-    license = l.read()
+# with open('LICENSE') as l:
+#     license = l.read()
 
 with open('requirements.txt') as r:
     requirements = r.read().split('\n')
@@ -18,7 +18,7 @@ setup(
             'playx = playx.main:main'
         ]
     },
-    version='1.0.0',
-    license=license,
+    version='1.0.1',
+    license='MIT',
     install_requires=requirements,
 )
