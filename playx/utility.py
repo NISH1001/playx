@@ -3,7 +3,7 @@
 
 import os
 import subprocess
-from lyrics import search_lyricswikia
+from .lyrics import search_lyricswikia
 
 
 def exe(command):

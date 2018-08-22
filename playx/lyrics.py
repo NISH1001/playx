@@ -4,7 +4,7 @@ import re
 from bs4 import BeautifulSoup
 import urllib.request, urllib.error, urllib.parse
 import sys
-from stringutils import (
+from .stringutils import (
     urlencode, remove_punct, compute_jaccard, remove_multiple_spaces
 )
 

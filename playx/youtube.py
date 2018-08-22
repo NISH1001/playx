@@ -8,10 +8,10 @@ due to all those crawling shit
 
 from bs4 import BeautifulSoup
 import requests
-from stringutils import replace_space, replace_character
-from cache import Cache
+from .stringutils import replace_space, replace_character
+from .cache import Cache
 
-from utility import exe
+from .utility import exe
 
 
 class YoutubeMetadata:
@@ -28,7 +28,7 @@ class YoutubeMetadata:
         print("Duration: ", self.duration)
 
 def get_youtube_streams(url):
-    """Get both audio & vidoe stream urls for youtube using youtube-dl.
+    """Get both audio & video stream urls for youtube using youtube-dl.
 
     PS: I don't know how youtube-dl does the magic
     """
@@ -69,7 +69,7 @@ def search_youtube(query):
         description = tile.find("div", {'class': 'yt-lockup-description'})
         youtube_metadata.description = description.get_text().strip() if description else "No description available"
         duration = tile.find("span", {'class': 'video-time'})
-        youtube_metadata.duration = duration.get_text() if duration else "uknown duration"
+        youtube_metadata.duration = duration.get_text() if duration else "unknown duration"
         videos.append(youtube_metadata)
     return videos
 
