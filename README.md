@@ -23,13 +23,23 @@ Play any songs that come in your mind.
 > Hoping to make it an awesome music assistant
 ---------
 
-## Requirements
+## Requirements/Dependencies
 
 1. Python3.x
 
 2. pip3
 
 3. MPV
+
+ * Get <a href = https://mpv.io/>MPV (website)</a> from here.
+
+ * Get <a href = https://github.com/mpv-player/mpv>MPV (github)</a> from here.
+
+> **Note**: These dependencies in linux can be installed in other variants.  
+> For *arch linux*, you can use **pacman** package manager accordingly.
+
+
+------------
 
 ## Installation
 
@@ -39,12 +49,11 @@ Play any songs that come in your mind.
 pip install -e .
 ```
 
- * Get <a href = https://mpv.io/>MPV (website)</a> from here.
+* Or install using setup.py as:
 
- * Get <a href = https://github.com/mpv-player/mpv>MPV (github)</a> from here.
-
-> **Note**: These dependencies in linux can be installed in other variants.  
-> For *arch linux*, you can use **pacman** package manager accordingly.
+```bash
+python setup.py install
+```
 
 ------------
 
