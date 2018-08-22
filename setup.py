@@ -18,7 +18,7 @@ setup(
             'playx = playx.main:main'
         ]
     },
-    version='0.0.1',
+    version='1.0.0',
     license=license,
     install_requires=requirements,
 )
