@@ -8,7 +8,11 @@ due to all those crawling shit
 
 from bs4 import BeautifulSoup
 import requests
-from .stringutils import replace_space, replace_character
+from .stringutils import (
+    remove_multiple_spaces,
+    remove_punct
+)
+
 from .cache import Cache
 
 from .utility import exe
@@ -78,7 +82,10 @@ def grab_link(value, title, no_cache):
     """Return the audio link of the song."""
     stream = get_youtube_streams(value)
     # Start downloading
+    title = remove_punct(title)
+    title = remove_multiple_spaces(title)
     title = title + '.mp3'
+    print("Title .... ", title)
     if stream['audio'] is None: return None
     value = stream['audio']
     if not no_cache:
