@@ -28,7 +28,7 @@ def direct_to_play(url, show_lyrics, title):
 
 def run_mpv(stream_url):
     print("Playing using mpv...")
-    cli = 'mpv "{}"'.format(stream_url)
+    cli = 'mpv --really-quiet "{}"'.format(stream_url)
     os.system(cli)
 
 def run_mpv_dir(directory):

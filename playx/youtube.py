@@ -47,11 +47,13 @@ def get_youtube_streams(url):
     url['video'] = stream_urls[0]
     return url
 
+
 def get_youtube_title(url):
     print("Getting title for :: {}".format(url))
     cli = "youtube-dl -e {}".format(url)
     output, error = exe(cli)
     return output
+
 
 def search_youtube(query):
     """Behold the greatest magic trick ever : crawl and crawl."""
@@ -85,7 +87,7 @@ def grab_link(value, title, no_cache):
     title = remove_punct(title)
     title = remove_multiple_spaces(title)
     title = title + '.mp3'
-    print("Title .... ", title)
+
     if stream['audio'] is None: return None
     value = stream['audio']
     if not no_cache:
