@@ -110,6 +110,7 @@ playx https://www.youtube.com/playlist?list=PLwg22VSCR0W6cwuCKUJSkX72xEvYXS0Zx
 This plays the songs from my personal (and public) playlist named *Chilld and Wisdom*.
 
 **Play from local playlist**
+
 The local playlist should have an extension ```.playx``` in order for us to recognize it as a playlist.
 ```sh
 playx example.playx
