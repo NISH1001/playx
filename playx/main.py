@@ -53,6 +53,12 @@ def parse():
     parser.add_argument('-l', '--lyrics',
                         action='store_true',
                         help="Show lyircs of the song.")
+    parser.add_argument('--pl-start', help="Start position in case a\
+                         playlist is passed. If passed without a playlist\
+                         it has no effect.", default=None, type=int)
+    parser.add_argument('--pl-end', help="End position in case a \
+                        playlist is passed. If passed without a playlist\
+                        it has no effect.", default=None, type=int)
     args = parser.parse_args()
     return parser, args
 
@@ -144,7 +150,7 @@ def playx(parser, args, song):
                         args.dont_cache_search)
     elif is_playlist(song):
         print("Passed song is a playlist")
-        youtube_playlist = YoutubePlaylist(song)
+        youtube_playlist = YoutubePlaylist(song, args.pl_start, args.pl_end)
         name, data = youtube_playlist.extract_playlistdata()
         print("{}: {} songs".format(name, len(data)))
         # Play all the songs from the data one by one
@@ -162,7 +168,7 @@ def main():
     parser, args = parse()
     song = ' '.join(args.song)
     # Put a check to see if the passed arg is a list
-    playx_list = Playxlist(song)
+    playx_list = Playxlist(song, args.pl_start, args.pl_end)
     if not playx_list.is_playx_list():
         playx(parser, args, song)
     else:

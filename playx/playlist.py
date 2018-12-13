@@ -9,9 +9,11 @@ from .youtube import YoutubeMetadata
 class YoutubePlaylist():
     """Class to store YouTube playlist data."""
 
-    def __init__(self, URL):
+    def __init__(self, URL, pl_start=None, pl_end=None):
         self.URL = URL
         self.data = []
+        self.pl_start = pl_start
+        self.pl_end = pl_end
 
     def extract_name(self, name):
         """Extract the name of the playlist."""
@@ -19,6 +21,20 @@ class YoutubePlaylist():
         name = ''.join(re.findall(r'>.*?<', name)).replace('>', '').replace('<', '')
         name = ' '.join(re.findall(r'[^ ]+', name))
         return name
+
+    def strip_to_start_end(self):
+        if self.pl_start is not None:
+            index = self.pl_start - 1
+            try:
+                self.data = self.data[index:]
+            except IndexError:
+                pass
+        if self.pl_end is not None:
+            index = self.pl_end - 1
+            try:
+                self.data = self.data[:index]
+            except IndexError:
+                pass
 
     def extract_playlistdata(self):
         """Extract all the videos into YoutubeMetadata objects."""
@@ -48,6 +64,7 @@ class YoutubePlaylist():
             print("Are you sure you have videos in your playlist? Try changing privacy\
                     to public.")
 
+        self.strip_to_start_end()
         return (name, self.data)
 
 

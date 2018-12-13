@@ -84,6 +84,7 @@ class Cache:
         # check if song is already downloaded...
         songs = dw.list_mp3()
         if name in songs:
+            print("{} already downloaded.".format(name))
             return
         print("Downloading {}".format(name))
         dw_thread = threading.Thread(target=dw.dw_song, args=(link, name))
