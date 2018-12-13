@@ -15,8 +15,13 @@ from .utility import (
 )
 
 from .youtube import (
-    grab_link, get_youtube_title
+    grab_link
 )
+
+from .playlist import (
+    isPlaylist, YoutubePlaylist
+)
+
 
 from .songfinder import search
 from .stringutils import is_song_url
@@ -91,15 +96,18 @@ def stream_from_name(value=None, show_lyrics=False, no_cache=False,
 
 
 def stream_from_url(url, show_lyrics=False, no_cache=False,
-                    dont_cache_search=False):
+                    dont_cache_search=False, ytObj=None):
     """Stream the song using the url.
 
     Before searching the stream, get the title of the song
     If local search is not forbidden, search it locally
     """
-    result = search(url)
-    if result is None:
-        return print("No results found")
+    if ytObj is None:
+        result = search(url)
+        if result is None:
+            return print("No results found")
+    else:
+        result = ytObj
     result.display()
     title = result.title
 
@@ -132,6 +140,15 @@ def main():
         # In case the song is a url
         stream_from_url(args.song, args.lyrics, args.no_cache,
                         args.dont_cache_search)
+    elif isPlaylist(args.song):
+        print("Passed song is a playlist")
+        youtube_playlist = YoutubePlaylist(args.song)
+        name, data = youtube_playlist.extractPlaylistData()
+        print("{}: {} songs".format(name, len(data)))
+        # Play all the songs from the data one by one
+        for i in data:
+            stream_from_url(args.song, args.lyrics, args.no_cache,
+                            args.dont_cache_search, i)
     elif not args.song:
         parser.print_help()
     else:
