@@ -19,9 +19,9 @@ class Playxlist():
     def is_valid(self):
         """Check if pl_start and pl_end are valid."""
         self.is_valid_start = True if self.pl_start in range(self.default_start,
-                                    self.default_end) else False
+                                    self.default_end + 1) else False
         self.is_valid_end = True if self.pl_end in range(self.default_start,
-                                    self.default_end) else False
+                                    self.default_end + 1) else False
 
     def strip_to_start_end(self):
         # Before doing anything check if the passed numbers are valid
