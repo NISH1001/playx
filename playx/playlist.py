@@ -13,21 +13,21 @@ class YoutubePlaylist():
         self.URL = URL
         self.data = []
 
-    def extractName(self, name):
+    def extract_name(self, name):
         """Extract the name of the playlist."""
         name = str(name).replace('\n', '')
         name = ''.join(re.findall(r'>.*?<', name)).replace('>', '').replace('<', '')
         name = ' '.join(re.findall(r'[^ ]+', name))
         return name
 
-    def extractPlaylistData(self):
+    def extract_playlistdata(self):
         """Extract all the videos into YoutubeMetadata objects."""
 
         url_prepend = 'https://www.youtube.com/watch?v='
         r = get(self.URL)
         soup = BeautifulSoup(r.text, 'html.parser')
         name = soup.findAll('h1', attrs={'class': 'pl-header-title'})
-        name = self.extractName(name)
+        name = self.extract_name(name)
         soup = soup.findAll('tr', attrs={'class': 'pl-video',
                                         'class': 'yt-uix-tile'})
 
@@ -51,10 +51,10 @@ class YoutubePlaylist():
         return (name, self.data)
 
 
-def isPlaylist(url):
+def is_playlist(url):
     """Check if the passed URL is a playlist."""
-    playlistPart = 'https://www.youtube.com/playlist?list'
-    if playlistPart in url:
+    playlist_part = 'https://www.youtube.com/playlist?list'
+    if playlist_part in url:
         return True
     else:
         return False

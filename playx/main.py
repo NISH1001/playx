@@ -19,7 +19,7 @@ from .youtube import (
 )
 
 from .playlist import (
-    isPlaylist, YoutubePlaylist
+    is_playlist, YoutubePlaylist
 )
 
 
@@ -140,10 +140,10 @@ def main():
         # In case the song is a url
         stream_from_url(args.song, args.lyrics, args.no_cache,
                         args.dont_cache_search)
-    elif isPlaylist(args.song):
+    elif is_playlist(args.song):
         print("Passed song is a playlist")
         youtube_playlist = YoutubePlaylist(args.song)
-        name, data = youtube_playlist.extractPlaylistData()
+        name, data = youtube_playlist.extract_playlistdata()
         print("{}: {} songs".format(name, len(data)))
         # Play all the songs from the data one by one
         for i in data:
