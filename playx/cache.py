@@ -67,7 +67,6 @@ class Cache:
             name = remove_punct(name)
             name = remove_multiple_spaces(name)
             tokens2 = name.split()
-            print(tokens1, tokens2)
             match = check_keywords(tokens1, tokens2)
             if match:
                 dist = compute_jaccard(tokens1, tokens2)
