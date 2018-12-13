@@ -86,6 +86,10 @@ optional arguments:
   -d, --dont-cache-search
                         Don't search the song in the cache.
   -l, --lyrics          Show lyircs of the song.
+  --pl-start PL_START   Start position in case a playlist is passed. If passed
+                        without a playlist it has no effect.
+  --pl-end PL_END       End position in case a playlist is passed. If passed
+                        without a playlist it has no effect.
 ```
 
 ------------
