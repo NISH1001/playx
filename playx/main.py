@@ -22,6 +22,10 @@ from .playlist import (
     is_playlist, YoutubePlaylist
 )
 
+from .list import (
+    Playxlist
+)
+
 
 from .songfinder import search
 from .stringutils import is_song_url
@@ -49,6 +53,12 @@ def parse():
     parser.add_argument('-l', '--lyrics',
                         action='store_true',
                         help="Show lyircs of the song.")
+    parser.add_argument('--pl-start', help="Start position in case a\
+                         playlist is passed. If passed without a playlist\
+                         it has no effect.", default=None, type=int)
+    parser.add_argument('--pl-end', help="End position in case a \
+                        playlist is passed. If passed without a playlist\
+                        it has no effect.", default=None, type=int)
     args = parser.parse_args()
     return parser, args
 
@@ -129,31 +139,41 @@ def stream_cache_all(cache):
     run_mpv_dir(cache.dir)
 
 
-def main():
+def playx(parser, args, song):
     """Search the song in youtube and stream through mpd."""
-    parser, args = parse()
-    args.song = ' '.join(args.song)
-    if not args.song and args.play_cache:
+    if not song and args.play_cache:
         cache = Cache("~/.playx/")
         return stream_cache_all(cache)
-    if is_song_url(args.song):
+    if is_song_url(song):
         # In case the song is a url
-        stream_from_url(args.song, args.lyrics, args.no_cache,
+        stream_from_url(song, args.lyrics, args.no_cache,
                         args.dont_cache_search)
-    elif is_playlist(args.song):
+    elif is_playlist(song):
         print("Passed song is a playlist")
-        youtube_playlist = YoutubePlaylist(args.song)
+        youtube_playlist = YoutubePlaylist(song, args.pl_start, args.pl_end)
         name, data = youtube_playlist.extract_playlistdata()
         print("{}: {} songs".format(name, len(data)))
         # Play all the songs from the data one by one
         for i in data:
-            stream_from_url(args.song, args.lyrics, args.no_cache,
+            stream_from_url(song, args.lyrics, args.no_cache,
                             args.dont_cache_search, i)
-    elif not args.song:
+    elif not song:
         parser.print_help()
     else:
-        stream_from_name(args.song, args.lyrics, args.no_cache,
+        stream_from_name(song, args.lyrics, args.no_cache,
                          args.dont_cache_search)
+
+
+def main():
+    parser, args = parse()
+    song = ' '.join(args.song)
+    # Put a check to see if the passed arg is a list
+    playx_list = Playxlist(song, args.pl_start, args.pl_end)
+    if not playx_list.is_playx_list():
+        playx(parser, args, song)
+    else:
+        for i in playx_list.get_list_contents():
+            playx(parser, args, i)
 
 
 if __name__ == "__main__":

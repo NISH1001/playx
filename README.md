@@ -86,6 +86,10 @@ optional arguments:
   -d, --dont-cache-search
                         Don't search the song in the cache.
   -l, --lyrics          Show lyircs of the song.
+  --pl-start PL_START   Start position in case a playlist is passed. If passed
+                        without a playlist it has no effect.
+  --pl-end PL_END       End position in case a playlist is passed. If passed
+                        without a playlist it has no effect.
 ```
 
 ------------
@@ -107,7 +111,17 @@ This plays the song *The Sound of Silence*.
 ```bash
 playx https://www.youtube.com/playlist?list=PLwg22VSCR0W6cwuCKUJSkX72xEvYXS0Zx
 ```
-This plays the songs from my personal (and public) playlist named *Chilld and Wisdom*.  
+This plays the songs from my personal (and public) playlist named *Chilld and Wisdom*.
+
+**Play from local playlist**
+
+The local playlist should have an extension ```.playx``` in order for us to recognize it as a playlist.
+```sh
+playx example.playx
+```
+This plays a playlist named example.playx
+
+For a playlist every line is considered an entry. Refer to [example.playx](https://github.com/NISH1001/playx/blob/develope/example.playx).
   
 ------------
 ## Contributions
@@ -121,7 +135,7 @@ Contributions are warmly welcome. Please do go through [CONTRIBUTING](https://gi
 - ~~play all the songs from the cache~~
 - ~~search lyrics~~
 - ~~play from youtube playlist~~
-- play from local playlist (may be a list of song names)
+- ~~play from local playlist (may be a list of song names)~~
 - log activity
 - use logs to create simple recommendations
 

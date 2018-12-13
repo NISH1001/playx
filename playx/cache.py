@@ -55,6 +55,7 @@ class Cache:
         """Search song in the cache based on simple each word matching."""
         print("Searching in the cache at :: {}".format(self.dir))
         song_name = remove_stopwords(remove_multiple_spaces(song_name).lower())
+        song_name = remove_punct(song_name)
         tokens1 = song_name.split()
         cached_songs = self.list_mp3()
 
@@ -62,6 +63,7 @@ class Cache:
         for song in cached_songs:
             name = os.path.splitext(song)[0].lower()
             title = name
+            name = remove_stopwords(name)
             name = remove_punct(name)
             name = remove_multiple_spaces(name)
             tokens2 = name.split()
@@ -82,6 +84,7 @@ class Cache:
         # check if song is already downloaded...
         songs = dw.list_mp3()
         if name in songs:
+            print("{} already downloaded.".format(name))
             return
         print("Downloading {}".format(name))
         dw_thread = threading.Thread(target=dw.dw_song, args=(link, name))

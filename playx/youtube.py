@@ -60,7 +60,11 @@ def search_youtube(query):
     print("Searching youtube for :: {}".format(query))
     base_url = "https://www.youtube.com"
     url = base_url + "//results?sp=EgIQAVAU&q=" + query
-    response = requests.get(url)
+    try:
+        response = requests.get(url)
+    except Exception as e:
+        print("ERROR: ", e)
+        exit()
     soup = BeautifulSoup(response.content, "html.parser")
     """
     for vid in soup.find_all(attrs={'class':'yt-uix-tile-link'}):
