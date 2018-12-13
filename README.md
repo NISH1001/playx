@@ -123,7 +123,7 @@ playx example.playx
 ```
 This plays a playlist named example.playx
 
-For a playlist every line is considered an entry. Refer to [example.playx](https://github.com/NISH1001/playx/blob/develope/example.playx).
+For a playlist every line is considered an entry. Refer to [example.playx](https://github.com/NISH1001/playx/blob/develop/example.playx).
   
 ------------
 
