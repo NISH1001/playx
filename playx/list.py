@@ -9,8 +9,8 @@ class Playxlist():
     def __init__(self, file_path, pl_start=None, pl_end=None):
         self.file_path = file_path
         self.list_content_tuple = []
-        self.default_end = 1
-        self.default_start = 0
+        self.default_start = 1
+        self.default_end = 0
         self.pl_start = pl_start
         self.pl_end = pl_end
         self.is_valid_start = False
