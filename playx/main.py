@@ -19,11 +19,8 @@ from .youtube import (
 )
 
 from .playlist import (
-    is_playlist, YoutubePlaylist
-)
-
-from .list import (
-    Playxlist
+    YoutubePlaylist, Playxlist,
+    is_playlist
 )
 
 

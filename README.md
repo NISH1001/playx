@@ -97,7 +97,7 @@ optional arguments:
 ### Example
 **Play by song name**
 ```bash
-playx man sold wold nirvana
+playx man sold world nirvana
 ```
 This plays the song titled "The man who sold the world by Nirvana"  
   
@@ -124,8 +124,10 @@ This plays a playlist named example.playx
 For a playlist every line is considered an entry. Refer to [example.playx](https://github.com/NISH1001/playx/blob/develope/example.playx).
   
 ------------
+
 ## Contributions
 Contributions are warmly welcome. Please do go through [CONTRIBUTING](https://github.com/NISH1001/playx/blob/develop/CONTRIBUTING.md).
+
 ------------
 
 ## TO-DO
