@@ -63,6 +63,8 @@ python setup.py install
 
 - play by query
 - play by youtube url
+- play a youtube playlist
+- play from local playlist
 - cache support
 - CLI using `mpv`
 ------------
