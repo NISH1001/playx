@@ -15,8 +15,10 @@
 3. [Installation](#installation)
 4. [Features](#features)
 5. [Usage](#usage)
-6. [TO-DO](#to-do)
-7. [Acknowledgements](#acknowledgements)
+6. [Example](#example)
+7. [Contribution](#contributions)
+8. [TO-DO](#to-do)
+9. [Acknowledgements](#acknowledgements)
 
 # Philosophy
 Play any songs that come in your mind.
@@ -88,12 +90,38 @@ optional arguments:
 
 ------------
 
+### Example
+**Play by song name**
+```bash
+playx man sold wold nirvana
+```
+This plays the song titled "The man who sold the world by Nirvana"  
+  
+**Play by youtube link**  
+```bash
+playx https://www.youtube.com/watch?v=4zLfCnGVeL4
+```
+This plays the song *The Sound of Silence*.   
+  
+**Play from youtube playlist**  
+```bash
+playx https://www.youtube.com/playlist?list=PLwg22VSCR0W6cwuCKUJSkX72xEvYXS0Zx
+```
+This plays the songs from my personal (and public) playlist named *Chilld and Wisdom*.  
+  
+------------
+## Contributions
+Contributions are warmly welcome. Please do go through [CONTRIBUTING](https://github.com/NISH1001/playx/blob/develop/CONTRIBUTING.md).
+------------
+
 ## TO-DO
 - ~~caching of downloaded songs (if the song exists locally, play it right away else play from youtube)~~
 - ~~speed up the whole **search->download->convert->play** process~~
 - ~~stream/play while downloading the song~~
 - ~~play all the songs from the cache~~
 - ~~search lyrics~~
+- ~~play from youtube playlist~~
+- play from local playlist (may be a list of song names)
 - log activity
 - use logs to create simple recommendations
 
