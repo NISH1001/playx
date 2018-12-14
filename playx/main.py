@@ -143,21 +143,35 @@ def playx(parser, args, song):
         return stream_cache_all(cache)
     if is_song_url(song):
         # In case the song is a url
-        stream_from_url(song, args.lyrics, args.no_cache,
-                        args.dont_cache_search)
+        stream_from_url(
+                        song,
+                        args.lyrics,
+                        args.no_cache,
+                        args.dont_cache_search
+                        )
     elif is_playlist(song, 'billboard'):
-        print("Passed song is a Billboard chart")
+        print("Billboard chart name passed.")
         # Initiate a billboard object
-        billboard_playlist = BillboardPlaylist(song, args.pl_start,
-                                            args.pl_end)
+        billboard_playlist = BillboardPlaylist(
+                                        song,
+                                        args.pl_start,
+                                        args.pl_end
+                                        )
         billboard_playlist.extract_list_contents()
-        print("{}: {} songs".format(billboard_playlist.playlist_name,
-                            len(billboard_playlist.list_content_tuple)))
+        print("{}: {} songs".format(
+                                billboard_playlist.playlist_name,
+                                len(billboard_playlist.list_content_tuple)
+                                )
+              )
         for i in billboard_playlist.list_content_tuple:
-            stream_from_name(i.title, args.lyrics, args.no_cache,
-                            args.dont_cache_search)
+            stream_from_name(
+                            i.title,
+                            args.lyrics,
+                            args.no_cache,
+                            args.dont_cache_search
+                            )
     elif is_playlist(song, 'youtube'):
-        print("Passed song is a playlist")
+        print("outube playlist passed.")
         youtube_playlist = YoutubePlaylist(song, args.pl_start, args.pl_end)
         name, data = youtube_playlist.extract_playlistdata()
         print("{}: {} songs".format(name, len(data)))
