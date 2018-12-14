@@ -18,7 +18,7 @@ class song():
     def __init__(self):
         self.title = ""
         self.artist = ""
-        self.lyrics = ""
+        self.rank = 0
 
 
 class Billboard():
