@@ -6,6 +6,11 @@ import re
 import os
 from .youtube import YoutubeMetadata
 
+"""
+__author__ = Deepjyoti Barman
+__github__= github.com/deepjyoti30
+"""
+
 
 class YoutubePlaylist:
     """Class to store YouTube playlist data."""
