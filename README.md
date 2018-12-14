@@ -6,7 +6,7 @@
 
 # playx in action
 
-![GIF](https://i.imgur.com/42mEHQ5.gif)
+![GIF](https://i.imgur.com/7P3dSWT.gif)
 
 # playx  
 
