@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import re
 import os
 from .youtube import YoutubeMetadata
+from .billboard import Billboard
 
 
 class YoutubePlaylist:
@@ -75,6 +76,7 @@ class YoutubePlaylist:
         self.strip_to_start_end()
         return (name, self.data)
 
+
 class Playxlist:
     """Class to store playx list data."""
 
@@ -134,10 +136,55 @@ class Playxlist:
         return self.list_content_tuple
 
 
-def is_playlist(url):
+class BillboardPlaylist:
+
+    def __init__(self, playlist_name, pl_start=None, pl_end=None):
+        self.playlist_name = playlist_name
+        self.list_content_tuple = []
+        self.pl_start = pl_start
+        self.pl_end = pl_end
+        self.default_start = 1
+        self.default_end = 0
+        self.is_valid_start = False
+        self.is_valid_end = False
+
+    def is_valid(self):
+        """Check if pl_start and pl_end are valid."""
+        self.is_valid_start = True if self.pl_start in range(self.default_start,
+                                    self.default_end + 1) else False
+        self.is_valid_end = True if self.pl_end in range(self.default_start,
+                                    self.default_end + 1) else False
+
+    def strip_to_start_end(self):
+        # Before doing anything check if the passed numbers are valid
+        self.is_valid()
+        if self.pl_start is not None and self.is_valid_start:
+            self.default_start = self.pl_start
+        if self.pl_end is not None and self.is_valid_end:
+            self.default_end = self.pl_end
+        self.list_content_tuple = self.list_content_tuple[self.default_start - 1: self.default_end]
+
+    def extract_list_contents(self):
+        """Extract the playlist data."""
+        Chart = Billboard(self.playlist_name)
+        self.list_content_tuple = Chart.chart
+        self.default_end = len(self.list_content_tuple)
+        self.strip_to_start_end()
+        self.playlist_name = Chart.chart_name
+
+
+def is_playlist(url, type):
     """Check if the passed URL is a playlist."""
-    playlist_part = 'https://www.youtube.com/playlist?list'
-    if playlist_part in url:
-        return True
-    else:
-        return False
+    if type.lower() == "youtube":
+        playlist_part = 'https://www.youtube.com/playlist?list'
+        if playlist_part in url:
+            return True
+        else:
+            return False
+    elif type.lower() == "billboard":
+        billboard_URL = "https://www.billboard.com/charts/"
+        response = get(billboard_URL + url)
+        if response.status_code != 404:
+            return True
+        else:
+            return False
