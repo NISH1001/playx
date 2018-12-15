@@ -6,7 +6,7 @@
 
 # playx in action
 
-![GIF](https://i.imgur.com/42mEHQ5.gif)
+![GIF](https://i.imgur.com/7P3dSWT.gif)
 
 # playx  
 
@@ -64,6 +64,7 @@ python setup.py install
 - play by query
 - play by youtube url
 - play a youtube playlist
+- play a billboard chart
 - play from local playlist
 - cache support
 - CLI using `mpv`
@@ -114,6 +115,12 @@ This plays the song *The Sound of Silence*.
 playx https://www.youtube.com/playlist?list=PLwg22VSCR0W6cwuCKUJSkX72xEvYXS0Zx
 ```
 This plays the songs from my personal (and public) playlist named *Chilld and Wisdom*.
+
+**Play from a Billboard Chart**
+```sh
+playx hot-100
+```
+This plays the songs from Billboards [hot-100](https://www.billboard.com/charts/hot-100) chart. The billboard charts can be found [here](https://www.billboard.com/charts)
 
 **Play from local playlist**
 
