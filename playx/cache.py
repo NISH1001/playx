@@ -15,8 +15,16 @@ from .stringutils import (
 class Cache:
     """Class to cache the song to a dir for quick acces."""
 
-    def __init__(self, directory='~/.playx'):
-        """Init the stuff."""
+    def __init__(self, directory='~/.playx/songs'):
+        """
+            Init the stuff.
+            directory: the directory where songs lie
+
+            Note:
+                The reason for choosing `playx/songs` is that I have allocated
+                other tree structure for misc activities like `playx/logs` and
+                `playx/playxlist`
+        """
         self.dir = os.path.expanduser(directory)
         self.create_cache_dir()
 
@@ -108,7 +116,7 @@ class Cache:
 
 def search_locally(song=None):
     """To be used by other files."""
-    cache = Cache("~/.playx")
+    cache = Cache("~/.playx/songs")
     if song:
         match = cache.search(song)
     else:
