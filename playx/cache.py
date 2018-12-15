@@ -32,7 +32,7 @@ class Cache:
         """If cache dir is not already present make it."""
         if not os.path.isdir(self.dir):
             # Make the dir
-            os.mkdir(self.dir)
+            os.makedirs(self.dir)
 
     def list_mp3(self):
         """Get the list of all the mp3 files in the cache."""
