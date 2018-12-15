@@ -139,7 +139,7 @@ def stream_cache_all(cache):
 def playx(parser, args, song):
     """Search the song in youtube and stream through mpd."""
     if not song and args.play_cache:
-        cache = Cache("~/.playx/")
+        cache = Cache("~/.playx/songs")
         return stream_cache_all(cache)
     if is_song_url(song):
         # In case the song is a url
