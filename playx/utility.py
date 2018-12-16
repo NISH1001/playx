@@ -24,11 +24,12 @@ def direct_to_play(url, show_lyrics, title):
         lyric = search_lyricswikia(title)
         print("----\n{}\n----".format(lyric))
 
-    run_mpv(url)
+    run_mpv(url, title)
 
-def run_mpv(stream_url):
-    print("Playing using mpv...")
-    cli = 'mpv "{}"'.format(stream_url)
+def run_mpv(stream_url, title=None):
+    # print("Playing using mpv...")
+    print("Playing :: {}".format(title))
+    cli = 'mpv "{}" --really-quiet'.format(stream_url)
     os.system(cli)
 
 def run_mpv_dir(directory):
