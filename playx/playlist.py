@@ -191,18 +191,20 @@ class BillboardPlaylist:
         self.playlist_name = Chart.chart_name
 
 
-def is_playlist(url, type):
-    """Check if the passed URL is a playlist."""
-    if type.lower() == "youtube":
+def is_playlist(url, playlist_type):
+    """
+        Check if the passed URL is a playlist.
+
+        For youtube playlist, simple substring matching is done.
+        For billboard, regex and URL call is done
+
+        playlist_type: type of the playlist (youtube, billboard, ...)
+    """
+
+    pt = playlist_type.lower()
+    if pt == "youtube":
         playlist_part = 'https://www.youtube.com/playlist?list'
-        if playlist_part in url:
-            return True
-        else:
-            return False
-    elif type.lower() == "billboard":
+        return playlist_part in url
+    elif pt == "billboard" and re.match(r"hot-\d+", pt):
         billboard_URL = "https://www.billboard.com/charts/"
-        response = get(billboard_URL + url)
-        if response.status_code != 404:
-            return True
-        else:
-            return False
+        return get(billboard_URL + url).status_code != 404
