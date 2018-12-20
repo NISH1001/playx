@@ -73,8 +73,10 @@ python setup.py install
 ## Usage
 For now, the application is in development phase.  
 
-```
-usage: playx [-h] [-p] [-n] [-d] [-l] [song [song ...]]
+```bash
+usage: playx [-h] [-p] [-db] [-n] [-d] [-l] [--pl-start PL_START]
+             [--pl-end PL_END]
+             [song [song ...]]
 
 playx - Search and play any song that comes to your mind. If you have any
 issues, raise an issue in the github (https://github.com/NISH1001/playx) page
@@ -85,6 +87,11 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -p, --play-cache      Play all songs from the cache.
+  -db, --dump-billboard
+                        Dump all chart names to '~/.playx/logs/billboard':
+                        This is to check if the song name is in billboard
+                        chart list while calling the playx to play songs from
+                        billboard playlist
   -n, --no-cache        Don't download the song for later use.
   -d, --dont-cache-search
                         Don't search the song in the cache.
@@ -120,7 +127,9 @@ This plays the songs from my personal (and public) playlist named *Chilld and Wi
 ```sh
 playx hot-100
 ```
-This plays the songs from Billboards [hot-100](https://www.billboard.com/charts/hot-100) chart. The billboard charts can be found [here](https://www.billboard.com/charts)
+This plays the songs from Billboards [hot-100](https://www.billboard.com/charts/hot-100) chart. The billboard charts can be found [here](https://www.billboard.com/charts)  
+Before trying to play songs from billboard playlist, make sure you have already used the command `playx -db` or `playx --dump-billboard` 
+to cache the list of chart names from billboard.
 
 **Play from local playlist**
 

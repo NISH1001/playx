@@ -1,9 +1,10 @@
 """Simple API to access Billboard charts."""
 
 
-from requests import get
+import requests
 from bs4 import BeautifulSoup
 import re
+import os
 
 """
 __author__ = Deepjyoti Barman
@@ -38,7 +39,7 @@ class Billboard():
 
     def get_soup(self):
         """Return the soup for the response."""
-        response = get(self.URL)
+        response = requests.get(self.URL)
         soup = BeautifulSoup(response.text, 'html.parser')
         return soup
 
@@ -116,9 +117,34 @@ class Billboard():
                                 )
             self.chart.append(songObj)
 
+def get_chart_names_online(url="https://www.billboard.com/charts"):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    links = soup.find_all('a', href=re.compile(r'.*/charts/.+'))
+    chart_names = set()
+    for link in links:
+        href = link['href']
+        name = href.split("/")[-1]
+        if name:
+            chart_names.add(name.lower())
+    return chart_names
+
+def get_chart_names(filename):
+    path = os.path.expanduser(filename)
+    return [ name.strip() for name in open(path).readlines()]
+
+def dump_to_file(names):
+    path = '~/.playx/logs/billboard'
+    path = os.path.expanduser(path)
+    print("Dumping billboard chart names to :: {}".format(path))
+    with open(path, 'w') as f:
+        f.write('\n'.join(names).strip())
 
 if __name__ == "__main__":
-    Chart = Billboard("youtube")
-    for i in Chart.chart:
-        # print(i.title)
-        print("{}: {} by {}".format(i.rank, i.title, i.artist))
+    # Chart = Billboard("youtube")
+    # for i in Chart.chart:
+    #     # print(i.title)
+    #     print("{}: {} by {}".format(i.rank, i.title, i.artist))
+    chart_names = get_chart_names_online()
+    dump_to_file(chart_names)
+    print(get_chart_names('~/.playx/logs/billboard'))

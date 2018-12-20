@@ -23,6 +23,8 @@ from .playlist import (
     BillboardPlaylist, is_playlist
 )
 
+from .import billboard
+
 
 from .songfinder import search
 from .stringutils import is_song_url
@@ -40,7 +42,15 @@ def parse():
                         default=None, type=str, nargs="*")
     parser.add_argument('-p', '--play-cache',
                         action='store_true',
-                        help="Play all songs from the cache.")
+                        help="Play all songs from the cache.\
+                        The cache is located at ~/.playx/songs/ by default")
+
+    parser.add_argument('-db', '--dump-billboard',
+                        action='store_true',
+                        help="Dump all chart names to '~/.playx/logs/billboard':\
+                        This is to check if the song name is in billboard chart list\
+                        while calling the playx to play songs from billboard playlist\
+                        ")
     parser.add_argument('-n', '--no-cache',
                         action='store_true',
                         help="Don't download the song for later use.")
@@ -141,6 +151,12 @@ def playx(parser, args, song):
     if not song and args.play_cache:
         cache = Cache("~/.playx/songs")
         return stream_cache_all(cache)
+    if not song and args.dump_billboard:
+        url = "https://www.billboard.com/charts"
+        chart_names = billboard.get_chart_names_online(url)
+        print("Chart names are :: \n{}".format(chart_names))
+        billboard.dump_to_file(chart_names)
+        return True
     if is_song_url(song):
         # In case the song is a url
         stream_from_url(

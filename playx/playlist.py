@@ -5,7 +5,10 @@ from bs4 import BeautifulSoup
 import re
 import os
 from .youtube import YoutubeMetadata
-from .billboard import Billboard
+from .billboard import (
+    Billboard,
+    get_chart_names
+)
 
 """
 __author__ = Deepjyoti Barman
@@ -205,6 +208,19 @@ def is_playlist(url, playlist_type):
     if pt == "youtube":
         playlist_part = 'https://www.youtube.com/playlist?list'
         return playlist_part in url
-    elif pt == "billboard" and re.match(r"hot-\d+", pt):
-        billboard_URL = "https://www.billboard.com/charts/"
-        return get(billboard_URL + url).status_code != 404
+    if pt == "billboard":
+        try:
+            chart_names = get_chart_names('~/.playx/logs/billboard')
+        except FileNotFoundError:
+            raise ValueError(
+                "No chart names found at ~/.playx/logs/billboard\n" +
+                "Be sure you have already dumped the chart names using the command\n" +
+                "playx -db"
+            )
+        if not chart_names:
+            raise ValueError(
+                "No chart names found at ~/.playx/logs/billboard\n" +
+                "Be sure you have already dumped the chart names using the command\n" +
+                "playx -db"
+            )
+        return url.lower() in get_chart_names('~/.playx/logs/billboard')
