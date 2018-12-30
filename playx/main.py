@@ -11,7 +11,7 @@ from .cache import (
 )
 
 from .utility import (
-    direct_to_play, run_mpv_dir
+    direct_to_play, run_mpv_dir, move_songs
 )
 
 from .youtube import (
@@ -192,6 +192,8 @@ def playx(parser, args, song):
 
 
 def main():
+    # Before doing anything, make sure all songs are in the new song dir
+    move_songs()
     parser, args = parse()
     song = ' '.join(args.song)
     # Put a check to see if the passed arg is a list

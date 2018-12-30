@@ -241,9 +241,7 @@ def is_playlist(url, playlist_type):
             try:
                 chart_names = get_chart_names('~/.playx/logs/billboard')
             except FileNotFoundError:
-                print("No internet connection! No local billboard\
-                         chart list found! Cannot check if passed\
-                         name is a chart.\a")
+                print("No internet connection!\nNo local billboard chart list found! Cannot check if passed name is a chart.\a")
                 return False
             if not chart_names:
                 return False
