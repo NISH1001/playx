@@ -4,14 +4,17 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import os
-from .youtube import YoutubeMetadata
-from .billboard import (
+from playx.youtube import YoutubeMetadata
+from playlist.billboard import (
     Billboard,
     get_chart_names,
     get_chart_names_online,
     dump_to_file
 )
-from .logger import get_logger
+from playlist.spotify import (
+    Spotify
+)
+from playx.logger import get_logger
 
 # Get the logger
 logger = get_logger('playlist')
@@ -226,6 +229,46 @@ class BillboardPlaylist:
         self.playlist_name = Chart.chart_name
 
 
+class SpotifyPlaylist:
+
+    def __init__(self, URL, pl_start=None, pl_end=None):
+        self.URL = URL
+        self.list_content_tuple = []
+        self.pl_end = pl_end
+        self.pl_start = pl_start
+        self.default_end = 0
+        self.default_start = 1
+        self.is_valid_start = False
+        self.is_valid_end = False
+
+    def is_valid(self):
+        """Check if pl_start and pl_end are valid."""
+        self.is_valid_start = True if self.pl_start in range(
+                                            self.default_start,
+                                            self.default_end + 1) else False
+        self.is_valid_end = True if self.pl_end in range(
+                                            self.default_start,
+                                            self.default_end + 1) else False
+
+    def strip_to_start_end(self):
+        """Strip the tuple to positions passed by the user."""
+        # Before doing anything check if the passed numbers are valid
+        self.is_valid()
+        if self.pl_start is not None and self.is_valid_start:
+            self.default_start = self.pl_start
+        if self.pl_end is not None and self.is_valid_end:
+            self.default_end = self.pl_end
+        self.list_content_tuple = self.list_content_tuple[self.default_start - 1: self.default_end]
+
+    def extract_data(self):
+        """Extract the playlist data."""
+        spotify = Spotify(self.URL)
+        self.list_content_tuple = spotify.get_data()
+        self.default_end = len(self.list_content_tuple)
+        self.strip_to_start_end()
+        return self.list_content_tuple, spotify.playlist_name
+
+
 def is_playlist(url, playlist_type):
     """
         Check if the passed URL is a playlist.
@@ -237,6 +280,9 @@ def is_playlist(url, playlist_type):
     """
 
     pt = playlist_type.lower()
+    if pt == "spotify":
+        playlist_part = 'open.spotify.com/playlist/'
+        return playlist_part in url
     if pt == "youtube":
         playlist_part = 'https://www.youtube.com/playlist?list'
         return playlist_part in url

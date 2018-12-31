@@ -18,9 +18,10 @@ from .youtube import (
     grab_link
 )
 
-from .playlist import (
+from playlist.playlist import (
     YoutubePlaylist, Playxlist,
-    BillboardPlaylist, is_playlist
+    BillboardPlaylist, is_playlist,
+    SpotifyPlaylist
 )
 
 from .logger import get_logger
@@ -176,6 +177,23 @@ def playx(parser, args, song):
                             args.no_cache,
                             args.dont_cache_search
                             )
+    elif is_playlist(song, 'spotify'):
+        logger.info("Spotify playlist passed.")
+        spotify_playlist = SpotifyPlaylist(song, args.pl_start, args.pl_end)
+        data, name = spotify_playlist.extract_data()
+        logger.info('{}: {} {}'.format(
+                                    name,
+                                    len(data),
+                                    'song' if len(data) < 2 else 'songs'
+                                    ))
+        for i in data:
+            stream_from_name(
+                            '{} by {}'.format(i.title, i.artist),
+                            args.lyrics,
+                            args.no_cache,
+                            args.dont_cache_search
+                            )
+
     elif is_playlist(song, 'youtube'):
         logger.info("Youtube playlist passed.")
         youtube_playlist = YoutubePlaylist(song, args.pl_start, args.pl_end)
