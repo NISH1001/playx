@@ -19,9 +19,11 @@ from .youtube import (
 )
 
 from playlist.playlist import (
-    YoutubePlaylist, Playxlist,
-    BillboardPlaylist, is_playlist,
-    SpotifyPlaylist
+    Playlist
+)
+
+from playlist.playxlist import (
+    Playxlist
 )
 
 from .logger import get_logger
@@ -147,7 +149,28 @@ def playx(parser, args, song):
     if not song and args.play_cache:
         cache = Cache("~/.playx/songs")
         return stream_cache_all(cache)
-    if is_song_url(song):
+    # Check if its a playlist
+    playlist = Playlist(song, args.pl_start, args.pl_start)
+    if playlist.is_playlist():
+        data = playlist.get_data()
+        if playlist.type == 'youtube':
+            for i in data:
+                stream_from_url(
+                                song,
+                                args.lyrics,
+                                args.no_cache,
+                                args.dont_cache_search,
+                                i
+                                )
+        else:
+            for i in data:
+                stream_from_name(
+                                '{} by {}'.format(i.title, i.artist),
+                                args.lyrics,
+                                args.no_cache,
+                                args.dont_cache_search
+                                )
+    elif is_song_url(song):
         # In case the song is a url
         stream_from_url(
                         song,
@@ -155,55 +178,6 @@ def playx(parser, args, song):
                         args.no_cache,
                         args.dont_cache_search
                         )
-    elif is_playlist(song, 'billboard'):
-        logger.info("Billboard chart name passed.")
-        # Initiate a billboard object
-        billboard_playlist = BillboardPlaylist(
-                                        song,
-                                        args.pl_start,
-                                        args.pl_end
-                                        )
-        billboard_playlist.extract_list_contents()
-        logger.info("{}: {} {}".format(
-                                billboard_playlist.playlist_name,
-                                len(billboard_playlist.list_content_tuple),
-                                'song' if len(billboard_playlist.list_content_tuple) < 2 else 'songs'
-                                )
-              )
-        for i in billboard_playlist.list_content_tuple:
-            stream_from_name(
-                            i.title,
-                            args.lyrics,
-                            args.no_cache,
-                            args.dont_cache_search
-                            )
-    elif is_playlist(song, 'spotify'):
-        logger.info("Spotify playlist passed.")
-        spotify_playlist = SpotifyPlaylist(song, args.pl_start, args.pl_end)
-        data, name = spotify_playlist.extract_data()
-        logger.info('{}: {} {}'.format(
-                                    name,
-                                    len(data),
-                                    'song' if len(data) < 2 else 'songs'
-                                    ))
-        for i in data:
-            stream_from_name(
-                            '{} by {}'.format(i.title, i.artist),
-                            args.lyrics,
-                            args.no_cache,
-                            args.dont_cache_search
-                            )
-
-    elif is_playlist(song, 'youtube'):
-        logger.info("Youtube playlist passed.")
-        youtube_playlist = YoutubePlaylist(song, args.pl_start, args.pl_end)
-        name, data = youtube_playlist.extract_playlistdata()
-        logger.info("{}: {} {}".format(name, len(data),
-                                'song' if len(data) < 2 else 'songs'))
-        # Play all the songs from the data one by one
-        for i in data:
-            stream_from_url(song, args.lyrics, args.no_cache,
-                            args.dont_cache_search, i)
     elif not song:
         parser.print_help()
     else:
