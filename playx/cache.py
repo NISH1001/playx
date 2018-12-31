@@ -4,7 +4,7 @@ import os
 import threading
 import glob
 import sys
-import requests
+import urllib.request
 from shutil import copyfileobj
 from .stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
@@ -65,10 +65,12 @@ class Cache:
 
     def _search_tokens(self, song_name):
         """Search song in the cache based on simple each word matching."""
-        logger.info("Searching in the cache at :: {}".format(self.dir))
+        logger.info("Searching {} in the cache at :: {}".format(song_name, self.dir))
+        logger.debug("Preprocessing stuff before matching of song starts.")
         song_name = remove_stopwords(remove_multiple_spaces(song_name).lower())
         song_name = remove_punct(song_name)
         tokens1 = song_name.split()
+        logger.debug("Song1 after split: {}".format(tokens1))
         cached_songs = self.list_mp3()
 
         res = []
@@ -79,6 +81,7 @@ class Cache:
             name = remove_punct(name)
             name = remove_multiple_spaces(name)
             tokens2 = name.split()
+            logger.debug("Song2 after split and preprocess: {}".format(tokens2))
             match = check_keywords(tokens1, tokens2)
             if match:
                 dist = compute_jaccard(tokens1, tokens2)
@@ -107,12 +110,20 @@ class Cache:
         try:
             path = os.path.join(self.dir, name)
             # Start downloading the song
-            response = requests.get(link, stream=True)
-            with open(path, 'wb') as out_file:
-                copyfileobj(response.raw, out_file)
+            # response = requests.get(link, stream=True)
+            u = urllib.request.urlopen(link)
+            f = open(path, 'wb')
 
-            del response
+            block_sz = 8192
 
+            while True:
+                buffer = u.read(block_sz)
+                if not buffer:
+                    break
+
+                f.write(buffer)
+
+            logger.info("Download complete.")
             return name
         except Exception:
             return False

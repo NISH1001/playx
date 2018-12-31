@@ -6,9 +6,23 @@ import subprocess
 from shutil import move
 from .lyrics import search_lyricswikia
 from .logger import get_logger
+import threading
 
 # Setup logger
 logger = get_logger('utility')
+
+
+class MPVThread(threading.Thread):
+
+    def __init__(self, URL, title=None):
+        threading.Thread.__init__(self)
+        self.songURL = URL
+        self.title = title
+
+    def run(self):
+        logger.info("Playing :: {}".format(self.title))
+        cli = 'mpv "{}" --really-quiet'.format(self.songURL)
+        os.system(cli)
 
 
 def exe(command):
@@ -36,6 +50,11 @@ def run_mpv(stream_url, title=None):
     logger.info("Playing :: {}".format(title))
     cli = 'mpv "{}" --really-quiet'.format(stream_url)
     os.system(cli)
+    """
+    mpv_thread = MPVThread(stream_url, title)
+    mpv_thread.start()
+    mpv_thread.join()
+    """
 
 def run_mpv_dir(directory):
     logger.info("Playing using mpv from directory :: {}".format(directory))
