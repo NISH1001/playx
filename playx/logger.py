@@ -10,9 +10,10 @@ def get_logger(name):
     # if log_path.is_fifo():
     log_path = log_path.expanduser()
 
-    log_format = "[%(name)s]-[%(asctime)s]: %(message)s"
+    log_format = "[%(name)s]: %(message)s"
+    log_format_file = "[%(name)s]-[%(asctime)s]: %(message)s"
     logging.basicConfig(level=logging.INFO,
-                        format=log_format,
+                        format=log_format_file,
                         filename=log_path)
     console = logging.StreamHandler()
     console.setLevel(logging.INFO)
