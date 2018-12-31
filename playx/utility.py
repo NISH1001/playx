@@ -5,6 +5,10 @@ import os
 import subprocess
 from shutil import move
 from .lyrics import search_lyricswikia
+from .logger import get_logger
+
+# Setup logger
+logger = get_logger('utility')
 
 
 def exe(command):
@@ -29,12 +33,12 @@ def direct_to_play(url, show_lyrics, title):
 
 def run_mpv(stream_url, title=None):
     # print("Playing using mpv...")
-    print("Playing :: {}".format(title))
+    logger.info("Playing :: {}".format(title))
     cli = 'mpv "{}" --really-quiet'.format(stream_url)
     os.system(cli)
 
 def run_mpv_dir(directory):
-    print("Playing using mpv from directory :: {}".format(directory))
+    logger.info("Playing using mpv from directory :: {}".format(directory))
     cli = 'mpv "{}"'.format(directory)
     os.system(cli)
 

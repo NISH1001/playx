@@ -10,6 +10,10 @@ from .stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
     check_keywords
 )
+from .logger import get_logger
+
+# Setup logger
+logger = get_logger('cache')
 
 
 class Cache:
@@ -61,7 +65,7 @@ class Cache:
 
     def _search_tokens(self, song_name):
         """Search song in the cache based on simple each word matching."""
-        print("Searching in the cache at :: {}".format(self.dir))
+        logger.info("Searching in the cache at :: {}".format(self.dir))
         song_name = remove_stopwords(remove_multiple_spaces(song_name).lower())
         song_name = remove_punct(song_name)
         tokens1 = song_name.split()
@@ -92,9 +96,9 @@ class Cache:
         # check if song is already downloaded...
         songs = dw.list_mp3()
         if name in songs:
-            print("{} already downloaded.".format(name))
+            logger.info("{} already downloaded.".format(name))
             return
-        print("Downloading {}".format(name))
+        logger.info("Downloading {}".format(name))
         dw_thread = threading.Thread(target=dw.dw_song, args=(link, name))
         dw_thread.start()
 
