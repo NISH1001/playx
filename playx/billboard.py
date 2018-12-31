@@ -118,7 +118,10 @@ class Billboard():
             self.chart.append(songObj)
 
 def get_chart_names_online(url="https://www.billboard.com/charts"):
-    response = requests.get(url)
+    try:
+        response = requests.get(url)
+    except requests.exceptions.ConnectionError:
+        return []
     soup = BeautifulSoup(response.text, 'html.parser')
     links = soup.find_all('a', href=re.compile(r'.*/charts/.+'))
     chart_names = set()
@@ -136,7 +139,7 @@ def get_chart_names(filename):
 def dump_to_file(names):
     path = '~/.playx/logs/billboard'
     path = os.path.expanduser(path)
-    print("Dumping billboard chart names to :: {}".format(path))
+    # print("Dumping billboard chart names to :: {}".format(path))
     with open(path, 'w') as f:
         f.write('\n'.join(names).strip())
 

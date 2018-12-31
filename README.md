@@ -87,11 +87,6 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -p, --play-cache      Play all songs from the cache.
-  -db, --dump-billboard
-                        Dump all chart names to '~/.playx/logs/billboard':
-                        This is to check if the song name is in billboard
-                        chart list while calling the playx to play songs from
-                        billboard playlist
   -n, --no-cache        Don't download the song for later use.
   -d, --dont-cache-search
                         Don't search the song in the cache.

@@ -1,13 +1,15 @@
 """Youtube Playlist related functions."""
 
-from requests import get
+import requests
 from bs4 import BeautifulSoup
 import re
 import os
 from .youtube import YoutubeMetadata
 from .billboard import (
     Billboard,
-    get_chart_names
+    get_chart_names,
+    get_chart_names_online,
+    dump_to_file
 )
 
 """
@@ -57,10 +59,25 @@ class YoutubePlaylist:
             self.default_end = self.pl_end
         self.data = self.data[self.default_start - 1: self.default_end]
 
+    def _is_connection_possible(self):
+        """Make a simple request to check if connection is possible.
+        i:e check if internet is connected.
+        """
+        url = "https://google.com"
+        try:
+            requests.get(url)
+        except requests.exceptions.ConnectionError:
+            return False
+
+        return True
+
     def extract_playlistdata(self):
         """Extract all the videos into YoutubeMetadata objects."""
         url_prepend = 'https://www.youtube.com/watch?v='
-        r = get(self.URL)
+        if not self._is_connection_possible():
+            print("Cannot play playlist. No connection detected!")
+            return 'N/A', []
+        r = requests.get(self.URL)
         soup = BeautifulSoup(r.text, 'html.parser')
         name = soup.findAll('h1', attrs={'class': 'pl-header-title'})
         name = self.extract_name(name)
@@ -209,18 +226,22 @@ def is_playlist(url, playlist_type):
         playlist_part = 'https://www.youtube.com/playlist?list'
         return playlist_part in url
     if pt == "billboard":
-        try:
-            chart_names = get_chart_names('~/.playx/logs/billboard')
-        except FileNotFoundError:
-            raise ValueError(
-                "No chart names found at ~/.playx/logs/billboard\n" +
-                "Be sure you have already dumped the chart names using the command\n" +
-                "playx -db"
-            )
-        if not chart_names:
-            raise ValueError(
-                "No chart names found at ~/.playx/logs/billboard\n" +
-                "Be sure you have already dumped the chart names using the command\n" +
-                "playx -db"
-            )
-        return url.lower() in get_chart_names('~/.playx/logs/billboard')
+        # First check online. If internet error then try to search offline.
+        # If its found online then
+        # We will check if we have an offline copy of the billboard charts
+
+        CHART_NAMES = get_chart_names_online()
+
+        # Check if CHART_NAMES are present or not.
+        if len(CHART_NAMES):
+            # Before returning dump the charts to a file
+            dump_to_file(CHART_NAMES)
+            return url.lower() in CHART_NAMES
+        else:
+            try:
+                chart_names = get_chart_names('~/.playx/logs/billboard')
+            except FileNotFoundError:
+                print("No internet connection!\nNo local billboard chart list found! Cannot check if passed name is a chart.\a")
+                return False
+            if not chart_names:
+                return False

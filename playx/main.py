@@ -11,7 +11,7 @@ from .cache import (
 )
 
 from .utility import (
-    direct_to_play, run_mpv_dir
+    direct_to_play, run_mpv_dir, move_songs
 )
 
 from .youtube import (
@@ -44,13 +44,6 @@ def parse():
                         action='store_true',
                         help="Play all songs from the cache.\
                         The cache is located at ~/.playx/songs/ by default")
-
-    parser.add_argument('-db', '--dump-billboard',
-                        action='store_true',
-                        help="Dump all chart names to '~/.playx/logs/billboard':\
-                        This is to check if the song name is in billboard chart list\
-                        while calling the playx to play songs from billboard playlist\
-                        ")
     parser.add_argument('-n', '--no-cache',
                         action='store_true',
                         help="Don't download the song for later use.")
@@ -151,12 +144,6 @@ def playx(parser, args, song):
     if not song and args.play_cache:
         cache = Cache("~/.playx/songs")
         return stream_cache_all(cache)
-    if not song and args.dump_billboard:
-        url = "https://www.billboard.com/charts"
-        chart_names = billboard.get_chart_names_online(url)
-        print("Chart names are :: \n{}".format(chart_names))
-        billboard.dump_to_file(chart_names)
-        return True
     if is_song_url(song):
         # In case the song is a url
         stream_from_url(
@@ -174,9 +161,10 @@ def playx(parser, args, song):
                                         args.pl_end
                                         )
         billboard_playlist.extract_list_contents()
-        print("{}: {} songs".format(
+        print("{}: {} {}".format(
                                 billboard_playlist.playlist_name,
-                                len(billboard_playlist.list_content_tuple)
+                                len(billboard_playlist.list_content_tuple),
+                                'song' if len(billboard_playlist.list_content_tuple) < 2 else 'songs'
                                 )
               )
         for i in billboard_playlist.list_content_tuple:
@@ -187,10 +175,11 @@ def playx(parser, args, song):
                             args.dont_cache_search
                             )
     elif is_playlist(song, 'youtube'):
-        print("outube playlist passed.")
+        print("Youtube playlist passed.")
         youtube_playlist = YoutubePlaylist(song, args.pl_start, args.pl_end)
         name, data = youtube_playlist.extract_playlistdata()
-        print("{}: {} songs".format(name, len(data)))
+        print("{}: {} {}".format(name, len(data),
+                                'song' if len(data) < 2 else 'songs'))
         # Play all the songs from the data one by one
         for i in data:
             stream_from_url(song, args.lyrics, args.no_cache,
@@ -203,6 +192,8 @@ def playx(parser, args, song):
 
 
 def main():
+    # Before doing anything, make sure all songs are in the new song dir
+    move_songs()
     parser, args = parse()
     song = ' '.join(args.song)
     # Put a check to see if the passed arg is a list
