@@ -4,14 +4,12 @@ from pathlib import Path
 
 def get_logger(name):
     """Custom logging function."""
-    name = name.upper()
     log_path = Path('~/.playx/logs/log.cat')
 
-    # if log_path.is_fifo():
     log_path = log_path.expanduser()
 
-    log_format = "[%(name)s]: %(message)s"
-    log_format_file = "[%(name)s]-[%(asctime)s]: %(message)s"
+    log_format = "[{}]: %(message)s".format(name)
+    log_format_file = "[{}]-[%(asctime)s]: %(message)s".format(name.upper())
     logging.basicConfig(level=logging.INFO,
                         format=log_format_file,
                         filename=log_path)
