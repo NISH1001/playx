@@ -21,7 +21,7 @@ class ManualError(Exception):
         print(' '.join(self.args))
 
 def search_lyricswikia(query):
-    logger.info("Searching lyrics.wikia.com")
+    logger.info("Searching [{}] at lyrics.wikia.com".format(query))
     query = remove_multiple_spaces(query).lower()
     tokens1 = query.split()
     query = urlencode(query.lower())

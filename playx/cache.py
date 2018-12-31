@@ -65,7 +65,7 @@ class Cache:
 
     def _search_tokens(self, song_name):
         """Search song in the cache based on simple each word matching."""
-        logger.info("Searching {} in the cache at :: {}".format(song_name, self.dir))
+        logger.info("Searching [{}] in the cache at [{}]".format(song_name, self.dir))
         logger.debug("Preprocessing stuff before matching of song starts.")
         song_name = remove_stopwords(remove_multiple_spaces(song_name).lower())
         song_name = remove_punct(song_name)
