@@ -5,5 +5,6 @@ __all__ = [
             'spotify',
             'playlist',
             'playxlist',
-            'youtube'
+            'youtube',
+            'soundcloud'
             ]

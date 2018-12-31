@@ -10,9 +10,11 @@ from playlist.billboard import (
 from playlist import (
     spotify,
     youtube,
-    billboard
+    billboard,
+    soundcloud
 )
 
+import re
 from playx.logger import get_logger
 
 # Get the logger
@@ -41,7 +43,8 @@ class Playlist():
         self.dict = {
                     'spotify': spotify,
                     'youtube': youtube,
-                    'billboard': billboard
+                    'billboard': billboard,
+                    'soundcloud': soundcloud
                     }
 
     def _is_spotify(self):
@@ -82,11 +85,19 @@ class Playlist():
                 if self.URL.lower in chart_names:
                     self.type = 'billboard'
 
+    def _is_soundcloud(self):
+        """Check if URL is a soundcloud set."""
+        match = re.findall(r'https://soundcloud\.com.*?/sets/.*?$', self.URL)
+        if len(match):
+            self.type = 'soundcloud'
+
     def is_playlist(self):
         """Check if the playlist is valid."""
+
         self._is_billboard()
         self._is_spotify()
         self._is_youtube()
+        self._is_soundcloud()
 
         if self.type != 'N/A':
             return True
