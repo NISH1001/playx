@@ -11,6 +11,11 @@ from .billboard import (
     get_chart_names_online,
     dump_to_file
 )
+from .logger import get_logger
+
+# Get the logger
+logger = get_logger('playlist')
+
 
 """
 __author__ = Deepjyoti Barman
@@ -75,7 +80,7 @@ class YoutubePlaylist:
         """Extract all the videos into YoutubeMetadata objects."""
         url_prepend = 'https://www.youtube.com/watch?v='
         if not self._is_connection_possible():
-            print("Cannot play playlist. No connection detected!")
+            logger.warning("Cannot play playlist. No connection detected!")
             return 'N/A', []
         r = requests.get(self.URL)
         soup = BeautifulSoup(r.text, 'html.parser')
@@ -98,7 +103,7 @@ class YoutubePlaylist:
                 self.data.append(youtube_metadata)
 
         if len(self.data) == 0:
-            print("Are you sure you have videos in your playlist? Try changing\
+            logger.warning("Are you sure you have videos in your playlist? Try changing\
                   privacy to public.")
 
         self.default_end = len(self.data)
@@ -192,6 +197,15 @@ class BillboardPlaylist:
                                             self.default_start,
                                             self.default_end + 1) else False
 
+    def _add_artist_name(self):
+        """Add the artist name to the song seperating by a 'by'
+
+        eg: If the song name is thank u, next
+        It should be changed to thank u, next by Ariana Grande."""
+
+        for i in self.list_content_tuple:
+            i.title = i.title + ' by ' + i.artist
+
     def strip_to_start_end(self):
         """Strip the tuple to positions passed by the user."""
         # Before doing anything check if the passed numbers are valid
@@ -208,6 +222,7 @@ class BillboardPlaylist:
         self.list_content_tuple = Chart.chart
         self.default_end = len(self.list_content_tuple)
         self.strip_to_start_end()
+        self._add_artist_name()
         self.playlist_name = Chart.chart_name
 
 
@@ -241,7 +256,7 @@ def is_playlist(url, playlist_type):
             try:
                 chart_names = get_chart_names('~/.playx/logs/billboard')
             except FileNotFoundError:
-                print("No internet connection!\nNo local billboard chart list found! Cannot check if passed name is a chart.\a")
+                logger.error("No internet connection!\nNo local billboard chart list found! Cannot check if passed name is a chart.\a")
                 return False
             if not chart_names:
                 return False
