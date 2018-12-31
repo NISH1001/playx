@@ -63,3 +63,4 @@ class Playxlist:
         """Return the tuple containing the list data."""
         self.extract_list_contents()
         self.strip_to_start_end()
+        return self.list_content_tuple
