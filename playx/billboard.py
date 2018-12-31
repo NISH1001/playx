@@ -117,6 +117,7 @@ class Billboard():
                                 )
             self.chart.append(songObj)
 
+
 def get_chart_names_online(url="https://www.billboard.com/charts"):
     try:
         response = requests.get(url)
@@ -132,16 +133,20 @@ def get_chart_names_online(url="https://www.billboard.com/charts"):
             chart_names.add(name.lower())
     return chart_names
 
+
 def get_chart_names(filename):
+    """Get the chart names from the local chart file."""
     path = os.path.expanduser(filename)
-    return [ name.strip() for name in open(path).readlines()]
+    return [name.strip() for name in open(path).readlines()]
+
 
 def dump_to_file(names):
+    """Dump the billboard chart names to a local file."""
     path = '~/.playx/logs/billboard'
     path = os.path.expanduser(path)
-    # print("Dumping billboard chart names to :: {}".format(path))
     with open(path, 'w') as f:
         f.write('\n'.join(names).strip())
+
 
 if __name__ == "__main__":
     # Chart = Billboard("youtube")

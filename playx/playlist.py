@@ -197,6 +197,15 @@ class BillboardPlaylist:
                                             self.default_start,
                                             self.default_end + 1) else False
 
+    def _add_artist_name(self):
+        """Add the artist name to the song seperating by a 'by'
+
+        eg: If the song name is thank u, next
+        It should be changed to thank u, next by Ariana Grande."""
+
+        for i in self.list_content_tuple:
+            i.title = i.title + ' by ' + i.artist
+
     def strip_to_start_end(self):
         """Strip the tuple to positions passed by the user."""
         # Before doing anything check if the passed numbers are valid
@@ -213,6 +222,7 @@ class BillboardPlaylist:
         self.list_content_tuple = Chart.chart
         self.default_end = len(self.list_content_tuple)
         self.strip_to_start_end()
+        self._add_artist_name()
         self.playlist_name = Chart.chart_name
 
 
