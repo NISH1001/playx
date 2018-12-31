@@ -17,6 +17,12 @@ from .cache import Cache
 
 from .utility import exe
 
+from .logger import get_logger
+
+
+# Setup logger
+logger = get_logger('youtube')
+
 
 class YoutubeMetadata:
     """A data store to store the information of a youtube video."""
@@ -28,8 +34,8 @@ class YoutubeMetadata:
 
     def display(self):
         """Be informative."""
-        print("Title: ", self.title)
-        print("Duration: ", self.duration)
+        logger.info("Title: {}".format(self.title))
+        logger.info("Duration: {}".format(self.duration))
 
 def get_youtube_streams(url):
     """Get both audio & video stream urls for youtube using youtube-dl.
@@ -49,7 +55,7 @@ def get_youtube_streams(url):
 
 
 def get_youtube_title(url):
-    print("Getting title for :: {}".format(url))
+    logger.info("Getting title for :: {}".format(url))
     cli = "youtube-dl -e {}".format(url)
     output, error = exe(cli)
     return output
@@ -57,13 +63,13 @@ def get_youtube_title(url):
 
 def search_youtube(query):
     """Behold the greatest magic trick ever : crawl and crawl."""
-    print("Searching youtube for :: {}".format(query))
+    logger.info("Searching youtube for :: {}".format(query))
     base_url = "https://www.youtube.com"
     url = base_url + "//results?sp=EgIQAVAU&q=" + query
     try:
         response = requests.get(url)
     except Exception as e:
-        print("ERROR: ", e)
+        logger.error("ERROR: ", e)
         exit()
     soup = BeautifulSoup(response.content, "html.parser")
     """

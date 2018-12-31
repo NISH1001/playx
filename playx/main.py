@@ -23,11 +23,13 @@ from .playlist import (
     BillboardPlaylist, is_playlist
 )
 
-from .import billboard
-
-
+from .logger import get_logger
 from .songfinder import search
 from .stringutils import is_song_url
+
+
+# Get the logger
+logger = get_logger('main')
 
 
 def parse():
@@ -153,7 +155,7 @@ def playx(parser, args, song):
                         args.dont_cache_search
                         )
     elif is_playlist(song, 'billboard'):
-        print("Billboard chart name passed.")
+        logger.info("Billboard chart name passed.")
         # Initiate a billboard object
         billboard_playlist = BillboardPlaylist(
                                         song,
@@ -161,7 +163,7 @@ def playx(parser, args, song):
                                         args.pl_end
                                         )
         billboard_playlist.extract_list_contents()
-        print("{}: {} {}".format(
+        logger.info("{}: {} {}".format(
                                 billboard_playlist.playlist_name,
                                 len(billboard_playlist.list_content_tuple),
                                 'song' if len(billboard_playlist.list_content_tuple) < 2 else 'songs'
@@ -175,10 +177,10 @@ def playx(parser, args, song):
                             args.dont_cache_search
                             )
     elif is_playlist(song, 'youtube'):
-        print("Youtube playlist passed.")
+        logger.info("Youtube playlist passed.")
         youtube_playlist = YoutubePlaylist(song, args.pl_start, args.pl_end)
         name, data = youtube_playlist.extract_playlistdata()
-        print("{}: {} {}".format(name, len(data),
+        logger.info("{}: {} {}".format(name, len(data),
                                 'song' if len(data) < 2 else 'songs'))
         # Play all the songs from the data one by one
         for i in data:

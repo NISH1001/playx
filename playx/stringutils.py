@@ -70,7 +70,7 @@ def urlencode(text):
     return encoded
 
 def remove_stopwords(string):
-    stopwords = ['the', 'in', 'of', 'at', 'by']
+    stopwords = ['the', 'in', 'of', 'at', 'by', 'featuring', 'x']
     res = []
     tokens = string.split()
     for token in tokens:

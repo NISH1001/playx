@@ -8,6 +8,11 @@ from .stringutils import (
     urlencode, remove_punct, compute_jaccard, remove_multiple_spaces
 )
 
+from .logger import get_logger
+
+# setup logger
+logger = get_logger('lyrics')
+
 
 class ManualError(Exception):
     def __init__(self, args):
@@ -16,7 +21,7 @@ class ManualError(Exception):
         print(' '.join(self.args))
 
 def search_lyricswikia(query):
-    print("Searching lyrics.wikia.com")
+    logger.info("Searching [{}] at lyrics.wikia.com".format(query))
     query = remove_multiple_spaces(query).lower()
     tokens1 = query.split()
     query = urlencode(query.lower())
@@ -80,7 +85,7 @@ def lyrics_full(url):
 
 def get_lyrics(query):
     url = "http://search.azlyrics.com/search.php"
-    print("Searching...\nHave patience and be an awesome potato...")
+    logger.info("Searching...")
     links = search(url, query)
 
     if links:

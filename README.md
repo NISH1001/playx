@@ -123,8 +123,7 @@ This plays the songs from my personal (and public) playlist named *Chilld and Wi
 playx hot-100
 ```
 This plays the songs from Billboards [hot-100](https://www.billboard.com/charts/hot-100) chart. The billboard charts can be found [here](https://www.billboard.com/charts)  
-Before trying to play songs from billboard playlist, make sure you have already used the command `playx -db` or `playx --dump-billboard` 
-to cache the list of chart names from billboard.
+
 
 **Play from local playlist**
 
