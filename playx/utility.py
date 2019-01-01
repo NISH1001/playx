@@ -4,8 +4,8 @@
 import os
 import subprocess
 from shutil import move
-from .lyrics import search_lyricswikia
-from .logger import get_logger
+from playx.lyrics import search_lyricswikia
+from playx.logger import get_logger
 import threading
 
 # Setup logger
@@ -55,7 +55,7 @@ def run_mpv(stream_url, title=None):
     mpv_thread = MPVThread(stream_url, title)
     mpv_thread.start()
     mpv_thread.join()
-    
+
 
 def run_mpv_dir(directory):
     logger.info("Playing using mpv from directory :: {}".format(directory))

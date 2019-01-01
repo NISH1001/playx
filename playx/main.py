@@ -6,29 +6,29 @@
 
 import argparse
 
-from .cache import (
+from playx.cache import (
     Cache, search_locally
 )
 
-from .utility import (
+from playx.utility import (
     direct_to_play, run_mpv_dir, move_songs
 )
 
-from .youtube import (
+from playx.youtube import (
     grab_link
 )
 
-from playlist.playlist import (
+from playx.playlist.playlist import (
     Playlist
 )
 
-from playlist.playxlist import (
+from playx.playlist.playxlist import (
     Playxlist
 )
 
-from .logger import get_logger
-from .songfinder import search
-from .stringutils import is_song_url
+from playx.logger import get_logger
+from playx.songfinder import search
+from playx.stringutils import is_song_url
 
 
 # Get the logger

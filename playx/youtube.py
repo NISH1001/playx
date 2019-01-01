@@ -8,16 +8,16 @@ due to all those crawling shit
 
 from bs4 import BeautifulSoup
 import requests
-from .stringutils import (
+from playx.stringutils import (
     remove_multiple_spaces,
     remove_punct
 )
 
-from .cache import Cache
+from playx.cache import Cache
 
-from .utility import exe
+from playx.utility import exe
 
-from .logger import get_logger
+from playx.logger import get_logger
 
 
 # Setup logger

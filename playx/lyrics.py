@@ -4,11 +4,11 @@ import re
 from bs4 import BeautifulSoup
 import urllib.request, urllib.error, urllib.parse
 import sys
-from .stringutils import (
+from playx.stringutils import (
     urlencode, remove_punct, compute_jaccard, remove_multiple_spaces
 )
 
-from .logger import get_logger
+from playx.logger import get_logger
 
 # setup logger
 logger = get_logger('lyrics')

@@ -1,13 +1,13 @@
 """File to handle all other playlists"""
 
 
-from playlist.billboard import (
+from playx.playlist.billboard import (
     get_chart_names,
     get_chart_names_online,
     dump_to_file
 )
 
-from playlist import (
+from playx.playlist import (
     spotify,
     youtube,
     billboard,

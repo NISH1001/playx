@@ -5,11 +5,12 @@ import threading
 import glob
 import sys
 import urllib.request
-from .stringutils import (
+
+from playx.stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
     check_keywords
 )
-from .logger import get_logger
+from playx.logger import get_logger
 
 # Setup logger
 logger = get_logger('cache')
