@@ -79,11 +79,11 @@ class YoutubePlaylist(PlaylistBase):
                 video_title = video_title[0].replace("data-title=", '').replace('"', '')
                 video_id = video_id[0].replace("data-video-id=", '').replace('"', '')
                 youtube_metadata = YoutubeMetadata()
-                youtube_metadata.url = url_prepend + video_id
+                youtube_metadata.URL = url_prepend + video_id
                 youtube_metadata.title = video_title
                 self.list_content_tuple.append(youtube_metadata)
 
-        if len(self.data) == 0:
+        if len(self.list_content_tuple) == 0:
             logger.warning("Are you sure you have videos in your playlist? Try changing\
                   privacy to public.")
 
