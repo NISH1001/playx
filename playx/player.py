@@ -102,7 +102,7 @@ class URLPlayer():
         """
         if self.URL_type == 'youtube':
             self.title = self.songObj.title
-            self.stream_url = self.songObj.URL
+            self.URL = self.songObj.URL
         elif self.URL_type == 'soundcloud':
             self.title = self.songObj.title
             self.stream_url = self.songObj.stream_url
@@ -126,10 +126,14 @@ class URLPlayer():
                 self.stream_url = match[1]
             else:
                 self._dw()
+        else:
+            logger.info("Searching locally disabled.")
+            if self.stream_url == '':
+                self._get_youtube_data()
 
         direct_to_play(self.stream_url, self.show_lyrics, self.title)
 
-    def play(self, URL, songObj=None):
+    def play_url(self, URL, songObj=None):
         """
         Play the song by using the URL.
         """
@@ -190,7 +194,7 @@ class NamePlayer():
             self._get_youtube_data()
         direct_to_play(self.stream_url, self.show_lyrics, self.title)
 
-    def play(self, name):
+    def play_name(self, name):
         """
         Start playing the song.
         """
@@ -290,19 +294,19 @@ class Player(URLPlayer, NamePlayer):
         self._check_type()
 
         if self.datatype == 'URL':
-            URLPlayer().play(self.data)
+            self.play_url(self.data)
         elif self.datatype == "song":
-            NamePlayer().play(self.data)
+            self.play_name(self.data)
         elif self.datatype == 'playlist':
             logger.debug(len(self._iterable_list))
             for i in self._iterable_list:
                 # For different playlists the player needs to act
                 # differently
                 if self.playlisttype == 'soundcloud':
-                    URLPlayer().play(i.stream_url, i)
+                    self.play_url(i.stream_url, i)
                 elif self.playlisttype == 'spotify':
-                    NamePlayer().play(i.title + ' ' + i.artist)
+                    self.play_name(i.title + ' ' + i.artist)
                 elif self.playlisttype == 'billboard':
-                    NamePlayer().play(i.title)
+                    self.play_name(i.title)
                 elif self.playlisttype == 'youtube':
-                    URLPlayer().play(i.URL, i)
+                    self.play_url(i.URL, i)
