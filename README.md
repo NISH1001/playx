@@ -143,6 +143,20 @@ For a playlist every line is considered an entry. Refer to [example.playx](https
   
 ------------
 
+## Cache Directory Structure
+By default, `playx` creates a directory in the home as `~/.playx` (which is a hidden folder). 
+Structure is like:  
+```bash
+.playx
+    |- songs/
+    |- logs/
+```
+
+*songs*: This stores all the songs downloaded by `playx`
+*logs*: This stores the log for user activities of songs that are searched and played with creation date. This will be used for recommendation of songs in future version
+
+------------
+
 ## Contributions
 Contributions are warmly welcome. Please do go through [CONTRIBUTING](https://github.com/NISH1001/playx/blob/develop/CONTRIBUTING.md).
 
@@ -156,10 +170,13 @@ Contributions are warmly welcome. Please do go through [CONTRIBUTING](https://gi
 - ~~search lyrics~~
 - ~~play from youtube playlist~~
 - ~~play from local playlist (may be a list of song names)~~
-- log activity
+- ~~play from other playlist (spotify, billboard, etc.)~~
+- ~~log activity~~
 - use logs to create simple recommendations
 
 
 ## Acknowledgements
-- Thanks to [Deepjyoti Barman](https://github.com/deepjyoti30) for parallelizing streaming + downloading (and other improvements)
+- Thanks to [Deepjyoti Barman](https://github.com/deepjyoti30) for doing all the major contributions (parallelizing streaming + downloads
+, playlist, logger)
 - Thanks to [Mirza Zulfan](https://github.com/mirzazulfan) for logo for `playx`. It's neat (and cool)
+- Thanks to [Mattwmaster58](https://github.com/Mattwmaster58) for creating packaging structure with setup file
