@@ -90,20 +90,22 @@ def search_youtube(query):
     return videos
 
 
-def grab_link(value, title, no_cache):
+def grab_link(value):
     """Return the audio link of the song."""
     stream = get_youtube_streams(value)
+    if stream['audio'] is None: return None
+    value = stream['audio']
+    # if not no_cache:
+    #    Cache.dw(value, title)
+    return value
+
+
+def dw(title, url):
     # Start downloading
     title = remove_punct(title)
     title = remove_multiple_spaces(title)
     title = title + '.mp3'
-
-    if stream['audio'] is None: return None
-    value = stream['audio']
-    if not no_cache:
-        Cache.dw(value, title)
-    return value
-
+    Cache.dw(url, title)
 
 def main():
     """Run on program call."""

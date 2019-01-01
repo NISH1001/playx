@@ -35,7 +35,7 @@ class YoutubePlaylist(PlaylistBase):
         """Init the URl."""
         super().__init__(pl_start, pl_end)
         self.URL = URL
-        self.data = []
+        self.list_content_tuple = []
         self.playlist_name = ''
 
     def extract_name(self, name):
@@ -81,14 +81,14 @@ class YoutubePlaylist(PlaylistBase):
                 youtube_metadata = YoutubeMetadata()
                 youtube_metadata.url = url_prepend + video_id
                 youtube_metadata.title = video_title
-                self.data.append(youtube_metadata)
+                self.list_content_tuple.append(youtube_metadata)
 
         if len(self.data) == 0:
             logger.warning("Are you sure you have videos in your playlist? Try changing\
                   privacy to public.")
 
-        PlaylistBase.update_end(self, len(self.data))
-        PlaylistBase.list_content_tuple = self.data
+        PlaylistBase.update_end(self, len(self.list_content_tuple))
+        PlaylistBase.list_content_tuple = self.list_content_tuple
         PlaylistBase.strip_to_start_end(self)
 
 
@@ -103,4 +103,4 @@ def get_data(URL, pl_start, pl_end):
     youtube_playlist = YoutubePlaylist(URL, pl_start, pl_end)
     youtube_playlist.extract_playlistdata()
 
-    return youtube_playlist.data, youtube_playlist.playlist_name
+    return youtube_playlist.list_content_tuple, youtube_playlist.playlist_name
