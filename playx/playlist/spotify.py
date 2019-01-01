@@ -2,6 +2,10 @@ from requests import get
 from bs4 import BeautifulSoup
 import re
 
+from playx.playlist.playlistmodder import (
+    PlaylistBase
+)
+
 # url = "https://open.spotify.com/playlist/3YSjAfvq8CVG2mqrzJcv31?si=U72PoitqQiyRmAJ1HZzDeA"
 url = "https://open.spotify.com/playlist/37i9dQZF1DX5Ozry5U6G0d"
 
@@ -15,7 +19,7 @@ class SpotifySong:
         self.album = ''
 
 
-class SpotifyIE:
+class SpotifyIE():
     """Spotify playlist data extractor."""
 
     def __init__(self, URL):
@@ -53,48 +57,25 @@ class SpotifyIE:
         return self.playlist_content
 
 
-class SpotifyPlaylist:
+class SpotifyPlaylist(PlaylistBase):
     """Container that uses the SpotifyIE to properly align
     all the data and return a proper tuple.
     """
 
     def __init__(self, URL, pl_start=None, pl_end=None):
+        super().__init__(pl_start, pl_end)
         self.URL = URL
         self.list_content_tuple = []
-        self.pl_end = pl_end
-        self.pl_start = pl_start
-        self.default_end = 0
-        self.default_start = 1
-        self.is_valid_start = False
-        self.is_valid_end = False
         self.playlist_name = ''
-
-    def is_valid(self):
-        """Check if pl_start and pl_end are valid."""
-        self.is_valid_start = True if self.pl_start in range(
-                                            self.default_start,
-                                            self.default_end + 1) else False
-        self.is_valid_end = True if self.pl_end in range(
-                                            self.default_start,
-                                            self.default_end + 1) else False
-
-    def strip_to_start_end(self):
-        """Strip the tuple to positions passed by the user."""
-        # Before doing anything check if the passed numbers are valid
-        self.is_valid()
-        if self.pl_start is not None and self.is_valid_start:
-            self.default_start = self.pl_start
-        if self.pl_end is not None and self.is_valid_end:
-            self.default_end = self.pl_end
-        self.list_content_tuple = self.list_content_tuple[self.default_start - 1: self.default_end]
 
     def extract_data(self):
         """Extract the playlist data."""
         spotify = SpotifyIE(self.URL)
         self.list_content_tuple = spotify.get_data()
         self.playlist_name = spotify.playlist_name
-        self.default_end = len(self.list_content_tuple)
-        self.strip_to_start_end()
+        PlaylistBase._update_end(self, len(self.list_content_tuple))
+        PlaylistBase.list_content_tuple = self.list_content_tuple
+        PlaylistBase._strip_to_start_end(self)
 
 
 def get_data(URL, pl_start, pl_end):
