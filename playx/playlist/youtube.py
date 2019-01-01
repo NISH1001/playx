@@ -87,8 +87,7 @@ class YoutubePlaylist(PlaylistBase):
             logger.warning("Are you sure you have videos in your playlist? Try changing\
                   privacy to public.")
 
-        PlaylistBase.list_content_tuple = self.list_content_tuple
-        PlaylistBase.strip_to_start_end(self)
+        self.strip_to_start_end()
 
 
 def get_data(URL, pl_start, pl_end):

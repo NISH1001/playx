@@ -61,17 +61,8 @@ class URLPlayer():
         """
         if not self.no_cache:
             dw(self.title, self.stream_url)
-
-    def _update_URL(self, URL):
-        """
-        Update the URL. Useful if the URL is to be updated later
-        during the class call.
-        """
-        self.URL = URL
-        self.URL_type = url_type(self.URL)
-
-    def _update_songObj(self, songObj):
-        self.songObj = songObj
+        else:
+            logger.info('Caching is disabled')
 
     def _get_soundcloud_data(self):
         """
@@ -79,7 +70,7 @@ class URLPlayer():
         """
         self.title, self.stream_url = get_track_info(self.URL)
 
-    def _get_youtube_data(self):
+    def _get_youtube_data_url(self):
         """
         Search youtube and get its data.
         """
@@ -92,7 +83,7 @@ class URLPlayer():
         Extract the song data according to type
         """
         if self.URL_type == 'youtube':
-            self._get_youtube_data()
+            self._get_youtube_data_url()
         elif self.URL_type == 'soundcloud':
             self._get_soundcloud_data()
 
@@ -129,7 +120,7 @@ class URLPlayer():
         else:
             logger.info("Searching locally disabled.")
             if self.stream_url == '':
-                self._get_youtube_data()
+                self._get_youtube_data_url()
 
         direct_to_play(self.stream_url, self.show_lyrics, self.title)
 
@@ -137,9 +128,10 @@ class URLPlayer():
         """
         Play the song by using the URL.
         """
-        self._update_URL(URL)
+        self.URL = URL
+        self.URL_type = url_type(self.URL)
         if songObj is not None:
-            self._update_songObj(songObj)
+            self.songObj = songObj
         self._stream_from_url()
 
 
@@ -162,13 +154,7 @@ class NamePlayer():
         self.title = ''
         self.stream_url = ''
 
-    def _update_name(self, name):
-        """
-        Update the name of the song.
-        """
-        self.name = name
-
-    def _get_youtube_data(self):
+    def _get_youtube_data_name(self):
         """
         Search youtube and get its data.
         """
@@ -189,16 +175,17 @@ class NamePlayer():
                 self.title = match[0]
                 self.stream_url = match[1]
             else:
-                self._get_youtube_data()
+                self._get_youtube_data_name()
+                self._dw()
         else:
-            self._get_youtube_data()
+            self._get_youtube_data_name()
         direct_to_play(self.stream_url, self.show_lyrics, self.title)
 
     def play_name(self, name):
         """
         Start playing the song.
         """
-        self._update_name(name)
+        self.name = name
         self._stream_from_name()
 
 

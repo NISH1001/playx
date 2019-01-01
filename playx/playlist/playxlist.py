@@ -37,8 +37,7 @@ class Playxlist(PlaylistBase):
             self.list_content_tuple.append(line.replace('\n', ''))
 
         # Update the total length of the list_tuple
-        PlaylistBase.list_content_tuple = self.list_content_tuple
-        PlaylistBase.strip_to_start_end(self)
+        self.strip_to_start_end()
 
     def get_list_contents(self):
         """Return the tuple containing the list data."""
