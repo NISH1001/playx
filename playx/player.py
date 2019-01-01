@@ -223,9 +223,9 @@ class Player(URLPlayer, NamePlayer):
         """
         data can be anything of the above supported
         types.
-        If simply an URL or a name is passed then
-        add it to a tuple so that player can always iterate
-        over that list.
+        If playlist then it is iterated over,
+        if it is some other type then its simply
+        sent to be played according to the player.
 
         datatype supports the following types:
         - playlist
