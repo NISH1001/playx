@@ -65,6 +65,7 @@ python setup.py install
 - play by youtube url
 - play a youtube playlist
 - play a billboard chart
+- play a spotify playlist
 - play from local playlist
 - cache support
 - CLI using `mpv`
@@ -124,6 +125,11 @@ playx hot-100
 ```
 This plays the songs from Billboards [hot-100](https://www.billboard.com/charts/hot-100) chart. The billboard charts can be found [here](https://www.billboard.com/charts)  
 
+**Play from spotify playlist**
+```sh
+playx https://open.spotify.com/playlist/37i9dQZF1DX5Ozry5U6G0d
+```
+This plays the songs from Spotify [Summer Party](https://open.spotify.com/playlist/37i9dQZF1DX5Ozry5U6G0d) playlist.
 
 **Play from local playlist**
 

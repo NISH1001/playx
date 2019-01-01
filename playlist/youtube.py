@@ -1,0 +1,125 @@
+"""Youtube playlist related functions and classes
+defined.
+"""
+
+import requests
+from bs4 import BeautifulSoup
+import re
+
+from playx.logger import get_logger
+
+
+# Setup logger
+logger = get_logger('YoutubePlaylist')
+
+
+class YoutubeMetadata():
+
+    def __init__(self):
+        self.URL = ''
+        self.title = ''
+
+    def display(self):
+        """Be informative."""
+        logger.info("Title: {}".format(self.title))
+
+
+class YoutubePlaylist:
+    """Class to store YouTube playlist data."""
+
+    def __init__(self, URL, pl_start=None, pl_end=None):
+        """Init the URl."""
+        self.URL = URL
+        self.data = []
+        self.default_start = 1
+        self.default_end = 0
+        self.pl_start = pl_start
+        self.pl_end = pl_end
+        self.is_valid_start = False
+        self.is_valid_end = False
+        self.playlist_name = ''
+
+    def extract_name(self, name):
+        """Extract the name of the playlist."""
+        name = str(name).replace('\n', '')
+        name = ''.join(re.findall(r'>.*?<', name)).replace('>',
+                                                           '').replace('<', '')
+        name = ' '.join(re.findall(r'[^ ]+', name))
+        self.playlist_name = name
+
+    def is_valid(self):
+        """Check if pl_start and pl_end are valid."""
+        self.is_valid_start = True if self.pl_start in range(
+                                            self.default_start,
+                                            self.default_end + 1) else False
+        self.is_valid_end = True if self.pl_end in range(
+                                            self.default_start,
+                                            self.default_end + 1) else False
+
+    def strip_to_start_end(self):
+        """Strip the tuple to the positions passed by user."""
+        # Before doing anything check if the passed numbers are valid
+        self.is_valid()
+        if self.pl_start is not None and self.is_valid_start:
+            self.default_start = self.pl_start
+        if self.pl_end is not None and self.is_valid_end:
+            self.default_end = self.pl_end
+        self.data = self.data[self.default_start - 1: self.default_end]
+
+    def _is_connection_possible(self):
+        """Make a simple request to check if connection is possible.
+        i:e check if internet is connected.
+        """
+        url = "https://google.com"
+        try:
+            requests.get(url)
+        except requests.exceptions.ConnectionError:
+            return False
+
+        return True
+
+    def extract_playlistdata(self):
+        """Extract all the videos into YoutubeMetadata objects."""
+        url_prepend = 'https://www.youtube.com/watch?v='
+        if not self._is_connection_possible():
+            logger.warning("Cannot play playlist. No connection detected!")
+            return 'N/A', []
+        r = requests.get(self.URL)
+        soup = BeautifulSoup(r.text, 'html.parser')
+        name = soup.findAll('h1', attrs={'class': 'pl-header-title'})
+        self.extract_name(name)
+        soup = soup.findAll('tr', attrs={'class': 'pl-video',
+                                         'class': 'yt-uix-tile'})
+
+        for i in soup:
+            a = re.findall(r'class="pl-video yt-uix-tile ".*?data-title=.*?data-video-id=.*?>', str(i))
+            video_title = re.findall(r'data-title=".*?"', a[0])
+            video_id = re.findall(r'data-video-id=".*?"', a[0])
+            if len(video_title) != 0 and len(video_id) != 0:
+                video_title = video_title[0].replace("data-title=", '').replace('"', '')
+                video_id = video_id[0].replace("data-video-id=", '').replace('"', '')
+                youtube_metadata = YoutubeMetadata()
+                youtube_metadata.url = url_prepend + video_id
+                youtube_metadata.title = video_title
+                self.data.append(youtube_metadata)
+
+        if len(self.data) == 0:
+            logger.warning("Are you sure you have videos in your playlist? Try changing\
+                  privacy to public.")
+
+        self.default_end = len(self.data)
+        self.strip_to_start_end()
+
+
+def get_data(URL, pl_start, pl_end):
+    """Generic function. Should be called only when
+    it is checked if the URL is a youtube playlist.
+
+    Returns a tuple containing the songs and name of
+    the playlist.
+    """
+
+    youtube_playlist = YoutubePlaylist(URL, pl_start, pl_end)
+    youtube_playlist.extract_playlistdata()
+
+    return youtube_playlist.data, youtube_playlist.playlist_name
