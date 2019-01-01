@@ -152,7 +152,7 @@ Structure is like:
     |- logs/
 ```
 
-*songs*: This stores all the songs downloaded by `playx`
+*songs*: This stores all the songs downloaded by `playx`  
 *logs*: This stores the log for user activities of songs that are searched and played with creation date. This will be used for recommendation of songs in future version
 
 ------------
