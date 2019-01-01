@@ -5,7 +5,6 @@ import threading
 import glob
 import sys
 import urllib.request
-from shutil import copyfileobj
 from .stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
     check_keywords

@@ -22,7 +22,7 @@ class song():
         self.rank = 0
 
 
-class Billboard():
+class BillboardIE():
     """Class to store billboard charts."""
 
     def __init__(self, URL):
@@ -118,6 +118,58 @@ class Billboard():
             self.chart.append(songObj)
 
 
+class BillboardPlaylist:
+    """Class to store Billboards Charts data."""
+
+    def __init__(self, playlist_name, pl_start=None, pl_end=None):
+        """Init the chart name."""
+        self.playlist_name = playlist_name
+        self.list_content_tuple = []
+        self.pl_start = pl_start
+        self.pl_end = pl_end
+        self.default_start = 1
+        self.default_end = 0
+        self.is_valid_start = False
+        self.is_valid_end = False
+
+    def is_valid(self):
+        """Check if pl_start and pl_end are valid."""
+        self.is_valid_start = True if self.pl_start in range(
+                                            self.default_start,
+                                            self.default_end + 1) else False
+        self.is_valid_end = True if self.pl_end in range(
+                                            self.default_start,
+                                            self.default_end + 1) else False
+
+    def _add_artist_name(self):
+        """Add the artist name to the song seperating by a 'by'
+
+        eg: If the song name is thank u, next
+        It should be changed to thank u, next by Ariana Grande."""
+
+        for i in self.list_content_tuple:
+            i.title = i.title + ' by ' + i.artist
+
+    def strip_to_start_end(self):
+        """Strip the tuple to positions passed by the user."""
+        # Before doing anything check if the passed numbers are valid
+        self.is_valid()
+        if self.pl_start is not None and self.is_valid_start:
+            self.default_start = self.pl_start
+        if self.pl_end is not None and self.is_valid_end:
+            self.default_end = self.pl_end
+        self.list_content_tuple = self.list_content_tuple[self.default_start - 1: self.default_end]
+
+    def extract_list_contents(self):
+        """Extract the playlist data."""
+        Chart = BillboardIE(self.playlist_name)
+        self.list_content_tuple = Chart.chart
+        self.default_end = len(self.list_content_tuple)
+        self.strip_to_start_end()
+        self._add_artist_name()
+        self.playlist_name = Chart.chart_name
+
+
 def get_chart_names_online(url="https://www.billboard.com/charts"):
     try:
         response = requests.get(url)
@@ -146,6 +198,24 @@ def dump_to_file(names):
     path = os.path.expanduser(path)
     with open(path, 'w') as f:
         f.write('\n'.join(names).strip())
+
+
+def get_data(URL, pl_start, pl_end):
+    """Generic function. Should be called only when
+    it is checked if the URL is a billboard chart.
+
+    Returns a tuple containing the songs and name of
+    the chart.
+    """
+
+    billboard_playlist = BillboardPlaylist(
+                                            URL,
+                                            pl_start,
+                                            pl_end
+                                        )
+    billboard_playlist.extract_list_contents()
+
+    return billboard_playlist.list_content_tuple, billboard_playlist.playlist_name
 
 
 if __name__ == "__main__":
