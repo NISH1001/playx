@@ -21,7 +21,7 @@ class PlaylistBase():
         self.is_valid_end = False
         self.list_content_tuple = []
 
-    def _update_end(self, end):
+    def update_end(self, end):
         """Update the default end value."""
         self.default_end = end
 
@@ -34,7 +34,7 @@ class PlaylistBase():
                                             self.default_start,
                                             self.default_end + 1) else False
 
-    def _strip_to_start_end(self):
+    def strip_to_start_end(self):
         """Strip the tuple to positions passed by the user."""
         # Before doing anything check if the passed numbers are valid
         logger.debug('{}: {} {}'.format(self.pl_start, self.pl_end, self.default_end))
