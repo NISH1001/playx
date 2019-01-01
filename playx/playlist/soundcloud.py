@@ -62,7 +62,6 @@ class SoundCloudPlaylistExtractor(PlaylistBase):
             sound_cloud_track.stream_url = i['stream_url'] + '?client_id=' + self._clientID
             self.list_content_tuple.append(sound_cloud_track)
 
-        PlaylistBase.update_end(self, len(self.list_content_tuple))
         PlaylistBase.list_content_tuple = self.list_content_tuple
         PlaylistBase.strip_to_start_end(self)
 

@@ -73,7 +73,6 @@ class SpotifyPlaylist(PlaylistBase):
         spotify = SpotifyIE(self.URL)
         self.list_content_tuple = spotify.get_data()
         self.playlist_name = spotify.playlist_name
-        PlaylistBase.update_end(self, len(self.list_content_tuple))
         PlaylistBase.list_content_tuple = self.list_content_tuple
         PlaylistBase.strip_to_start_end(self)
 

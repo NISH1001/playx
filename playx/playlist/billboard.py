@@ -144,7 +144,6 @@ class BillboardPlaylist(PlaylistBase):
         """Extract the playlist data."""
         Chart = BillboardIE(self.playlist_name)
         self.list_content_tuple = Chart.chart
-        PlaylistBase.update_end(self, len(self.list_content_tuple))
         PlaylistBase.list_content_tuple = self.list_content_tuple
         PlaylistBase.strip_to_start_end(self)
         self._add_artist_name()
