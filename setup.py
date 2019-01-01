@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='playx',
-    packages=['playx'],
+    packages=['playx', 'playx.playlist'],
     author='NISH1001',
     author_email='nishanpantha@gmail.com',
     description='Search and play any song from terminal.',
