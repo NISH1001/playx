@@ -2,7 +2,7 @@ from requests import get
 from bs4 import BeautifulSoup
 import re
 
-from playx.playlist.playlistmodder import (
+from playx.playlist.playlistbase import (
     PlaylistBase
 )
 

@@ -3,7 +3,7 @@
 import requests
 import re
 
-from playx.playlist.playlistmodder import (
+from playx.playlist.playlistbase import (
     PlaylistBase
 )
 

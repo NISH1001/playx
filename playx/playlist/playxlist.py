@@ -2,7 +2,7 @@
 
 import os
 
-from playx.playlist.playlistmodder import (
+from playx.playlist.playlistbase import (
     PlaylistBase
 )
 

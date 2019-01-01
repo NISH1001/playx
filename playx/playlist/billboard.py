@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import re
 import os
 
-from playx.playlist.playlistmodder import (
+from playx.playlist.playlistbase import (
     PlaylistBase
 )
 
