@@ -67,6 +67,7 @@ python setup.py install
 - play a billboard chart
 - play a spotify playlist
 - play from soundcloud playlist
+- play from JioSaavn playlist
 - play from local playlist
 - cache support
 - CLI using `mpv`
@@ -143,6 +144,12 @@ This plays the songs from Spotify [Summer Party](https://open.spotify.com/playli
 playx https://soundcloud.com/devintracy/sets/goodafternoon
 ```
 This plays the songs from SoundCloud [playlist](https://soundcloud.com/devintracy/sets/goodafternoon)
+
+**Play from JioSaavn playlist**
+```sh
+playx https://www.jiosaavn.com/featured/magical-amit-trivedi/IGYxX3V4T7w_
+```
+This plays songs from the JioSaavn [playlist](https://www.jiosaavn.com/featured/magical-amit-trivedi/IGYxX3V4T7w_)
 
 **Play from local playlist**
 

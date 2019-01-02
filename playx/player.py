@@ -94,6 +94,7 @@ class URLPlayer():
         if self.URL_type == 'youtube':
             self.title = self.songObj.title
             self.URL = self.songObj.URL
+            self._get_youtube_data_url()
         elif self.URL_type == 'soundcloud':
             self.title = self.songObj.title
             self.stream_url = self.songObj.stream_url
@@ -244,6 +245,7 @@ class Player(URLPlayer, NamePlayer):
                                 'youtube',
                                 'soundcloud',
                                 'billboard',
+                                'jiosaavn'
                               ]
         self._datatypes = [
                             'playlist',
@@ -297,3 +299,5 @@ class Player(URLPlayer, NamePlayer):
                     self.play_name(i.title)
                 elif self.playlisttype == 'youtube':
                     self.play_url(i.URL, i)
+                elif self.playlisttype == 'jiosaavn':
+                    self.play_name(i.title + ' ' + i.subtitle)

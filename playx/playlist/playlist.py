@@ -11,7 +11,8 @@ from playx.playlist import (
     spotify,
     youtube,
     billboard,
-    soundcloud
+    soundcloud,
+    jiosaavn
 )
 
 import re
@@ -44,7 +45,8 @@ class Playlist():
                     'spotify': spotify,
                     'youtube': youtube,
                     'billboard': billboard,
-                    'soundcloud': soundcloud
+                    'soundcloud': soundcloud,
+                    'jiosaavn': jiosaavn
                     }
 
     def _is_spotify(self):
@@ -91,6 +93,14 @@ class Playlist():
         if len(match):
             self.type = 'soundcloud'
 
+    def _is_jiosaavn(self):
+        """
+        Check if the passed URL is a jiosaavn playlist.
+        """
+        match = re.findall(r'^(https://www.)?jiosaavn.com/featured/.*?$', self.URL)
+        if len(match):
+            self.type = 'jiosaavn'
+
     def is_playlist(self):
         """Check if the playlist is valid."""
 
@@ -98,6 +108,7 @@ class Playlist():
         self._is_spotify()
         self._is_youtube()
         self._is_soundcloud()
+        self._is_jiosaavn()
 
         if self.type != 'N/A':
             return True
@@ -112,7 +123,7 @@ class Playlist():
         if self.type == 'N/A':
             return []
 
-        logger.info("{} playlist passed.".format(self.type))
+        logger.info("{} Playlist passed.".format(self.type))
         data, name = self.dict[self.type].get_data(
                                                 self.URL,
                                                 self.pl_start,
