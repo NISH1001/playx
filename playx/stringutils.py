@@ -89,8 +89,16 @@ def check_keywords(tokens1, tokens2):
 
 
 def is_song_url(song):
-    return re.match(r"^(?:https?(?:\:\/\/)?)?(?:www\.)?(?:youtu\.be|youtube\.com)/(?:watch\?v=)?[a-zA-Z0-9_-]{11}$", song)
+    return re.match(r"^(?:https?(?:\:\/\/)?)?(?:www\.)?(?:youtu\.be|youtube\.com)/(?:watch\?v=)?[a-zA-Z0-9_-]{11}$|^(https://)?api.soundcloud.com/tracks/.*?$", song)
 
+
+def url_type(url):
+    if len(re.findall(r"^(?:https?(?:\:\/\/)?)?(?:www\.)?(?:youtu\.be|youtube\.com)/(?:watch\?v=)?[a-zA-Z0-9_-]{11}$", url)):
+        return 'youtube'
+    elif len(re.findall(r"^(https://)?api.soundcloud.com/tracks/.*?$", url)):
+        return 'soundcloud'
+    else:
+        return None
 
 def main():
     pass

@@ -6,6 +6,10 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
+from playx.playlist.playlistbase import (
+    PlaylistBase
+)
+
 from playx.logger import get_logger
 
 
@@ -24,19 +28,14 @@ class YoutubeMetadata():
         logger.info("Title: {}".format(self.title))
 
 
-class YoutubePlaylist:
+class YoutubePlaylist(PlaylistBase):
     """Class to store YouTube playlist data."""
 
     def __init__(self, URL, pl_start=None, pl_end=None):
         """Init the URl."""
+        super().__init__(pl_start, pl_end)
         self.URL = URL
-        self.data = []
-        self.default_start = 1
-        self.default_end = 0
-        self.pl_start = pl_start
-        self.pl_end = pl_end
-        self.is_valid_start = False
-        self.is_valid_end = False
+        self.list_content_tuple = []
         self.playlist_name = ''
 
     def extract_name(self, name):
@@ -46,25 +45,6 @@ class YoutubePlaylist:
                                                            '').replace('<', '')
         name = ' '.join(re.findall(r'[^ ]+', name))
         self.playlist_name = name
-
-    def is_valid(self):
-        """Check if pl_start and pl_end are valid."""
-        self.is_valid_start = True if self.pl_start in range(
-                                            self.default_start,
-                                            self.default_end + 1) else False
-        self.is_valid_end = True if self.pl_end in range(
-                                            self.default_start,
-                                            self.default_end + 1) else False
-
-    def strip_to_start_end(self):
-        """Strip the tuple to the positions passed by user."""
-        # Before doing anything check if the passed numbers are valid
-        self.is_valid()
-        if self.pl_start is not None and self.is_valid_start:
-            self.default_start = self.pl_start
-        if self.pl_end is not None and self.is_valid_end:
-            self.default_end = self.pl_end
-        self.data = self.data[self.default_start - 1: self.default_end]
 
     def _is_connection_possible(self):
         """Make a simple request to check if connection is possible.
@@ -99,15 +79,14 @@ class YoutubePlaylist:
                 video_title = video_title[0].replace("data-title=", '').replace('"', '')
                 video_id = video_id[0].replace("data-video-id=", '').replace('"', '')
                 youtube_metadata = YoutubeMetadata()
-                youtube_metadata.url = url_prepend + video_id
+                youtube_metadata.URL = url_prepend + video_id
                 youtube_metadata.title = video_title
-                self.data.append(youtube_metadata)
+                self.list_content_tuple.append(youtube_metadata)
 
-        if len(self.data) == 0:
+        if len(self.list_content_tuple) == 0:
             logger.warning("Are you sure you have videos in your playlist? Try changing\
                   privacy to public.")
 
-        self.default_end = len(self.data)
         self.strip_to_start_end()
 
 
@@ -122,4 +101,4 @@ def get_data(URL, pl_start, pl_end):
     youtube_playlist = YoutubePlaylist(URL, pl_start, pl_end)
     youtube_playlist.extract_playlistdata()
 
-    return youtube_playlist.data, youtube_playlist.playlist_name
+    return youtube_playlist.list_content_tuple, youtube_playlist.playlist_name

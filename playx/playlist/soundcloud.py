@@ -3,6 +3,10 @@
 import requests
 import re
 
+from playx.playlist.playlistbase import (
+    PlaylistBase
+)
+
 
 class SoundCloudTrack():
 
@@ -12,7 +16,7 @@ class SoundCloudTrack():
         self.stream_url = ''
 
 
-class SoundCloudPlaylistExtractor():
+class SoundCloudPlaylistExtractor(PlaylistBase):
     """
     Class to scrap Soundcloud playlists.
 
@@ -23,37 +27,13 @@ class SoundCloudPlaylistExtractor():
     """
 
     def __init__(self, URL, pl_start, pl_end):
+        super().__init__(pl_start, pl_end)
         self._clientID = 'LvWovRaJZlWCHql0bISuum8Bd2KX79mb'
         self.URL = URL
         self.set_ID = ''
         self.API_URL = 'http://api.soundcloud.com/playlists/{}?client_id={}'
-        self.song_tuple = []
+        self.list_content_tuple = []
         self.set_name = ''
-        self.pl_end = pl_end
-        self.pl_start = pl_start
-        self.default_end = 0
-        self.default_start = 1
-        self.is_valid_start = False
-        self.is_valid_end = False
-
-    def _is_valid(self):
-        """Check if pl_start and pl_end are valid."""
-        self.is_valid_start = True if self.pl_start in range(
-                                            self.default_start,
-                                            self.default_end + 1) else False
-        self.is_valid_end = True if self.pl_end in range(
-                                            self.default_start,
-                                            self.default_end + 1) else False
-
-    def _strip_to_start_end(self):
-        """Strip the tuple to positions passed by the user."""
-        # Before doing anything check if the passed numbers are valid
-        self._is_valid()
-        if self.pl_start is not None and self.is_valid_start:
-            self.default_start = self.pl_start
-        if self.pl_end is not None and self.is_valid_end:
-            self.default_end = self.pl_end
-        self.song_tuple = self.song_tuple[self.default_start - 1: self.default_end]
 
     def _get_ID(self):
         """Get the playlists id."""
@@ -80,10 +60,9 @@ class SoundCloudPlaylistExtractor():
             sound_cloud_track.title = i['title']
             sound_cloud_track.download_url = i['download_url'] + '?client_id=' + self._clientID
             sound_cloud_track.stream_url = i['stream_url'] + '?client_id=' + self._clientID
-            self.song_tuple.append(sound_cloud_track)
+            self.list_content_tuple.append(sound_cloud_track)
 
-        self.default_end = len(self.song_tuple)
-        self._strip_to_start_end()
+        self.strip_to_start_end()
 
 
 def get_data(URL, pl_start, pl_end):
@@ -95,4 +74,4 @@ def get_data(URL, pl_start, pl_end):
     """
     sound_cloud_playlist = SoundCloudPlaylistExtractor(URL, pl_start, pl_end)
     sound_cloud_playlist.get_tracks()
-    return sound_cloud_playlist.song_tuple, sound_cloud_playlist.set_name
+    return sound_cloud_playlist.list_content_tuple, sound_cloud_playlist.set_name

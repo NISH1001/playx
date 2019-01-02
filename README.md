@@ -66,6 +66,7 @@ python setup.py install
 - play a youtube playlist
 - play a billboard chart
 - play a spotify playlist
+- play from soundcloud playlist
 - play from local playlist
 - cache support
 - CLI using `mpv`
@@ -112,6 +113,12 @@ This plays the song titled "The man who sold the world by Nirvana"
 playx https://www.youtube.com/watch?v=4zLfCnGVeL4
 ```
 This plays the song *The Sound of Silence*.   
+
+**Play by soundcloud links**
+```sh
+playx https://api.soundcloud.com/tracks/232673157
+```
+This plays soundcloud [track](https://api.soundcloud.com/tracks/232673157)
   
 **Play from youtube playlist**  
 ```bash
@@ -130,6 +137,12 @@ This plays the songs from Billboards [hot-100](https://www.billboard.com/charts/
 playx https://open.spotify.com/playlist/37i9dQZF1DX5Ozry5U6G0d
 ```
 This plays the songs from Spotify [Summer Party](https://open.spotify.com/playlist/37i9dQZF1DX5Ozry5U6G0d) playlist.
+
+**Play from soundcloud playlist**
+```sh
+playx https://soundcloud.com/devintracy/sets/goodafternoon
+```
+This plays the songs from SoundCloud [playlist](https://soundcloud.com/devintracy/sets/goodafternoon)
 
 **Play from local playlist**
 

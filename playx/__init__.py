@@ -8,4 +8,6 @@ __all__ = ['main',
             'logger',
             'lyrics',
             'songfinder',
+            'player',
+            'soundcloud'
             ]
