@@ -76,7 +76,19 @@ def remove_stopwords(string):
     for token in tokens:
         if token not in stopwords:
             res.append(token)
-    return ' '.join(res)
+    res = ' '.join(res)
+    return remove_duplicates(res)
+
+
+def remove_duplicates(string):
+    tokens = string.split()
+    res = []
+    for token in tokens:
+        if token not in res:
+            res.append(token)
+
+    res = ' '.join(res)
+    return res
 
 
 def check_keywords(tokens1, tokens2):

@@ -41,6 +41,14 @@ class SongMetadata(SongMetadataBase):
         self.artist_tuple = artist_tuple
         self._update_artist()
         self._create_search_querry()
+        self._remove_duplicates()
+        self._remove_stopletters()
+
+    def _remove_stopletters(self):
+        """
+        Remove letters like - and numbers from the searchquery
+        """
+        self.search_querry = re.sub(r'-|[0-9]', ' ', self.search_querry)
 
     def _update_artist(self):
         """
@@ -55,7 +63,7 @@ class SongMetadata(SongMetadataBase):
         Update the search querry of the base class.
         """
         self.search_querry = self.track_seokey + ' ' + self.album_seokey + '' + self.artist_seokey
-        self.search_querry = re.sub(r'-', ' ', self.search_querry)
+        self._remove_stopletters()
 
 
 class GaanaIE(PlaylistBase):
