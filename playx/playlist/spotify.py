@@ -6,6 +6,13 @@ from playx.playlist.playlistbase import (
     PlaylistBase
 )
 
+from playx.logger import (
+    get_logger
+)
+
+# Setup logger
+logger = get_logger("Spotify")
+
 # url = "https://open.spotify.com/playlist/3YSjAfvq8CVG2mqrzJcv31?si=U72PoitqQiyRmAJ1HZzDeA"
 url = "https://open.spotify.com/playlist/37i9dQZF1DX5Ozry5U6G0d"
 
@@ -82,6 +89,7 @@ def get_data(URL, pl_start, pl_end):
     Returns a tuple containing the songs and name of
     the playlist.
     """
+    logger.info("Extracting Playlist Contents")
     spotify_playlist = SpotifyPlaylist(URL, pl_start, pl_end)
     spotify_playlist.extract_data()
     return spotify_playlist.list_content_tuple, spotify_playlist.playlist_name

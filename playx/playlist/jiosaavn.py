@@ -7,8 +7,15 @@ from playx.playlist.playlistbase import (
 from selenium import webdriver
 import re
 
+from playx.logger import (
+    get_logger
+)
 
-class SongMetadata():
+# Setup logger
+logger = get_logger('JioSaavn')
+
+
+class SongMetadata:
 
     def __init__(self, title='', subtitle=''):
         self.title = title
@@ -61,6 +68,7 @@ def get_data(URL, pl_start, pl_end):
     the playlist.
     """
 
+    logger.info('Extracting Playlist Content')
     jio_saavn_IE = JioSaavnIE(URL, pl_start, pl_end)
     jio_saavn_IE.get_data()
     return jio_saavn_IE.list_content_tuple, jio_saavn_IE.playlist_name

@@ -6,6 +6,13 @@ from playx.playlist.playlistbase import (
     PlaylistBase
 )
 
+from playx.logger import (
+    get_logger
+)
+
+# Setup logger
+logger = get_logger("Playxlist")
+
 
 class Playxlist(PlaylistBase):
     """Class to store playx list data."""
@@ -41,6 +48,7 @@ class Playxlist(PlaylistBase):
 
     def get_list_contents(self):
         """Return the tuple containing the list data."""
+        logger.info("Extracting Playlist Content")
         self.extract_list_contents()
         self.strip_to_start_end()
         return self.list_content_tuple

@@ -10,6 +10,14 @@ from playx.playlist.playlistbase import (
     PlaylistBase
 )
 
+from playx.logger import (
+    get_logger
+)
+
+# Setup logger
+logger = get_logger('Billboard')
+
+
 """
 __author__ = Deepjyoti Barman
 __github__ = github.com/deepjyoti30
@@ -184,6 +192,7 @@ def get_data(URL, pl_start, pl_end):
     the chart.
     """
 
+    logger.info("Extracting Playlist Content")
     billboard_playlist = BillboardPlaylist(
                                             URL,
                                             pl_start,
