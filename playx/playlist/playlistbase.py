@@ -6,7 +6,18 @@ from playx.logger import (
 
 
 # Setup logger
-logger = get_logger('playlistmodder')
+logger = get_logger('PlaylistBase')
+
+
+class SongMetadataBase:
+    """
+    Base class to store song metadata.
+    """
+
+    def __init__(self):
+        self.title = ''
+        self.search_querry = ''
+        self.URL = ''
 
 
 class PlaylistBase():
