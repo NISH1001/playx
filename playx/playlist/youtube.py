@@ -17,11 +17,11 @@ from playx.logger import get_logger
 logger = get_logger('YoutubePlaylist')
 
 
-class YoutubeMetadata():
+class YoutubeMetadata:
 
-    def __init__(self):
-        self.URL = ''
-        self.title = ''
+    def __init__(self, url='', title=''):
+        self.URL = url
+        self.title = title
 
     def display(self):
         """Be informative."""
@@ -78,10 +78,9 @@ class YoutubePlaylist(PlaylistBase):
             if len(video_title) != 0 and len(video_id) != 0:
                 video_title = video_title[0].replace("data-title=", '').replace('"', '')
                 video_id = video_id[0].replace("data-video-id=", '').replace('"', '')
-                youtube_metadata = YoutubeMetadata()
-                youtube_metadata.URL = url_prepend + video_id
-                youtube_metadata.title = video_title
-                self.list_content_tuple.append(youtube_metadata)
+                url = url_prepend + video_id
+                title = video_title
+                self.list_content_tuple.append(YoutubeMetadata(url, title))
 
         if len(self.list_content_tuple) == 0:
             logger.warning("Are you sure you have videos in your playlist? Try changing\

@@ -13,10 +13,10 @@ url = "https://open.spotify.com/playlist/37i9dQZF1DX5Ozry5U6G0d"
 class SpotifySong:
     """Spotify songs container."""
 
-    def __init__(self):
-        self.title = ''
-        self.artist = ''
-        self.album = ''
+    def __init__(self, title='', artist='', album=''):
+        self.title = title
+        self.artist = artist
+        self.album = album
 
 
 class SpotifyIE():
@@ -42,17 +42,16 @@ class SpotifyIE():
         self.playlist_name = name
 
         for i in s:
-            songObj = SpotifySong()
-            songObj.title = re.sub(r'class="track-name".*?>|</span>',
+            title = re.sub(r'class="track-name".*?>|</span>',
                             '',
                             re.findall(r'class="track-name".*?</span>', str(i))[0])
-            songObj.artist = re.sub(r'a href="/artist.*?<span dir=".*?>|</span>|</a>',
+            artist = re.sub(r'a href="/artist.*?<span dir=".*?>|</span>|</a>',
                             '',
                             re.findall(r'a href="/artist.*?</a>', str(i))[0])
-            songObj.album = re.sub(r'a href="/album.*?<span dir=".*?>|</span>|</a>',
+            album = re.sub(r'a href="/album.*?<span dir=".*?>|</span>|</a>',
                             '',
                             re.findall(r'a href="/album.*?</a>', str(i))[0])
-            self.playlist_content.append(songObj)
+            self.playlist_content.append(SpotifySong(title, artist, album))
 
         return self.playlist_content
 

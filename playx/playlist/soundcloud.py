@@ -8,12 +8,12 @@ from playx.playlist.playlistbase import (
 )
 
 
-class SoundCloudTrack():
+class SoundCloudTrack:
 
-    def __init__(self):
-        self.title = ''
-        self.download_url = ''
-        self.stream_url = ''
+    def __init__(self, title, download_url, stream_url):
+        self.title = title
+        self.download_url = download_url
+        self.stream_url = stream_url
 
 
 class SoundCloudPlaylistExtractor(PlaylistBase):
@@ -56,11 +56,10 @@ class SoundCloudPlaylistExtractor(PlaylistBase):
         tracks = r['tracks']
 
         for i in tracks:
-            sound_cloud_track = SoundCloudTrack()
-            sound_cloud_track.title = i['title']
-            sound_cloud_track.download_url = i['download_url'] + '?client_id=' + self._clientID
-            sound_cloud_track.stream_url = i['stream_url'] + '?client_id=' + self._clientID
-            self.list_content_tuple.append(sound_cloud_track)
+            title = i['title']
+            download_url = i['download_url'] + '?client_id=' + self._clientID
+            stream_url = i['stream_url'] + '?client_id=' + self._clientID
+            self.list_content_tuple.append(SoundCloudTrack(title, download_url, stream_url))
 
         self.strip_to_start_end()
 
