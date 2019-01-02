@@ -245,6 +245,7 @@ class Player(URLPlayer, NamePlayer):
                                 'youtube',
                                 'soundcloud',
                                 'billboard',
+                                'jiosaavn'
                               ]
         self._datatypes = [
                             'playlist',
@@ -298,3 +299,5 @@ class Player(URLPlayer, NamePlayer):
                     self.play_name(i.title)
                 elif self.playlisttype == 'youtube':
                     self.play_url(i.URL, i)
+                elif self.playlisttype == 'jiosaavn':
+                    self.play_name(i.title + ' ' + i.subtitle)
