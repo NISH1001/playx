@@ -17,10 +17,10 @@ from playx.playlist import (
 )
 
 import re
-from playx.logger import get_logger
+from playx.logger import Logger
 
 # Get the logger
-logger = get_logger('Playlist')
+logger = Logger('Playlist')
 
 
 """

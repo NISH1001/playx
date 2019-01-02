@@ -10,10 +10,10 @@ from playx.stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
     check_keywords
 )
-from playx.logger import get_logger
+from playx.logger import Logger
 
 # Setup logger
-logger = get_logger('cache')
+logger = Logger('cache')
 
 
 class Cache:

@@ -17,7 +17,7 @@ from playx.songfinder import (
 )
 
 from playx.logger import (
-    get_logger
+    Logger
 )
 
 from playx.stringutils import (
@@ -30,7 +30,7 @@ from playx.soundcloud import (
 
 
 # Setup logger
-logger = get_logger('player')
+logger = Logger('player')
 
 
 class URLPlayer():

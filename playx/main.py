@@ -30,13 +30,13 @@ from playx.player import (
     Player
 )
 
-from playx.logger import get_logger
+from playx.logger import Logger
 from playx.songfinder import search
 from playx.stringutils import is_song_url
 
 
 # Get the logger
-logger = get_logger('main')
+logger = Logger('main')
 
 
 def parse():

@@ -5,11 +5,11 @@ import os
 import subprocess
 from shutil import move
 from playx.lyrics import search_lyricswikia
-from playx.logger import get_logger
+from playx.logger import Logger
 import threading
 
 # Setup logger
-logger = get_logger('utility')
+logger = Logger('utility')
 
 
 class MPVThread(threading.Thread):

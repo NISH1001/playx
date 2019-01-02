@@ -1,14 +1,14 @@
 """File to modify the playlists."""
 
 from playx.logger import (
-    get_logger
+    Logger
 )
 
 from playx.stringutils import remove_duplicates
 
 
 # Setup logger
-logger = get_logger('PlaylistBase')
+logger = Logger('PlaylistBase')
 
 
 class SongMetadataBase:
