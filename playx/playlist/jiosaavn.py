@@ -8,11 +8,11 @@ from selenium import webdriver
 import re
 
 from playx.logger import (
-    get_logger
+    Logger
 )
 
 # Setup logger
-logger = get_logger('JioSaavn')
+logger = Logger('JioSaavn')
 
 
 class SongMetadata:

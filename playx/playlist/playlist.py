@@ -12,14 +12,15 @@ from playx.playlist import (
     youtube,
     billboard,
     soundcloud,
-    jiosaavn
+    jiosaavn,
+    gaana
 )
 
 import re
-from playx.logger import get_logger
+from playx.logger import Logger
 
 # Get the logger
-logger = get_logger('Playlist')
+logger = Logger('Playlist')
 
 
 """
@@ -46,7 +47,8 @@ class Playlist():
                     'youtube': youtube,
                     'billboard': billboard,
                     'soundcloud': soundcloud,
-                    'jiosaavn': jiosaavn
+                    'jiosaavn': jiosaavn,
+                    'gaana': gaana
                     }
 
     def _is_spotify(self):
@@ -101,6 +103,14 @@ class Playlist():
         if len(match):
             self.type = 'jiosaavn'
 
+    def _is_gaana(self):
+        """
+        Check if passed URL is a gaana playlist.
+        """
+        match = re.findall(r'^(https://)?gaana.com/playlist.*?$', self.URL)
+        if len(match):
+            self.type = 'gaana'
+
     def is_playlist(self):
         """Check if the playlist is valid."""
 
@@ -109,6 +119,7 @@ class Playlist():
         self._is_youtube()
         self._is_soundcloud()
         self._is_jiosaavn()
+        self._is_gaana()
 
         if self.type != 'N/A':
             return True

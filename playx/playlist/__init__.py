@@ -8,5 +8,6 @@ __all__ = [
             'youtube',
             'soundcloud',
             'playlistbase',
-            'jiosaavn'
+            'jiosaavn',
+            'gaana'
             ]

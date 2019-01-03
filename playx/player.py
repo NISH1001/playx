@@ -17,7 +17,7 @@ from playx.songfinder import (
 )
 
 from playx.logger import (
-    get_logger
+    Logger
 )
 
 from playx.stringutils import (
@@ -30,7 +30,7 @@ from playx.soundcloud import (
 
 
 # Setup logger
-logger = get_logger('player')
+logger = Logger('player')
 
 
 class URLPlayer():
@@ -245,7 +245,8 @@ class Player(URLPlayer, NamePlayer):
                                 'youtube',
                                 'soundcloud',
                                 'billboard',
-                                'jiosaavn'
+                                'jiosaavn',
+                                'gaana'
                               ]
         self._datatypes = [
                             'playlist',
@@ -301,3 +302,5 @@ class Player(URLPlayer, NamePlayer):
                     self.play_url(i.URL, i)
                 elif self.playlisttype == 'jiosaavn':
                     self.play_name(i.title + ' ' + i.subtitle)
+                elif self.playlisttype == 'gaana':
+                    self.play_name(i.search_querry)

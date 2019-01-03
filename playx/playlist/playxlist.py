@@ -7,11 +7,11 @@ from playx.playlist.playlistbase import (
 )
 
 from playx.logger import (
-    get_logger
+    Logger
 )
 
 # Setup logger
-logger = get_logger("Playxlist")
+logger = Logger("Playxlist")
 
 
 class Playxlist(PlaylistBase):
