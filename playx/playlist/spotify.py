@@ -7,11 +7,11 @@ from playx.playlist.playlistbase import (
 )
 
 from playx.logger import (
-    get_logger
+    Logger
 )
 
 # Setup logger
-logger = get_logger("Spotify")
+logger = Logger("Spotify")
 
 # url = "https://open.spotify.com/playlist/3YSjAfvq8CVG2mqrzJcv31?si=U72PoitqQiyRmAJ1HZzDeA"
 url = "https://open.spotify.com/playlist/37i9dQZF1DX5Ozry5U6G0d"

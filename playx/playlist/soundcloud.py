@@ -8,11 +8,11 @@ from playx.playlist.playlistbase import (
 )
 
 from playx.logger import (
-    get_logger
+    Logger
 )
 
 # Setup logger
-logger = get_logger("Soundcloud")
+logger = Logger("Soundcloud")
 
 
 class SoundCloudTrack:

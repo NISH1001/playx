@@ -10,11 +10,11 @@ from playx.playlist.playlistbase import (
     PlaylistBase
 )
 
-from playx.logger import get_logger
+from playx.logger import Logger
 
 
 # Setup logger
-logger = get_logger('YoutubePlaylist')
+logger = Logger('YoutubePlaylist')
 
 
 class YoutubeMetadata:

@@ -17,11 +17,11 @@ from playx.cache import Cache
 
 from playx.utility import exe
 
-from playx.logger import get_logger
+from playx.logger import Logger
 
 
 # Setup logger
-logger = get_logger('youtube')
+logger = Logger('youtube')
 
 
 class YoutubeMetadata:
