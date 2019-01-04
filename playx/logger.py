@@ -54,7 +54,7 @@ def Logger(name):
                             filename=log_path,
                             format=log_format_file
                             )
-        logging.info("basicConfig() called by {}".format(name))
+        # logging.info("basicConfig() called by {}".format(name))
     #else:
     filehandler = logging.FileHandler(log_path)
     filehandler.setLevel(logging.INFO)
@@ -75,7 +75,7 @@ def Logger(name):
         filehandler.setFormatter(logging.Formatter(log_format_file))
         logger.addHandler(filehandler)
 
-    logging.info("{}: Handlers in root".format(len(logging.getLogger().handlers)))
-    logging.info('{}: Handlers present in {}'.format(len(logger.handlers), name))
+    # logging.info("{}: Handlers in root".format(len(logging.getLogger().handlers)))
+    # logging.info('{}: Handlers present in {}'.format(len(logger.handlers), name))
 
     return logger
