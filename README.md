@@ -68,6 +68,7 @@ python setup.py install
 - play a spotify playlist
 - play from soundcloud playlist
 - play from JioSaavn playlist
+- play from gaana playlist.
 - play from local playlist
 - cache support
 - CLI using `mpv`

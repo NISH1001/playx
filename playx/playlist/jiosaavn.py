@@ -1,7 +1,7 @@
 """Functions related to jiosaavn."""
 
 from playx.playlist.playlistbase import (
-    PlaylistBase
+    PlaylistBase, SongMetadataBase
 )
 
 from selenium import webdriver
@@ -15,11 +15,20 @@ from playx.logger import (
 logger = Logger('JioSaavn')
 
 
-class SongMetadata:
+class SongMetadata(SongMetadataBase):
 
     def __init__(self, title='', subtitle=''):
+        super().__init__()
         self.title = title
         self.subtitle = subtitle
+        self._create_search_querry()
+        self._remove_duplicates()
+
+    def _create_search_querry(self):
+        """
+        Create a search querry.
+        """
+        self.search_querry = self.title + ' ' + self.subtitle
 
 
 class JioSaavnIE(PlaylistBase):

@@ -7,7 +7,7 @@ import re
 import os
 
 from playx.playlist.playlistbase import (
-    PlaylistBase
+    PlaylistBase, SongMetadataBase
 )
 
 from playx.logger import (
@@ -25,13 +25,22 @@ __github__ = github.com/deepjyoti30
 """
 
 
-class Song:
+class Song(SongMetadataBase):
     """Class to store song details."""
 
     def __init__(self, title='', artist='', rank=0):
+        super().__init__()
         self.title = title
         self.artist = artist
         self.rank = 0
+        self._create_search_querry()
+        self._remove_duplicates()
+
+    def _create_search_querry(self):
+        """
+        Create a search querry using the title and the artist name.
+        """
+        self.search_querry = self.title + ' ' + self.artist
 
 
 class BillboardIE:
@@ -136,21 +145,11 @@ class BillboardPlaylist(PlaylistBase):
         self.playlist_name = playlist_name
         self.list_content_tuple = []
 
-    def _add_artist_name(self):
-        """Add the artist name to the song seperating by a 'by'
-
-        eg: If the song name is thank u, next
-        It should be changed to thank u, next by Ariana Grande."""
-
-        for i in self.list_content_tuple:
-            i.title = i.title + ' by ' + i.artist
-
     def extract_list_contents(self):
         """Extract the playlist data."""
         Chart = BillboardIE(self.playlist_name)
         self.list_content_tuple = Chart.chart
         self.strip_to_start_end()
-        self._add_artist_name()
         self.playlist_name = Chart.chart_name
 
 

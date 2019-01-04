@@ -4,7 +4,7 @@ import requests
 import re
 
 from playx.playlist.playlistbase import (
-    PlaylistBase
+    PlaylistBase, SongMetadataBase
 )
 
 from playx.logger import (
@@ -15,12 +15,19 @@ from playx.logger import (
 logger = Logger("Soundcloud")
 
 
-class SoundCloudTrack:
+class SoundCloudTrack(SongMetadataBase):
 
-    def __init__(self, title, download_url, stream_url):
+    def __init__(self, title, download_url, URL):
+        super().__init__()
         self.title = title
         self.download_url = download_url
-        self.stream_url = stream_url
+        self.URL = URL
+
+    def _create_search_querry(self):
+        """
+        Create a search querry.
+        """
+        self.search_querry = self.URL
 
 
 class SoundCloudPlaylistExtractor(PlaylistBase):

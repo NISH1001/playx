@@ -10,7 +10,8 @@ from bs4 import BeautifulSoup
 import requests
 from playx.stringutils import (
     remove_multiple_spaces,
-    remove_punct
+    remove_punct,
+    is_song_url
 )
 
 from playx.cache import Cache
@@ -22,6 +23,12 @@ from playx.logger import Logger
 
 # Setup logger
 logger = Logger('youtube')
+
+better_search_kw = [
+                    ' audio',
+                    ' full',
+                    ' lyrics'
+                  ]
 
 
 class YoutubeMetadata:
@@ -61,8 +68,20 @@ def get_youtube_title(url):
     return output
 
 
+def add_better_search_kw(query):
+    """
+    Add some keywords to the search querry to get better results.
+    """
+    if not is_song_url(query):
+        for kw in better_search_kw:
+            query += kw
+
+    return query
+
+
 def search_youtube(query):
     """Behold the greatest magic trick ever : crawl and crawl."""
+    query = add_better_search_kw(query)
     logger.info("Searching youtube for :: {}".format(query))
     base_url = "https://www.youtube.com"
     url = base_url + "//results?sp=EgIQAVAU&q=" + query

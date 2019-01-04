@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import re
 
 from playx.playlist.playlistbase import (
-    PlaylistBase
+    PlaylistBase, SongMetadataBase
 )
 
 from playx.logger import (
@@ -17,13 +17,22 @@ logger = Logger("Spotify")
 url = "https://open.spotify.com/playlist/37i9dQZF1DX5Ozry5U6G0d"
 
 
-class SpotifySong:
+class SpotifySong(SongMetadataBase):
     """Spotify songs container."""
 
     def __init__(self, title='', artist='', album=''):
+        super().__init__()
         self.title = title
         self.artist = artist
         self.album = album
+        self._create_search_querry()
+        self._remove_duplicates()
+
+    def _create_search_querry(self):
+        """
+        Create a search querry.
+        """
+        self.search_querry = self.title + ' ' + self.artist
 
 
 class SpotifyIE():
