@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import re
 
 from playx.playlist.playlistbase import (
-    PlaylistBase
+    PlaylistBase, SongMetadataBase
 )
 
 from playx.logger import Logger
@@ -17,11 +17,19 @@ from playx.logger import Logger
 logger = Logger('YoutubePlaylist')
 
 
-class YoutubeMetadata:
+class YoutubeMetadata(SongMetadataBase):
 
     def __init__(self, url='', title=''):
+        super().__init__()
         self.URL = url
         self.title = title
+        self._create_search_querry()
+
+    def _create_search_querry(self):
+        """
+        Create a search querry.
+        """
+        self.search_querry = self.URL
 
     def display(self):
         """Be informative."""

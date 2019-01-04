@@ -97,7 +97,7 @@ class URLPlayer():
             self._get_youtube_data_url()
         elif self.URL_type == 'soundcloud':
             self.title = self.songObj.title
-            self.stream_url = self.songObj.stream_url
+            self.stream_url = self.songObj.URL
 
     def _stream_from_url(self):
         """Stream the song using the url.
@@ -293,14 +293,8 @@ class Player(URLPlayer, NamePlayer):
                 # For different playlists the player needs to act
                 # differently
                 if self.playlisttype == 'soundcloud':
-                    self.play_url(i.stream_url, i)
-                elif self.playlisttype == 'spotify':
-                    self.play_name(i.title + ' ' + i.artist)
-                elif self.playlisttype == 'billboard':
-                    self.play_name(i.title)
-                elif self.playlisttype == 'youtube':
                     self.play_url(i.URL, i)
-                elif self.playlisttype == 'jiosaavn':
-                    self.play_name(i.title + ' ' + i.subtitle)
-                elif self.playlisttype == 'gaana':
+                elif self.playlisttype == 'youtube':
+                    self.play_url(i.search_querry, i)
+                else:
                     self.play_name(i.search_querry)

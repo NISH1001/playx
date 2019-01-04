@@ -34,6 +34,7 @@ class SongMetadata(SongMetadataBase):
                 track_seokey='',
                 album_seokey='',
                 ):
+        super().__init__()
         self.title = title
         self.album_seokey = album_seokey
         self.track_seokey = track_seokey
@@ -48,7 +49,7 @@ class SongMetadata(SongMetadataBase):
         """
         Remove letters like - and numbers from the searchquery
         """
-        self.search_querry = re.sub(r'-|[0-9]', ' ', self.search_querry)
+        self.search_querry = re.sub(r'-|[0-9]|&amp', ' ', self.search_querry)
 
     def _update_artist(self):
         """
