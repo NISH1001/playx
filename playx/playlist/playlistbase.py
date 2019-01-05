@@ -67,12 +67,14 @@ class PlaylistBase():
         self.default_end = len(self.list_content_tuple)
         logger.debug('{}: {} {}'.format(self.pl_start, self.pl_end, self.default_end))
         self._is_valid()
-        if self.pl_start is not None and self.is_valid_start:
-            self.default_start = self.pl_start
-        else:
-            logger.info("Passed pl-start argument is not valid!")
-        if self.pl_end is not None and self.is_valid_end:
-            self.default_end = self.pl_end
-        else:
-            logger.info("Passed pl-end argument is not valid!")
+        if self.pl_start is not None:
+            if self.is_valid_start:
+                self.default_start = self.pl_start
+            else:
+                logger.info("Passed pl-start argument is not valid!")
+        if self.pl_end is not None:
+            if self.is_valid_end:
+                self.default_end = self.pl_end
+            else:
+                logger.info("Passed pl-end argument is not valid!")
         self.list_content_tuple = self.list_content_tuple[self.default_start - 1: self.default_end]

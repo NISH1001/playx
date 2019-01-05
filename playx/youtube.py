@@ -44,6 +44,7 @@ class YoutubeMetadata:
         logger.info("Title: {}".format(self.title))
         logger.info("Duration: {}".format(self.duration))
 
+
 def get_youtube_streams(url):
     """Get both audio & video stream urls for youtube using youtube-dl.
 
@@ -91,10 +92,7 @@ def search_youtube(query):
         logger.error("ERROR: ", e)
         exit()
     soup = BeautifulSoup(response.content, "html.parser")
-    """
-    for vid in soup.find_all(attrs={'class':'yt-uix-tile-link'}):
-        video_urls.append(base_url + vid['href'])
-    """
+
     videos = []
     for tile in soup.find_all(attrs={'class': "yt-lockup-tile"}):
         yt_uix_tile = tile.find(attrs={'class': 'yt-uix-tile-link'})
