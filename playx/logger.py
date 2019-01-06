@@ -119,7 +119,6 @@ class Logger():
         Make the format of the string that is to be written.
         """
         t = datetime.datetime.now()
-        DATETIME_FORMAT = '{year:04d}-{month:02d}-{day:02d} {hour:02d}:{min:02d}:{sec:02d}'
         DATETIME_FORMAT = '{}-{}-{} {}:{}:{}'.format(
                                 t.year,
                                 t.month,
