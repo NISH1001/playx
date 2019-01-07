@@ -1,8 +1,9 @@
 import logging
 from pathlib import Path
+import datetime
 
 
-def Logger(name):
+def Logger_(name):
     """
     Issue with initialization.
 
@@ -79,3 +80,87 @@ def Logger(name):
     # logging.info('{}: Handlers present in {}'.format(len(logger.handlers), name))
 
     return logger
+
+
+class Logger():
+
+    def __init__(self, name='', level='INFO'):
+        self.name = name
+        self._file_format = ''
+        self._console_format = ''
+        self._log_file = Path('~/.playx/logs/log.cat').expanduser()
+        self._level_number = {
+                                'DEBUG': 0,
+                                'INFO': 1,
+                                'WARNING': 2,
+                                'ERROR': 3,
+                                'CRITICAL': 4
+                             }
+        self.level = self._level_number[level]
+
+    def _write(self, message, LEVEL_NUMBER):
+        """
+        Write the logs.
+
+        LEVEL_NUMBER is the levelnumber of the level that is calling the
+        _write function.
+        """
+        if LEVEL_NUMBER >= self.level:
+            self._make_format(message)
+            # The file log is to be written to the _log_file file
+            FILE_STREAM = open(self._log_file, 'a')
+            FILE_STREAM.write(self._file_format)
+            FILE_STREAM.close()
+
+            print(self._console_format)
+
+    def _make_format(self, message):
+        """
+        Make the format of the string that is to be written.
+        """
+        t = datetime.datetime.now()
+        DATETIME_FORMAT = '{}-{}-{} {}:{}:{}'.format(
+                                t.year,
+                                t.month,
+                                t.day,
+                                t.hour,
+                                t.minute,
+                                t.second
+                              )
+        self._console_format = '[{}]: {}'.format(self.name, message)
+        self._file_format = '[{}]-[{}]: {}\n'.format(self.name, DATETIME_FORMAT, message)
+
+    def debug(self, message):
+        """
+        Add the message if the level is debug.
+        """
+        LEVEL_NUMBER = 0
+        self._write(message, LEVEL_NUMBER)
+
+    def info(self, message):
+        """
+        Add the message if the level is info or less.
+        """
+        LEVEL_NUMBER = 1
+        self._write(message, LEVEL_NUMBER)
+
+    def warning(self, message):
+        """
+        Add the message if the level is warning or less.
+        """
+        LEVEL_NUMBER = 2
+        self._write(message, LEVEL_NUMBER)
+
+    def error(self, message):
+        """
+        Add the message if the level is error or less.
+        """
+        LEVEL_NUMBER = 3
+        self._write(message, LEVEL_NUMBER)
+
+    def critical(self, message):
+        """
+        Add the message if the level is critical or less.
+        """
+        LEVEL_NUMBER = 4
+        self._write(message, LEVEL_NUMBER)
