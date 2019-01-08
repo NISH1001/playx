@@ -1,6 +1,7 @@
 import logging
 from pathlib import Path
 import datetime
+import os
 
 
 def Logger_(name):
@@ -89,6 +90,7 @@ class Logger:
         self._file_format = ''
         self._console_format = ''
         self._log_file = Path('~/.playx/logs/log.cat').expanduser()
+        self._check_logfile()
         self._level_number = {
                                 'DEBUG': 0,
                                 'INFO': 1,
@@ -97,6 +99,17 @@ class Logger:
                                 'CRITICAL': 4
                              }
         self.level = self._level_number[level]
+
+    def _check_logfile(self):
+        """
+        Check if the passed logfile path is present.
+        If not present then create it.
+        """
+        if not self._log_file.exists():
+            if not self._log_file.parent.exists():
+                os.makedirs(self._log_file.parent)
+            f = open(self._log_file, 'w')
+            f.close()
 
     def _write(self, message, LEVEL_NUMBER):
         """
@@ -108,7 +121,7 @@ class Logger:
         if LEVEL_NUMBER >= self.level:
             self._make_format(message)
             with open(self._log_file, 'a') as f:
-            # The file log is to be written to the _log_file file
+                # The file log is to be written to the _log_file file
                 f = open(self._log_file, 'a')
                 f.write(self._file_format)
             print(self._console_format)
