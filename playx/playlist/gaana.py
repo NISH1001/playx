@@ -3,6 +3,7 @@ Functions related to gaana playlist.
 """
 
 import requests
+from bs4 import BeautifulSoup
 import re
 
 from playx.playlist.playlistbase import (
@@ -77,12 +78,24 @@ class GaanaIE(PlaylistBase):
         self.list_content_tuple = []
         self.playlist_name = ''
         self._extract_playlist_seokey()
+        self._get_name()
 
     def _extract_playlist_seokey(self):
         """
         The playlist seokey is the basename present in the URL.
         """
         self.playlist_seokey = self.URL.split('/')[-1]
+
+    def _get_name(self):
+        """
+        Extract the name of the playlist.
+        """
+        r = requests.get(self.URL)
+        s = BeautifulSoup(r.text, 'html.parser')
+        s = s.findAll(attrs={'class': '_t1'})
+        name = re.findall(r'<h1>.*?</h1>', str(s))[0]
+        name = re.sub(r'<|>|/|h1', '', name)
+        self.playlist_name = name
 
     def extract_data(self):
         """
@@ -91,8 +104,6 @@ class GaanaIE(PlaylistBase):
         r = requests.get(self.API_URL.format(self.playlist_seokey)).json()
         tracks = r['tracks']
         logger.debug(type(tracks))
-        # For the time being keep playlist seokey as playlist name
-        self.playlist_name = self.playlist_seokey
 
         for track in tracks:
             track_title = track['track_title']
