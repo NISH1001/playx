@@ -95,6 +95,15 @@ class GaanaIE(PlaylistBase):
         s = s.findAll(attrs={'class': '_t1'})
         name = re.findall(r'<h1>.*?</h1>', str(s))[0]
         name = re.sub(r'<|>|/|h1', '', name)
+
+        # Now change first letters of words to uppercase
+        name_tuple = name.split(' ')
+        for i in range(0, len(name_tuple)):
+            first_letter = name_tuple[i][0]
+            rest = name_tuple[i][1:]
+            name_tuple[i] = first_letter.upper() + rest
+        name = ' '.join(name_tuple)
+
         self.playlist_name = name
 
     def extract_data(self):
