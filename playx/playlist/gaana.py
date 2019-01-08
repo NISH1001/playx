@@ -64,7 +64,7 @@ class SongMetadata(SongMetadataBase):
         """
         Update the search querry of the base class.
         """
-        self.search_querry = self.track_seokey + ' ' + self.album_seokey + '' + self.artist_seokey
+        self.search_querry = self.track_seokey + '' + self.artist_seokey
         self._remove_stopletters()
 
 
