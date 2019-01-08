@@ -82,7 +82,7 @@ def Logger_(name):
     return logger
 
 
-class Logger():
+class Logger:
 
     def __init__(self, name='', level='INFO'):
         self.name = name
@@ -100,18 +100,17 @@ class Logger():
 
     def _write(self, message, LEVEL_NUMBER):
         """
-        Write the logs.
+            Write the logs.
 
-        LEVEL_NUMBER is the levelnumber of the level that is calling the
-        _write function.
+            LEVEL_NUMBER is the levelnumber of the level that is calling the
+            _write function.
         """
         if LEVEL_NUMBER >= self.level:
             self._make_format(message)
+            with open(self._log_file, 'a') as f:
             # The file log is to be written to the _log_file file
-            FILE_STREAM = open(self._log_file, 'a')
-            FILE_STREAM.write(self._file_format)
-            FILE_STREAM.close()
-
+                f = open(self._log_file, 'a')
+                f.write(self._file_format)
             print(self._console_format)
 
     def _make_format(self, message):
