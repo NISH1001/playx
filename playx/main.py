@@ -34,6 +34,10 @@ from playx.logger import Logger
 from playx.songfinder import search
 from playx.stringutils import is_song_url
 
+from playx.playlist.autoplaylist import (
+    CountBasedAutoPlaylist
+)
+
 
 # Get the logger
 logger = Logger('main')
@@ -56,6 +60,9 @@ def parse():
     parser.add_argument('-n', '--no-cache',
                         action='store_true',
                         help="Don't download the song for later use.")
+    parser.add_argument('-auto', '--auto',
+                        action='store_true',
+                        help="Auto generate playlist")
     parser.add_argument('-d', '--dont-cache-search',
                         action='store_true',
                         help="Don't search the song in the cache.")
@@ -179,9 +186,14 @@ def playx(parser, args, song):
 
 def main():
     # Before doing anything, make sure all songs are in the new song dir
-    move_songs()
+    # move_songs()
     parser, args = parse()
     song = ' '.join(args.song)
+    # first check for auto playlist
+    if args.auto:
+        logger.info("Auto-Generating playlist using [counter]")
+        ap = CountBasedAutoPlaylist('~/.playx/logs/log.cat')
+        song = ap.generate()
     # Put a check to see if the passed arg is a list
     playx_list = Playxlist(song, args.pl_start, args.pl_end)
     if not playx_list.is_playx_list():
