@@ -46,10 +46,6 @@ class JioSaavnIE(PlaylistBase):
         self.list_content_tuple = []
         self.playlist_name = ''
 
-    def _remove_stopwords(self, String):
-        """Remove stop words like , and -"""
-        return re.sub(r'-|,', '', String)
-
     def get_data(self):
         """
         Get the data from the page.
@@ -58,8 +54,8 @@ class JioSaavnIE(PlaylistBase):
         driver.get(self.URL)
         for i in driver.find_elements_by_class_name('song-wrap'):
             data = i.text.split('\n')
-            title = self._remove_stopwords(data[2])
-            subtitle = self._remove_stopwords(data[3])
+            title = re.sub(r'-|,', '', data[2])
+            subtitle = re.sub(r'-|,', '', data[3])
             self.list_content_tuple.append(SongMetadata(title, subtitle))
 
         self.strip_to_start_end()
