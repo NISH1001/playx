@@ -9,14 +9,18 @@ import pathlib
 import re
 
 from collections import Counter
-from playx.stringutils import (
-    remove_multiple_spaces,
-    remove_punct
-)
 
 from abc import (
     ABC, abstractmethod
 )
+
+from playx.stringutils import (
+    remove_multiple_spaces,
+    remove_punct
+)
+from playx.logger import Logger
+
+logger = Logger('autoplaylist')
 
 class AbstractAutoPlaylist(ABC):
     def __init__(self, log_path):
@@ -28,6 +32,9 @@ class AbstractAutoPlaylist(ABC):
             Override this method to create any arbitary playlist
         """
         pass
+
+    def info(self):
+        logger.info("Auto-Generating playlist using [{}]".format(self.__class__.__name__))
 
     def get_timeseries_data(self, log_path):
         data = []
@@ -58,6 +65,7 @@ class CountBasedAutoPlaylist(AbstractAutoPlaylist):
         super().__init__(log_path)
 
     def generate(self):
+        self.info()
         data = self.get_timeseries_data(self.log_path)
         ts, songs = zip(*data)
         counter = Counter(songs)

@@ -191,7 +191,6 @@ def main():
     song = ' '.join(args.song)
     # first check for auto playlist
     if args.auto:
-        logger.info("Auto-Generating playlist using [counter]")
         ap = CountBasedAutoPlaylist('~/.playx/logs/log.cat')
         song = ap.generate()
     # Put a check to see if the passed arg is a list
