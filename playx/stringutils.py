@@ -45,7 +45,7 @@ def replace_space(string, replacer):
 
 def remove_punct(string):
     string = re.sub(r"[']+", '', string)
-    return re.sub(r"[-:_!,/.()#?;&]+", ' ', string)
+    return re.sub(r"[-:_!,/\[\].()#?;&]+", ' ', string)
 
 def replace_character(string, character, replacer):
     return re.sub(r"{}".format(character), replacer, string)
