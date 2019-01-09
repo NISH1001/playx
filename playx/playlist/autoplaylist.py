@@ -25,6 +25,7 @@ logger = Logger('autoplaylist')
 class AbstractAutoPlaylist(ABC):
     def __init__(self, log_path):
         self.log_path = pathlib.Path(log_path).expanduser()
+        self.data = []
 
     @abstractmethod
     def generate(self):
@@ -34,7 +35,9 @@ class AbstractAutoPlaylist(ABC):
         pass
 
     def info(self):
-        logger.info("Auto-Generating playlist using [{}]".format(self.__class__.__name__))
+        logger.info("Auto-Generating playlist with [{}] songs using [{}]".format(
+            len(self.data), self.__class__.__name__
+        ))
 
     def get_timeseries_data(self, log_path):
         data = []
@@ -65,11 +68,12 @@ class CountBasedAutoPlaylist(AbstractAutoPlaylist):
         super().__init__(log_path)
 
     def generate(self):
-        self.info()
         data = self.get_timeseries_data(self.log_path)
         ts, songs = zip(*data)
         counter = Counter(songs)
         songs_frequent, c = zip(*counter.most_common())
+        self.data = songs_frequent
+        self.info()
         return list(songs_frequent)
 
     def write_to_file(self, songs, path):

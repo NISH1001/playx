@@ -198,8 +198,8 @@ def main():
     if not playx_list.is_playx_list():
         playx(parser, args, song)
     else:
-        for i in playx_list.get_list_contents():
-            playx(parser, args, i)
+        for s in playx_list.get_list_contents():
+            playx(parser, args, s)
 
 
 if __name__ == "__main__":

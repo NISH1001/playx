@@ -40,34 +40,28 @@ class SongMetadataBase:
         self.search_querry = remove_duplicates(self.search_querry)
 
 
-class PlaylistBase():
-    """Strip the playlist according to the passed index."""
-
-    def __init__(self, pl_start, pl_end):
+class PlaylistBase:
+    """
+        Base class for all the playlist that implements some common functionalitites
+        such as fixing the start-end markers
+    """
+    def __init__(self, pl_start=1, pl_end=1):
         self.pl_start = pl_start
         self.pl_end = pl_end
-        self.default_end = 0
         self.list_content_tuple = []
 
-    def _is_valid(self, n):
-        """
-        Check if passed number is valid or not.
-        """
-        if n is not None:
-            if n in range(1, self.default_end + 1):
-                return True
-            else:
-                return False
+    def _is_valid(self, s, e):
+        if s and e:
+            return len(range(s, e)) > 0
 
     def strip_to_start_end(self):
-        """Strip the tuple to positions passed by the user."""
+        """
+            Strip the tuple to positions passed by the user.
+            First check if start and end are in increasing range.
+            Then truncate the markers based on the size of the list.
+        """
         # Update the length of the playlist
-        self.default_end = len(self.list_content_tuple)
-
-        if self._is_valid(self.pl_start):
-            self.default_start = self.pl_start
-
-        if self._is_valid(self.pl_end):
-            self.default_end = self.pl_end
-
-        self.list_content_tuple = self.list_content_tuple[self.default_start - 1: self.default_end]
+        if self._is_valid(self.pl_start, self.pl_end):
+            self.pl_start = max(1, self.pl_start)
+            self.pl_end = min(self.pl_end, len(self.list_content_tuple))
+            self.list_content_tuple = self.list_content_tuple[self.pl_start-1: self.pl_end]
