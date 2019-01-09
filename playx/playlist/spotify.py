@@ -13,9 +13,6 @@ from playx.logger import (
 # Setup logger
 logger = Logger("Spotify")
 
-# url = "https://open.spotify.com/playlist/3YSjAfvq8CVG2mqrzJcv31?si=U72PoitqQiyRmAJ1HZzDeA"
-url = "https://open.spotify.com/playlist/37i9dQZF1DX5Ozry5U6G0d"
-
 
 class SpotifySong(SongMetadataBase):
     """Spotify songs container."""
@@ -35,12 +32,13 @@ class SpotifySong(SongMetadataBase):
         self.search_querry = self.title + ' ' + self.artist
 
 
-class SpotifyIE():
+class SpotifyIE(PlaylistBase):
     """Spotify playlist data extractor."""
 
-    def __init__(self, URL):
+    def __init__(self, URL, pl_start=None, pl_end=None):
+        super().__init__(pl_start, pl_end)
         self.URL = URL
-        self.playlist_content = []
+        self.list_content_tuple = []
         self.playlist_name = ''
 
     def get_data(self):
@@ -67,27 +65,8 @@ class SpotifyIE():
             album = re.sub(r'a href="/album.*?<span dir=".*?>|</span>|</a>',
                             '',
                             re.findall(r'a href="/album.*?</a>', str(i))[0])
-            self.playlist_content.append(SpotifySong(title, artist, album))
+            self.list_content_tuple.append(SpotifySong(title, artist, album))
 
-        return self.playlist_content
-
-
-class SpotifyPlaylist(PlaylistBase):
-    """Container that uses the SpotifyIE to properly align
-    all the data and return a proper tuple.
-    """
-
-    def __init__(self, URL, pl_start=None, pl_end=None):
-        super().__init__(pl_start, pl_end)
-        self.URL = URL
-        self.list_content_tuple = []
-        self.playlist_name = ''
-
-    def extract_data(self):
-        """Extract the playlist data."""
-        spotify = SpotifyIE(self.URL)
-        self.list_content_tuple = spotify.get_data()
-        self.playlist_name = spotify.playlist_name
         self.strip_to_start_end()
 
 
@@ -99,6 +78,6 @@ def get_data(URL, pl_start, pl_end):
     the playlist.
     """
     logger.info("Extracting Playlist Contents")
-    spotify_playlist = SpotifyPlaylist(URL, pl_start, pl_end)
-    spotify_playlist.extract_data()
+    spotify_playlist = SpotifyIE(URL, pl_start, pl_end)
+    spotify_playlist.get_data()
     return spotify_playlist.list_content_tuple, spotify_playlist.playlist_name
