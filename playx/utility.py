@@ -7,7 +7,6 @@ from shutil import move
 from playx.lyrics import search_lyricswikia
 from playx.logger import Logger
 import threading
-from mpv import MPV
 
 # Setup logger
 logger = Logger('utility')
@@ -22,9 +21,10 @@ class MPVThread(threading.Thread):
 
     def run(self):
         logger.info("Playing [{}]".format(self.title))
-        player = MPV(ytdl=True)
-        player.play(self.songURL)
-        player.wait_for_playback()
+        #player = MPV(ytdl=True)
+        #player.play(self.songURL)
+        #player.wait_for_playback()
+        pass
 
 
 def exe(command):
@@ -49,13 +49,14 @@ def direct_to_play(url, show_lyrics, title):
 
 def run_mpv(stream_url, title=None):
     # print("Playing using mpv...")
-    """logger.info("Playing [{}]".format(title))
+    logger.info("Playing [{}]".format(title))
     cli = 'mpv "{}" --really-quiet'.format(stream_url)
     os.system(cli)
     """
     mpv_thread = MPVThread(stream_url, title)
     mpv_thread.start()
     # mpv_thread.join()
+    """
 
 
 def run_mpv_dir(directory):
