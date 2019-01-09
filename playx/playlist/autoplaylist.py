@@ -62,9 +62,12 @@ class CountBasedAutoPlaylist(AbstractAutoPlaylist):
         ts, songs = zip(*data)
         counter = Counter(songs)
         songs_frequent, c = zip(*counter.most_common())
-        outpath = pathlib.Path("~/.playx/playxlist/auto.playx").expanduser()
+        return list(songs_frequent)
+
+    def write_to_file(self, songs, path):
+        outpath = pathlib.Path(path).expanduser()
         with open(outpath, 'w') as f:
-            for s in songs_frequent:
+            for s in songs:
                 f.write("{}\n".format(s))
         return outpath
 
