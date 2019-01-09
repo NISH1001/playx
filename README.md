@@ -72,13 +72,14 @@ python setup.py install
 - play from local playlist
 - cache support
 - CLI using `mpv`
+- auto generate playlist
 ------------
 
 ## Usage
 For now, the application is in development phase.  
 
 ```bash
-usage: playx [-h] [-p] [-db] [-n] [-d] [-l] [--pl-start PL_START]
+usage: playx [-h] [-p] [-n] [-auto] [-d] [-l] [--pl-start PL_START]
              [--pl-end PL_END]
              [song [song ...]]
 
@@ -90,8 +91,10 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  -p, --play-cache      Play all songs from the cache.
+  -p, --play-cache      Play all songs from the cache. The cache is located at
+                        ~/.playx/songs/ by default
   -n, --no-cache        Don't download the song for later use.
+  -auto, --auto         Auto generate playlist
   -d, --dont-cache-search
                         Don't search the song in the cache.
   -l, --lyrics          Show lyircs of the song.
@@ -160,7 +163,14 @@ playx example.playx
 ```
 This plays a playlist named example.playx
 
-For a playlist every line is considered an entry. Refer to [example.playx](https://github.com/NISH1001/playx/blob/develop/example.playx).
+For a playlist every line is considered an entry. Refer to [example.playx](https://github.com/NISH1001/playx/blob/develop/example.playx).  
+  
+**Auto-Generate Playlist**
+```bash
+playx --auto
+```
+This will automatically generate a playlist by using the frequency of songs played that has been logged in the log file.  
+*Note: This will improve in future releases using more robust method (like Markov Chains)*  
   
 ------------
 
@@ -193,6 +203,9 @@ Contributions are warmly welcome. Please do go through [CONTRIBUTING](https://gi
 - ~~play from local playlist (may be a list of song names)~~
 - ~~play from other playlist (spotify, billboard, etc.)~~
 - ~~log activity~~
+- ~~auto generate playlist~~
+- use Markov Chains to improve auto-playlist
+- use Factorization Machines to improve auto-playlist
 - use logs to create simple recommendations
 
 
