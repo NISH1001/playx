@@ -46,35 +46,28 @@ class PlaylistBase():
     def __init__(self, pl_start, pl_end):
         self.pl_start = pl_start
         self.pl_end = pl_end
-        self.default_start = 1
         self.default_end = 0
-        self.is_valid_start = False
-        self.is_valid_end = False
         self.list_content_tuple = []
 
-    def _is_valid(self):
-        """Check if pl_start and pl_end are valid."""
-        self.is_valid_start = True if self.pl_start in range(
-                                            self.default_start,
-                                            self.default_end + 1) else False
-        self.is_valid_end = True if self.pl_end in range(
-                                            self.default_start,
-                                            self.default_end + 1) else False
+    def _is_valid(self, n):
+        """
+        Check if passed number is valid or not.
+        """
+        if n is not None:
+            if n in range(1, self.default_end + 1):
+                return True
+            else:
+                return False
 
     def strip_to_start_end(self):
         """Strip the tuple to positions passed by the user."""
-        # Before doing anything check if the passed numbers are valid
+        # Update the length of the playlist
         self.default_end = len(self.list_content_tuple)
-        logger.debug('{}: {} {}'.format(self.pl_start, self.pl_end, self.default_end))
-        self._is_valid()
-        if self.pl_start is not None:
-            if self.is_valid_start:
-                self.default_start = self.pl_start
-            else:
-                logger.info("Passed pl-start argument is not valid!")
-        if self.pl_end is not None:
-            if self.is_valid_end:
-                self.default_end = self.pl_end
-            else:
-                logger.info("Passed pl-end argument is not valid!")
+
+        if self._is_valid(self.pl_start):
+            self.default_start = self.pl_start
+
+        if self._is_valid(self.pl_end):
+            self.default_end = self.pl_end
+
         self.list_content_tuple = self.list_content_tuple[self.default_start - 1: self.default_end]
