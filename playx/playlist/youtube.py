@@ -78,9 +78,10 @@ class YoutubePlaylist(PlaylistBase):
         self.extract_name(name)
         soup = soup.findAll('tr', attrs={'class': 'pl-video',
                                          'class': 'yt-uix-tile'})
+        logger.debug(len(soup))
 
         for i in soup:
-            a = re.findall(r'class="pl-video yt-uix-tile ".*?data-title=.*?data-video-id=.*?>', str(i))
+            a = re.findall(r'class="pl-video yt-uix-tile".*?data-title=.*?data-video-id=.*?>', str(i))
             video_title = re.findall(r'data-title=".*?"', a[0])
             video_id = re.findall(r'data-video-id=".*?"', a[0])
             if len(video_title) != 0 and len(video_id) != 0:

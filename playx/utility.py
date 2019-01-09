@@ -21,8 +21,10 @@ class MPVThread(threading.Thread):
 
     def run(self):
         logger.info("Playing [{}]".format(self.title))
-        cli = 'mpv "{}" --really-quiet'.format(self.songURL)
-        os.system(cli)
+        #player = MPV(ytdl=True)
+        #player.play(self.songURL)
+        #player.wait_for_playback()
+        pass
 
 
 def exe(command):
@@ -53,7 +55,7 @@ def run_mpv(stream_url, title=None):
     """
     mpv_thread = MPVThread(stream_url, title)
     mpv_thread.start()
-    mpv_thread.join()
+    # mpv_thread.join()
     """
 
 
