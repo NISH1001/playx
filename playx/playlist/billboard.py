@@ -199,7 +199,7 @@ def get_data(URL, pl_start, pl_end, shuffle):
                                             URL,
                                             shuffle,
                                             pl_start,
-                                            pl_end,
+                                            pl_end
                                         )
     billboard_playlist.extract_list_contents()
 
