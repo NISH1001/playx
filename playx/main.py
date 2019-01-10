@@ -61,17 +61,18 @@ def parse():
                         The cache is located at ~/.playx/songs/ by default")
     parser.add_argument('-n', '--no-cache',
                         action='store_true',
-                        help="Don't download the song for later use.")
+                        help="Do not download the song for later use.")
     parser.add_argument('-auto', '--auto',
                         action='store_true',
-                        help="Auto generate playlist")
+                        help="Auto generate playlist on the basis of\
+                        previously played songs.")
     parser.add_argument('-s', '--shuffle',
                         action='store_true',
                         help='Shuffle the playlist. Not applicbble if playlist\
                         not passed.')
     parser.add_argument('-d', '--dont-cache-search',
                         action='store_true',
-                        help="Don't search the song in the cache.")
+                        help="Do not search the song in the cache.")
     parser.add_argument('-l', '--lyrics',
                         action='store_true',
                         help="Show lyircs of the song.")
