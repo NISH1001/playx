@@ -93,14 +93,14 @@ optional arguments:
   -h, --help            show this help message and exit
   -p, --play-cache      Play all songs from the cache. The cache is located at
                         ~/.playx/songs/ by default
-  -n, --no-cache        Don\'t download the song for later use.
+  -n, --no-cache        Do not download the song for later use.
   -auto, --auto         Auto generate playlist on the basis of previously
                         played songs.
   -s, --shuffle         Shuffle the playlist. Not applicbble if playlist not
                         passed.
 
   -d, --dont-cache-search
-                        Don't search the song in the cache.
+                        Do not search the song in the cache.
   -l, --lyrics          Show lyircs of the song.
   --pl-start PL_START   Start position in case a playlist is passed. If passed
                         without a playlist it has no effect.
