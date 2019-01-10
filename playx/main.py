@@ -38,6 +38,8 @@ from playx.playlist.autoplaylist import (
     CountBasedAutoPlaylist
 )
 
+from random import shuffle
+
 
 # Get the logger
 logger = Logger('main')
@@ -63,6 +65,10 @@ def parse():
     parser.add_argument('-auto', '--auto',
                         action='store_true',
                         help="Auto generate playlist")
+    parser.add_argument('-s', '--shuffle',
+                        action='store_true',
+                        help='Shuffle the playlist. Not applicbble if playlist\
+                        not passed.')
     parser.add_argument('-d', '--dont-cache-search',
                         action='store_true',
                         help="Don't search the song in the cache.")
@@ -164,6 +170,8 @@ def playx(parser, args, song):
     playlist = Playlist(song, args.pl_start, args.pl_end)
     if playlist.is_playlist():
         data = playlist.get_data()
+        if args.shuffle:
+            shuffle(data)
         player = Player(
                         data,
                         playlisttype=playlist.type,
