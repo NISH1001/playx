@@ -40,7 +40,7 @@ class SoundCloudPlaylistExtractor(PlaylistBase):
     to get the tracks data.
     """
 
-    def __init__(self, URL, pl_start, pl_end):
+    def __init__(self, URL, is_shuffle, pl_start, pl_end):
         super().__init__(pl_start, pl_end)
         self._clientID = 'LvWovRaJZlWCHql0bISuum8Bd2KX79mb'
         self.URL = URL
@@ -48,6 +48,7 @@ class SoundCloudPlaylistExtractor(PlaylistBase):
         self.API_URL = 'http://api.soundcloud.com/playlists/{}?client_id={}'
         self.list_content_tuple = []
         self.set_name = ''
+        self.is_shuffle = is_shuffle
 
     def _get_ID(self):
         """Get the playlists id."""
@@ -77,8 +78,11 @@ class SoundCloudPlaylistExtractor(PlaylistBase):
 
         self.strip_to_start_end()
 
+        if self.is_shuffle:
+            self.shufflelist()
 
-def get_data(URL, pl_start, pl_end):
+
+def get_data(URL, pl_start, pl_end, shuffle):
     """Generic function. Should be called only when
     it is checked if the URL is a spotify playlist.
 
@@ -86,6 +90,6 @@ def get_data(URL, pl_start, pl_end):
     the playlist.
     """
     logger.info("Extracting Playlist Contents")
-    sound_cloud_playlist = SoundCloudPlaylistExtractor(URL, pl_start, pl_end)
+    sound_cloud_playlist = SoundCloudPlaylistExtractor(URL, shuffle, pl_start, pl_end)
     sound_cloud_playlist.get_tracks()
     return sound_cloud_playlist.list_content_tuple, sound_cloud_playlist.set_name

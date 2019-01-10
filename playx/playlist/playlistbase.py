@@ -5,6 +5,7 @@ from playx.logger import (
 )
 
 from playx.stringutils import remove_duplicates
+from random import shuffle
 
 
 # Setup logger
@@ -65,3 +66,10 @@ class PlaylistBase:
             self.pl_start = max(1, self.pl_start)
             self.pl_end = min(self.pl_end, len(self.list_content_tuple))
             self.list_content_tuple = self.list_content_tuple[self.pl_start-1: self.pl_end]
+
+    def shufflelist(self):
+        """
+            Shuffle the listcontenttuple.
+        """
+        logger.debug("Shuffling playlist.")
+        shuffle(self.list_content_tuple)

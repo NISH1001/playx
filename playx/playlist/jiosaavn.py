@@ -40,11 +40,12 @@ class JioSaavnIE(PlaylistBase):
     thus selenium is used.
     """
 
-    def __init__(self, URL, pl_start=None, pl_end=None):
+    def __init__(self, URL, is_shuffle, pl_start=None, pl_end=None):
         super().__init__(pl_start, pl_end)
         self.URL = URL
         self.list_content_tuple = []
         self.playlist_name = ''
+        self.is_shuffle = is_shuffle
 
     def get_data(self):
         """
@@ -64,8 +65,11 @@ class JioSaavnIE(PlaylistBase):
         playlist = playlist.text.split('\n')[0]
         self.playlist_name = playlist
 
+        if self.is_shuffle:
+            self.shufflelist()
 
-def get_data(URL, pl_start, pl_end):
+
+def get_data(URL, pl_start, pl_end, shuffle):
     """Generic function. Should be called only when
     it is checked if the URL is a jiosaavn playlist.
 
@@ -74,6 +78,6 @@ def get_data(URL, pl_start, pl_end):
     """
 
     logger.info('Extracting Playlist Content')
-    jio_saavn_IE = JioSaavnIE(URL, pl_start, pl_end)
+    jio_saavn_IE = JioSaavnIE(URL, shuffle, pl_start, pl_end)
     jio_saavn_IE.get_data()
     return jio_saavn_IE.list_content_tuple, jio_saavn_IE.playlist_name

@@ -139,11 +139,12 @@ class BillboardIE:
 class BillboardPlaylist(PlaylistBase):
     """Class to store Billboards Charts data."""
 
-    def __init__(self, playlist_name, pl_start=None, pl_end=None):
+    def __init__(self, playlist_name, is_shuffle, pl_start=None, pl_end=None):
         """Init the chart name."""
         super().__init__(pl_start, pl_end)
         self.playlist_name = playlist_name
         self.list_content_tuple = []
+        self.is_shuffle = is_shuffle
 
     def extract_list_contents(self):
         """Extract the playlist data."""
@@ -151,6 +152,8 @@ class BillboardPlaylist(PlaylistBase):
         self.list_content_tuple = Chart.chart
         self.strip_to_start_end()
         self.playlist_name = Chart.chart_name
+        if self.is_shuffle:
+            self.shufflelist()
 
 
 def get_chart_names_online(url="https://www.billboard.com/charts"):
@@ -183,7 +186,7 @@ def dump_to_file(names):
         f.write('\n'.join(names).strip())
 
 
-def get_data(URL, pl_start, pl_end):
+def get_data(URL, pl_start, pl_end, shuffle):
     """Generic function. Should be called only when
     it is checked if the URL is a billboard chart.
 
@@ -194,8 +197,9 @@ def get_data(URL, pl_start, pl_end):
     logger.info("Extracting Playlist Content")
     billboard_playlist = BillboardPlaylist(
                                             URL,
+                                            shuffle,
                                             pl_start,
-                                            pl_end
+                                            pl_end,
                                         )
     billboard_playlist.extract_list_contents()
 

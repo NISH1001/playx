@@ -126,7 +126,7 @@ class Playlist():
         else:
             return False
 
-    def get_data(self):
+    def get_data(self, shuffle=False):
         """
         Extract the data according to the playlist
         and return the data.
@@ -138,7 +138,8 @@ class Playlist():
         data, name = self.dict[self.type].get_data(
                                                 self.URL,
                                                 self.pl_start,
-                                                self.pl_end
+                                                self.pl_end,
+                                                shuffle
                                                 )
         logger.info("{}: {} {}".format(
                                         name,

@@ -39,12 +39,13 @@ class YoutubeMetadata(SongMetadataBase):
 class YoutubePlaylist(PlaylistBase):
     """Class to store YouTube playlist data."""
 
-    def __init__(self, URL, pl_start=None, pl_end=None):
+    def __init__(self, URL, is_shuffle, pl_start=None, pl_end=None):
         """Init the URl."""
         super().__init__(pl_start, pl_end)
         self.URL = URL
         self.list_content_tuple = []
         self.playlist_name = ''
+        self.is_shuffle = is_shuffle
 
     def extract_name(self, name):
         """Extract the name of the playlist."""
@@ -97,8 +98,11 @@ class YoutubePlaylist(PlaylistBase):
 
         self.strip_to_start_end()
 
+        if self.is_shuffle:
+            self.shufflelist()
 
-def get_data(URL, pl_start, pl_end):
+
+def get_data(URL, pl_start, pl_end, shuffle):
     """Generic function. Should be called only when
     it is checked if the URL is a youtube playlist.
 
@@ -107,7 +111,7 @@ def get_data(URL, pl_start, pl_end):
     """
 
     logger.info("Extracting Playlist Content")
-    youtube_playlist = YoutubePlaylist(URL, pl_start, pl_end)
+    youtube_playlist = YoutubePlaylist(URL, shuffle, pl_start, pl_end)
     youtube_playlist.extract_playlistdata()
 
     return youtube_playlist.list_content_tuple, youtube_playlist.playlist_name

@@ -32,7 +32,6 @@ from playx.player import (
 
 from playx.logger import Logger
 from playx.songfinder import search
-from playx.stringutils import is_song_url
 
 from playx.playlist.autoplaylist import (
     CountBasedAutoPlaylist
@@ -63,6 +62,10 @@ def parse():
     parser.add_argument('-auto', '--auto',
                         action='store_true',
                         help="Auto generate playlist")
+    parser.add_argument('-s', '--shuffle',
+                        action='store_true',
+                        help='Shuffle the playlist passed. Applicable only if a\
+                        playlist is passed.')
     parser.add_argument('-d', '--dont-cache-search',
                         action='store_true',
                         help="Don't search the song in the cache.")
@@ -163,7 +166,7 @@ def playx(parser, args, song):
     # Check if its a playlist
     playlist = Playlist(song, args.pl_start, args.pl_end)
     if playlist.is_playlist():
-        data = playlist.get_data()
+        data = playlist.get_data(args.shuffle)
         player = Player(
                         data,
                         playlisttype=playlist.type,
