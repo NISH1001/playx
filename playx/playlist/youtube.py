@@ -105,10 +105,7 @@ class YoutubePlaylist(PlaylistBase):
             # Get video url using simple algorithm. This 3 index search is done
             # just to make sure when youtube playlist url has these query
             # params in shuffled order.
-            slicer1 = href.index('&index=')
-            slicer2 = href.index('&t=')
-            slicer3 = href.index('&list=')
-            slicer = min(slicer1, slicer2, slicer3)
+            slicer = self._get_url_slicer(href)
             url = url_base + href[:slicer]
             self.list_content_tuple.append(YoutubeMetadata(url, title))
         # for i in soup:
@@ -127,6 +124,17 @@ class YoutubePlaylist(PlaylistBase):
                   privacy to public.")
 
         self.strip_to_start_end()
+
+    def _get_url_slicer(self, url):
+        slicers = []
+        strings = ['&index=', '&t=', '&list=']
+        for s in strings:
+            try:
+                slicer = url.index(s)
+                slicers.append(slicer)
+            except ValueError:
+                continue
+        return min(slicers)
 
 
 def get_data(URL, pl_start, pl_end):
