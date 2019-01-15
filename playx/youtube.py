@@ -69,7 +69,11 @@ def get_youtube_title(url):
     Extract title of video from url.
     """
     logger.info("Extracting title of passed URL")
-    r = requests.get(url)
+    try:
+        r = requests.get(url)
+    except Exception as e:
+        logger.error('ERROR: {}'.format(e))
+        exit(-1)
     soup = BeautifulSoup(r.text, 'html.parser')
     title = soup.findAll('title')[0]
     title = re.sub(r'title|>|<|/|\ ?-|\ ?YouTube', '', str(title))
