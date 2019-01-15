@@ -14,6 +14,8 @@ from playx.stringutils import (
     is_song_url
 )
 
+import re
+
 from playx.cache import Cache
 
 from playx.utility import exe
@@ -63,10 +65,19 @@ def get_youtube_streams(url):
 
 
 def get_youtube_title(url):
-    logger.info("Getting title for :: {}".format(url))
-    cli = "youtube-dl -e {}".format(url)
-    output, error = exe(cli)
-    return output
+    """
+    Extract title of video from url.
+    """
+    logger.info("Extracting title of passed URL")
+    try:
+        r = requests.get(url)
+    except Exception as e:
+        logger.error('ERROR: {}'.format(e))
+        exit(-1)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    title = soup.findAll('title')[0]
+    title = re.sub(r'title|>|<|/|\ ?-|\ ?YouTube', '', str(title))
+    return title
 
 
 def add_better_search_kw(query):
@@ -122,7 +133,8 @@ def dw(title, url):
     title = remove_punct(title)
     title = remove_multiple_spaces(title)
     title = title + '.mp3'
-    Cache.dw(url, title)
+    Cache.dw(url, title) 
+
 
 def main():
     """Run on program call."""
