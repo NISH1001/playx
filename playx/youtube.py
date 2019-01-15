@@ -72,7 +72,7 @@ def get_youtube_title(url):
     r = requests.get(url)
     soup = BeautifulSoup(r.text, 'html.parser')
     title = soup.findAll('title')[0]
-    title = re.sub(r'title|>|<|/|-|YouTube', '', str(title))
+    title = re.sub(r'title|>|<|/|\ ?-|\ ?YouTube', '', str(title))
     return title
 
 
