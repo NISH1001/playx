@@ -29,7 +29,7 @@ __github__ = github.com/deepjyoti30
 """
 
 
-class Playlist():
+class Playlist:
     """Class for every kind of playlist supported."""
 
     def __init__(self, URL, pl_start, pl_end):
