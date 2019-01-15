@@ -32,7 +32,6 @@ from playx.player import (
 
 from playx.logger import Logger
 from playx.songfinder import search
-from playx.stringutils import is_song_url
 
 from playx.playlist.autoplaylist import (
     CountBasedAutoPlaylist
@@ -98,57 +97,6 @@ def get_value(value, no_cache):
         exit(-1)
     else:
         return value[0], value[1]
-
-
-def stream_from_name(value=None, show_lyrics=False, no_cache=False,
-                     dont_cache_search=False):
-    """Start streaming the song.
-
-    First search in the local cache.
-    If no song is found in the cache, search in the youtube.
-    """
-    # Need to check if searching locally is forbidden
-    if not dont_cache_search:
-        match = search_locally(value)
-        if match:
-            value = match[1]
-            title = match[0]
-        else:
-            value, title = get_value(value, no_cache)
-    else:
-        value, title = get_value(value, no_cache)
-
-    direct_to_play(value, show_lyrics, title)
-
-
-def stream_from_url(url, show_lyrics=False, no_cache=False,
-                    dont_cache_search=False, ytObj=None):
-    """Stream the song using the url.
-
-    Before searching the stream, get the title of the song
-    If local search is not forbidden, search it locally
-    """
-    if ytObj is None:
-        result = search(url)
-        if result is None:
-            return print("No results found")
-    else:
-        result = ytObj
-    result.display()
-    title = result.title
-
-    # Now search the song locally
-    if not dont_cache_search:
-        match = search_locally(title)
-        if match:
-            # Change the value to local path
-            value = match[1]
-        else:
-            value = grab_link(result.url, title, no_cache)
-    else:
-        value = grab_link(result.url, title, no_cache)
-
-    direct_to_play(value, show_lyrics, title)
 
 
 def stream_cache_all(cache):
