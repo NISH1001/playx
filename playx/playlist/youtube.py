@@ -69,6 +69,7 @@ class YoutubePlaylist(PlaylistBase):
     def extract_playlistdata(self):
         """Extract all the videos into YoutubeMetadata objects."""
         url_prepend = 'https://www.youtube.com/watch?v='
+        url_base = 'https://www.youtube.com'
         if not self._is_connection_possible():
             logger.warning("Cannot play playlist. No connection detected!")
             return 'N/A', []
@@ -76,20 +77,50 @@ class YoutubePlaylist(PlaylistBase):
         soup = BeautifulSoup(r.text, 'html.parser')
         name = soup.findAll('h1', attrs={'class': 'pl-header-title'})
         self.extract_name(name)
-        soup = soup.findAll('tr', attrs={'class': 'pl-video',
-                                         'class': 'yt-uix-tile'})
+        # soup = soup.findAll('tr', attrs={'class': 'pl-video',
+        #                                  'class': 'yt-uix-tile'})
         logger.debug(len(soup))
 
-        for i in soup:
-            a = re.findall(r'class="pl-video yt-uix-tile".*?data-title=.*?data-video-id=.*?>', str(i))
-            video_title = re.findall(r'data-title=".*?"', a[0])
-            video_id = re.findall(r'data-video-id=".*?"', a[0])
-            if len(video_title) != 0 and len(video_id) != 0:
-                video_title = video_title[0].replace("data-title=", '').replace('"', '')
-                video_id = video_id[0].replace("data-video-id=", '').replace('"', '')
-                url = url_prepend + video_id
-                title = video_title
-                self.list_content_tuple.append(YoutubeMetadata(url, title))
+        # use regex to get video url
+        # this seems rigid against <div> changes
+        # so, far this works
+        links = soup.find_all(
+            'a',
+            href=re.compile(r".*watch.*") # this regex can be improved in future
+        )
+        for link in links:
+            href = link['href']
+            title = link.contents[0]
+            # If the link is not a video from playlist, there will be no
+            # 'index' substring. Hence, we can skip this
+            if 'index' not in href:
+                continue
+            # Just to make sure the title is not empty. This is done because
+            # there is always a first link that contains 'index', yet does not
+            # have a title. This represents the meta-link: a link to playlist
+            # itself.
+            title = title.strip()
+            if not title:
+                continue
+            # Get video url using simple algorithm. This 3 index search is done
+            # just to make sure when youtube playlist url has these query
+            # params in shuffled order.
+            slicer1 = href.index('&index=')
+            slicer2 = href.index('&t=')
+            slicer3 = href.index('&list=')
+            slicer = min(slicer1, slicer2, slicer3)
+            url = url_base + href[:slicer]
+            self.list_content_tuple.append(YoutubeMetadata(url, title))
+        # for i in soup:
+        #     a = re.findall(r'class="pl-video yt-uix-tile".*?data-title=.*?data-video-id=.*?>', str(i))
+        #     video_title = re.findall(r'data-title=".*?"', a[0])
+        #     video_id = re.findall(r'data-video-id=".*?"', a[0])
+        #     if len(video_title) != 0 and len(video_id) != 0:
+        #         video_title = video_title[0].replace("data-title=", '').replace('"', '')
+        #         video_id = video_id[0].replace("data-video-id=", '').replace('"', '')
+        #         url = url_prepend + video_id
+        #         title = video_title
+        #         self.list_content_tuple.append(YoutubeMetadata(url, title))
 
         if len(self.list_content_tuple) == 0:
             logger.warning("Are you sure you have videos in your playlist? Try changing\
