@@ -55,4 +55,16 @@ class Playxlist(PlaylistBase):
         logger.info("Extracting Playlist Content")
         self.extract_list_contents()
         self.strip_to_start_end()
+        data = self.list_content_tuple
+        if self.file_path:
+            logger.info("{}: {} {}".format(
+                                            self.file_path,
+                                            len(data),
+                                            'song' if len(data) < 2 else 'songs'
+                                    ))
+        else:
+            logger.info("{} {}".format(
+                                            len(data),
+                                            'song' if len(data) < 2 else 'songs'
+                                    ))
         return self.list_content_tuple

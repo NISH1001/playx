@@ -45,7 +45,7 @@ class PlaylistBase:
         Base class for all the playlist that implements some common functionalitites
         such as fixing the start-end markers
     """
-    def __init__(self, pl_start=1, pl_end=1):
+    def __init__(self, pl_start=-1, pl_end=-1):
         self.pl_start = pl_start
         self.pl_end = pl_end
         self.list_content_tuple = []
@@ -61,7 +61,18 @@ class PlaylistBase:
             Then truncate the markers based on the size of the list.
         """
         # Update the length of the playlist
-        if self._is_valid(self.pl_start, self.pl_end):
-            self.pl_start = max(1, self.pl_start)
-            self.pl_end = min(self.pl_end, len(self.list_content_tuple))
-            self.list_content_tuple = self.list_content_tuple[self.pl_start-1: self.pl_end]
+        if not self.pl_start or self.pl_start<1:
+            self.pl_start = 1
+        if not self.pl_end or self.pl_end <1:
+            self.pl_end = len(self.list_content_tuple)
+
+        # reset marker to make sure it's in the order appearing in the playlist
+        # this can be improved by using step (1 or -1) to play in reverse order
+        start = min(self.pl_start, self.pl_end)
+        end = max(self.pl_start, self.pl_end)
+        step = 1 if (self.pl_start<= self.pl_end) else -1
+        if self._is_valid(start, end):
+            self.list_content_tuple = self.list_content_tuple[start-1 : end]
+            if step == -1:
+                self.list_content_tuple = self.list_content_tuple[::-1]
+

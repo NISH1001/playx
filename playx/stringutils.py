@@ -113,7 +113,8 @@ def url_type(url):
         return None
 
 def main():
-    pass
+    url = "https://www.youtube.com/watch?v=M6n-VvCcxTo"
+    print(url_type(url))
 
 
 if __name__ == "__main__":
