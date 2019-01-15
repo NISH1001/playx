@@ -66,8 +66,7 @@ class PlaylistBase:
         if not self.pl_end or self.pl_end <1:
             self.pl_end = len(self.list_content_tuple)
 
-        # reset marker to make sure it's in the order appearing in the playlist
-        # this can be improved by using step (1 or -1) to play in reverse order
+        # reset marker to make sure it's in the order given by start/end
         start = min(self.pl_start, self.pl_end)
         end = max(self.pl_start, self.pl_end)
         step = 1 if (self.pl_start<= self.pl_end) else -1
