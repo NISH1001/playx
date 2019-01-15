@@ -65,10 +65,15 @@ def get_youtube_streams(url):
 
 
 def get_youtube_title(url):
-    logger.info("Getting title for :: {}".format(url))
-    cli = "youtube-dl -e {}".format(url)
-    output, error = exe(cli)
-    return output
+    """
+    Extract title of video from url.
+    """
+    logger.info("Extracting title of passed URL")
+    r = requests.get(url)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    title = soup.findAll('title')[0]
+    title = re.sub(r'title|>|<|/|-|YouTube', '', str(title))
+    return title
 
 
 def add_better_search_kw(query):
@@ -124,19 +129,7 @@ def dw(title, url):
     title = remove_punct(title)
     title = remove_multiple_spaces(title)
     title = title + '.mp3'
-    Cache.dw(url, title)
-
-
-def get_title_from_url(url):
-    """
-    Extract title of video from url.
-    """
-    logger.info("Extracting title of passed URL")
-    r = requests.get(url)
-    soup = BeautifulSoup(r.text, 'html.parser')
-    title = soup.findAll('title')[0]
-    title = re.sub(r'title|>|<|/|-|YouTube', '', str(title))
-    return title
+    Cache.dw(url, title) 
 
 
 def main():

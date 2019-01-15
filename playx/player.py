@@ -9,7 +9,7 @@ from playx.cache import (
 )
 
 from playx.youtube import (
-    grab_link, dw, get_title_from_url
+    grab_link, dw, get_youtube_title
 )
 
 from playx.songfinder import (
@@ -74,7 +74,7 @@ class URLPlayer():
         """
         Search youtube and get its data.
         """
-        self.title = get_title_from_url(self.URL)
+        self.title = get_youtube_title(self.URL)
         self.stream_url = grab_link(self.URL)
 
     def _extract_data(self):
