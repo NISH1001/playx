@@ -52,6 +52,7 @@ def get_youtube_streams(url):
 
     PS: I don't know how youtube-dl does the magic
     """
+    logger.debug("Extracting streamable links")
     cli = "youtube-dl -g {}".format(url)
     output, error = exe(cli)
     stream_urls = output.split("\n")
@@ -74,8 +75,7 @@ def get_youtube_title(url):
     except Exception as e:
         logger.error('ERROR: {}'.format(e))
         exit(-1)
-    soup = BeautifulSoup(r.text, 'html.parser')
-    title = soup.findAll('title')[0]
+    title = re.findall(r'<title>.*?</title>', r.text)[0]
     title = re.sub(r'title|>|<|/|\ ?-|\ ?YouTube', '', str(title))
     return title
 
