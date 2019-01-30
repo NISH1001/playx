@@ -155,8 +155,10 @@ class BillboardPlaylist(PlaylistBase):
 
 def get_chart_names_online(url="https://www.billboard.com/charts"):
     try:
-        response = requests.get(url, timeout=1)
+        response = requests.get(url, timeout=5)
     except requests.exceptions.ConnectionError:
+        return []
+    except requests.exceptions.ReadTimeout:
         return []
     soup = BeautifulSoup(response.text, 'html.parser')
     links = soup.find_all('a', href=re.compile(r'.*/charts/.+'))
