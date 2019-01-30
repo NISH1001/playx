@@ -59,12 +59,21 @@ class SpotifyIE(PlaylistBase):
             title = re.sub(r'class="track-name".*?>|</span>',
                             '',
                             re.findall(r'class="track-name".*?</span>', str(i))[0])
-            artist = re.sub(r'a href="/artist.*?<span dir=".*?>|</span>|</a>',
-                            '',
-                            re.findall(r'a href="/artist.*?</a>', str(i))[0])
-            album = re.sub(r'a href="/album.*?<span dir=".*?>|</span>|</a>',
-                            '',
-                            re.findall(r'a href="/album.*?</a>', str(i))[0])
+            # Some spotify playlists (mostly the ones by spotify) have one or
+            # more videos in the playlist. In that case we will skip the
+            # extraction of artist and album.
+            try:
+                artist = re.sub(r'a href="/artist.*?<span dir=".*?>|</span>|</a>',
+                                '',
+                                re.findall(r'a href="/artist.*?</a>', str(i))[0])
+            except IndexError:
+                artist = ''
+            try:
+                album = re.sub(r'a href="/album.*?<span dir=".*?>|</span>|</a>',
+                                '',
+                                re.findall(r'a href="/album.*?</a>', str(i))[0])
+            except IndexError:
+                album = ''
             self.list_content_tuple.append(SpotifySong(title, artist, album))
 
         self.strip_to_start_end()
