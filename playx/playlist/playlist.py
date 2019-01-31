@@ -53,8 +53,9 @@ class Playlist:
 
     def _is_spotify(self):
         """Check if URL is a spotify playlist."""
-        playlist_part = 'open.spotify.com/playlist/'
-        if playlist_part in self.URL:
+        # playlist_part = 'open.spotify.com/playlist/'
+        match = re.match(r'^(https://)?open.spotify.com/(user/.*/)?playlist/.*?$', self.URL)
+        if match:
             self.type = 'spotify'
 
     def _is_youtube(self):
