@@ -6,7 +6,11 @@
 
 # playx in action
 
-![GIF](https://i.imgur.com/7P3dSWT.gif)
+<p align="center">
+<img src="playx.gif">
+</a>
+</p>
+
 
 # playx  
 
@@ -78,7 +82,7 @@ python setup.py install
 ## Usage
 For now, the application is in development phase.  
 
-```bash
+```
 usage: playx [-h] [-p] [-n] [-auto] [-d] [-l] [--pl-start PL_START]
              [--pl-end PL_END]
              [song [song ...]]
