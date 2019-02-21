@@ -100,7 +100,7 @@ class Playlist:
         """
         Check if the passed URL is a jiosaavn playlist.
         """
-        match = re.findall(r'^(https://)?(www.)?jiosaavn.com/featured/.*?$', self.URL)
+        match = re.findall(r'^(https://)?(www.)?(jio)?saavn.com/(s/playlist|featured)/.*?', self.URL)
         if len(match):
             self.type = 'jiosaavn'
 

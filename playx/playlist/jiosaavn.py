@@ -4,7 +4,9 @@ from playx.playlist.playlistbase import (
     PlaylistBase, SongMetadataBase
 )
 
-from selenium import webdriver
+from bs4 import BeautifulSoup
+import requests
+from json import JSONDecoder
 import re
 
 from playx.logger import (
@@ -43,6 +45,11 @@ class JioSaavnIE(PlaylistBase):
     def __init__(self, URL, pl_start=None, pl_end=None):
         super().__init__(pl_start, pl_end)
         self.URL = URL
+        self._headers = {
+                    'User-Agent': 'Mozilla/5.0 \
+                                   (X11; Ubuntu; Linux x86_64; rv:49.0)\
+                                   Gecko/20100101 Firefox/49.0'
+                       }
         self.list_content_tuple = []
         self.playlist_name = ''
 
@@ -50,19 +57,20 @@ class JioSaavnIE(PlaylistBase):
         """
         Get the data from the page.
         """
-        driver = webdriver.PhantomJS()
-        driver.get(self.URL)
-        for i in driver.find_elements_by_class_name('song-wrap'):
-            data = i.text.split('\n')
-            title = re.sub(r'-|,', '', data[2])
-            subtitle = re.sub(r'-|,', '', data[3])
-            self.list_content_tuple.append(SongMetadata(title, subtitle))
+        response = requests.get(self.URL, headers=self._headers)
+        soup = BeautifulSoup(response.text, 'lxml')
+        songs = soup.find_all('div', {'class': 'hide song-json'})
+
+        for i in songs:
+            obj = JSONDecoder().decode(i.text)
+            self.list_content_tuple.append(SongMetadata(obj['title'], obj['singers']))
 
         self.strip_to_start_end()
 
-        playlist = driver.find_elements_by_class_name('meta-info')[0]
-        playlist = playlist.text.split('\n')[0]
-        self.playlist_name = playlist
+        # Extract the name of the playlist
+        self.playlist_name = soup.find_all('h1', {'class': 'page-title ellip'})
+        self.playlist_name = re.findall(r'>.*?<', str(self.playlist_name))[0]
+        self.playlist_name = re.sub(r'>|<', '', self.playlist_name)
 
 
 def get_data(URL, pl_start, pl_end):
