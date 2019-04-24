@@ -53,8 +53,17 @@ def get_youtube_streams(url):
     PS: I don't know how youtube-dl does the magic
     """
     logger.debug("Extracting streamable links")
+    logger.debug("{}".format(url))
     cli = "youtube-dl -g {}".format(url)
     output, error = exe(cli)
+    logger.debug("{}".format(type(error)))
+
+    if error != '':
+        logger.critical("'{}' Error passed by youtube-dl. Please check if the latest version of youtube-dl is installed. You can report the error on https://yt-dl.org/bug.".format(error))
+
+    logger.debug("O/P: {}".format(output))
+    logger.debug("ERROR: {}".format(error))
+
     stream_urls = output.split("\n")
     url = {}
     try:
@@ -121,6 +130,7 @@ def search_youtube(query):
 def grab_link(value):
     """Return the audio link of the song."""
     stream = get_youtube_streams(value)
+    logger.debug(stream)
     if stream['audio'] is None: return None
     value = stream['audio']
     # if not no_cache:

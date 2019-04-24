@@ -100,3 +100,4 @@ class Logger:
         """
         LEVEL_NUMBER = 4
         self._write(message, LEVEL_NUMBER)
+        exit()
