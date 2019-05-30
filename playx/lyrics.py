@@ -64,10 +64,10 @@ def search(url, query):
 
     table = extractor.find_all("table", {'class' : 'table'})[0]
     rows = table.find_all('tr')
-    anchors = [ row.find('td').find('a').get('href')  for row in rows ]
+    anchors = [row.find('td').find('a').get('href')  for row in rows]
 
     # discard if the link/anchor is just a pagination link
-    links = [ anchor for anchor in anchors if not url_query in anchor ]
+    links = [anchor for anchor in anchors if not url_query in anchor]
 
     if not links:
         print("no songs...")
