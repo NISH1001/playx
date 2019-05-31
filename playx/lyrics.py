@@ -61,18 +61,17 @@ def search(url, query):
     response = urllib.request.urlopen(url_search)
     extractor = BeautifulSoup(response.read(), "html.parser")
     anchors = []
-    try:
-        table = extractor.find_all("table", {'class' : 'table'})[0]
-        rows = table.find_all('tr')
-        anchors = [ row.find('td').find('a').get('href')  for row in rows ]
 
-        # discard if the link/anchor is just a pagination link
-        links = [ anchor for anchor in anchors if not url_query in anchor ]
-        if len(links) < 1:
-            raise ManualError("no songs...")
-    except ManualError as merr:
-        merr.display()
-        link = []
+    table = extractor.find_all("table", {'class' : 'table'})[0]
+    rows = table.find_all('tr')
+    anchors = [row.find('td').find('a').get('href')  for row in rows]
+
+    # discard if the link/anchor is just a pagination link
+    links = [anchor for anchor in anchors if not url_query in anchor]
+
+    if not links:
+        print("no songs...")
+
     return links
 
 def lyrics_full(url):
