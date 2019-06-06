@@ -245,7 +245,8 @@ class Player(URLPlayer, NamePlayer):
                                 'soundcloud',
                                 'billboard',
                                 'jiosaavn',
-                                'gaana'
+                                'gaana',
+                                'cached'
                               ]
         self._datatypes = [
                             'playlist',
