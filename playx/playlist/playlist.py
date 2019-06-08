@@ -41,6 +41,7 @@ class Playlist:
         """
         self.URL = URL
         self.file_path = None  # Used for cached playlists
+        self.temp_type = None  # Used for cached playlists
         self.pl_start = pl_start
         self.pl_end = pl_end
         self.type = 'N/A'
@@ -122,6 +123,7 @@ class Playlist:
         playlist_cache = playlistcache.PlaylistCache(self.URL)
         if playlist_cache.is_cached():
             self.type = 'cached'
+            self.temp_type = playlist_cache.extract_playlist_type()
             self.URL = playlist_cache.file_path
 
     def is_playlist(self):
@@ -163,5 +165,7 @@ class Playlist:
         # Cache the playlist if its not already there
         if self.type != 'cached':
             playlistcache.save_data(name, self.URL, self.type, data)
+        else:
+            self.type = self.temp_type
 
         return data

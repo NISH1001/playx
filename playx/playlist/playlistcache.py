@@ -22,6 +22,7 @@ class PlaylistCache:
     -----------------------------------------
     |[Name]:[<name of the playlist>]        |
     |[URL]:[<URL of the playlist>]          |
+    |[Type]:[<PlaylistType>]                |
     |[Song]:[Song name, URL of song, querry]|
     |........                               |
     |........                               |
@@ -43,6 +44,15 @@ class PlaylistCache:
         """
         if not self.dir_path.exists():
             makedirs(self.dir_path, exist_ok=True)
+
+    def extract_playlist_type(self):
+        """
+        Extract the type of the playlist.
+        """
+        READSTREAM = open(self.file_path)
+        FILE_CONTENTS = READSTREAM.read().split('\n')
+        TYPE = FILE_CONTENTS[2][FILE_CONTENTS[2].index(':')+2:-1]
+        return TYPE
 
     def _get_data(self, path_to_file):
         """
@@ -79,6 +89,7 @@ class PlaylistCache:
         WSTREAM = open(self.dir_path.joinpath(file_name), 'w')
         WSTREAM.write('[Name]:[{}]\n'.format(name))
         WSTREAM.write('[URL]:[{}]\n'.format(url))
+        WSTREAM.write('[TYPE]:[{}\n]'.format(pltype))
 
         for song in data:
             song_details = '[SONG]:[{},{},{}]'.format(
@@ -122,7 +133,7 @@ class CachedIE(PlaylistBase):
         self.playlist_name = FILECONTENTS[0][FILECONTENTS[0].index(':')+2: -1]
         logger.debug(self.playlist_name)
 
-        for line in FILECONTENTS[2:-1]:
+        for line in FILECONTENTS[3:-1]:
             logger.debug(line)
             song_details = line[line.index(':')+2:-1].split(',')
             logger.debug(str(song_details))

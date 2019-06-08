@@ -5,7 +5,7 @@ from playx.utility import (
 )
 
 from playx.cache import (
-    search_locally
+    search_locally, update_URL_cache
 )
 
 from playx.youtube import (
@@ -61,6 +61,8 @@ class URLPlayer():
         """
         if not self.no_cache:
             dw(self.title, self.stream_url)
+            # Update the cache.
+            update_URL_cache(self.title, self.URL)
         else:
             logger.info('Caching is disabled')
 
@@ -109,10 +111,14 @@ class URLPlayer():
         else:
             self._extract_songObj()
 
+        logger.debug(self.title)
+
         # Now search the song locally
         if not self.dont_cache_search:
             match = search_locally(self.title)
             if match:
+                # Update the URL cache. This is necessary for the old songs.
+                update_URL_cache(self.title, self.URL)
                 # Change the value to local path
                 self.stream_url = match[1]
             else:
@@ -288,7 +294,6 @@ class Player(URLPlayer, NamePlayer):
         elif self.datatype == "song":
             self.play_name(self.data)
         elif self.datatype == 'playlist':
-            logger.debug(len(self._iterable_list))
             for i in self._iterable_list:
                 # For different playlists the player needs to act
                 # differently

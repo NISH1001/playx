@@ -4,11 +4,14 @@ import os
 import threading
 import glob
 import sys
+import json
 import urllib.request
+
+from json.decoder import JSONDecodeError
 
 from playx.stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
-    check_keywords
+    check_keywords, fix_title
 )
 from playx.logger import Logger
 
@@ -137,6 +140,31 @@ def search_locally(song=None):
     else:
         match = []
     return match
+
+
+def update_URL_cache(title, URL):
+    """
+    Update the URL cache saved in the mapURL.json file.
+    """
+    cache_dir = os.path.expanduser('~/.playx/songs')
+    file_path = os.path.join(cache_dir, 'mapURL.json')
+    song_path = os.path.join(cache_dir, fix_title(title))
+
+    if not os.path.exists(file_path):
+        temp = open(file_path, 'w')
+        temp.close()
+        data = {}
+    else:
+        with open(file_path, 'r') as RSTREAM:
+            try:
+                data = json.load(RSTREAM)
+            except JSONDecodeError:
+                data = {}
+
+    data.update({URL: song_path})
+
+    WSTREAM = open(file_path, 'w')
+    json.dump(data, WSTREAM)
 
 
 if __name__ == "__main__":

@@ -9,8 +9,7 @@ due to all those crawling shit
 from bs4 import BeautifulSoup
 import requests
 from playx.stringutils import (
-    remove_multiple_spaces,
-    remove_punct,
+    fix_title,
     is_song_url
 )
 
@@ -140,10 +139,8 @@ def grab_link(value):
 
 def dw(title, url):
     # Start downloading
-    title = remove_punct(title)
-    title = remove_multiple_spaces(title)
-    title = title + '.mp3'
-    Cache.dw(url, title) 
+    title = fix_title(title)
+    Cache.dw(url, title)
 
 
 def main():
