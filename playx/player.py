@@ -5,7 +5,7 @@ from playx.utility import (
 )
 
 from playx.cache import (
-    search_locally, update_URL_cache
+    search_locally, update_URL_cache, search_URL
 )
 
 from playx.youtube import (
@@ -27,6 +27,8 @@ from playx.stringutils import (
 from playx.soundcloud import (
     get_track_info
 )
+
+from os.path import basename
 
 
 # Setup logger
@@ -135,6 +137,16 @@ class URLPlayer():
         Play the song by using the URL.
         """
         self.URL = URL
+
+        # Make a search locally to see if the song is already cached.
+        if not self.dont_cache_search:
+            song_path = search_URL(self.URL)
+            if song_path is not None:
+                self.stream_url = song_path
+                self.title = basename(song_path)
+                direct_to_play(song_path, self.show_lyrics, self.title)
+                return
+
         self.URL_type = url_type(self.URL)
         if songObj is not None:
             self.songObj = songObj

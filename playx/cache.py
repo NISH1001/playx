@@ -142,6 +142,21 @@ def search_locally(song=None):
     return match
 
 
+def search_URL(URL):
+    """
+    Check if the URL is cached.
+    """
+    file_path = os.path.expanduser('~/.playx/songs/mapURL.json')
+    logger.debug(URL)
+    RSTREAM = open(file_path, 'r')
+    data = json.load(RSTREAM)
+    logger.info("Searching {} in the cached file".format(URL))
+    try:
+        return data[URL]
+    except KeyError:
+        return None
+
+
 def update_URL_cache(title, URL):
     """
     Update the URL cache saved in the mapURL.json file.
