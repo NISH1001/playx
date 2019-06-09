@@ -39,6 +39,16 @@ class SongMetadataBase:
         """
         self.search_querry = remove_duplicates(self.search_querry)
 
+    def content(self):
+        """
+        Show the content of the class
+        """
+        return "{}:{}:{}".format(
+                                self.title,
+                                self.URL,
+                                self.search_querry
+                            )
+
 
 class PlaylistBase:
     """
@@ -61,17 +71,16 @@ class PlaylistBase:
             Then truncate the markers based on the size of the list.
         """
         # Update the length of the playlist
-        if not self.pl_start or self.pl_start<1:
+        if not self.pl_start or self.pl_start < 1:
             self.pl_start = 1
-        if not self.pl_end or self.pl_end <1:
+        if not self.pl_end or self.pl_end < 1:
             self.pl_end = len(self.list_content_tuple)
 
         # reset marker to make sure it's in the order given by start/end
         start = min(self.pl_start, self.pl_end)
         end = max(self.pl_start, self.pl_end)
-        step = 1 if (self.pl_start<= self.pl_end) else -1
+        step = 1 if (self.pl_start <= self.pl_end) else -1
         if self._is_valid(start, end):
             self.list_content_tuple = self.list_content_tuple[start-1 : end]
             if step == -1:
                 self.list_content_tuple = self.list_content_tuple[::-1]
-

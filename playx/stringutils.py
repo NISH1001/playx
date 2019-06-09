@@ -91,6 +91,14 @@ def remove_duplicates(string):
     return res
 
 
+def fix_title(title):
+    title = remove_punct(title)
+    title = remove_multiple_spaces(title)
+    if not title.endswith('.mp3'):
+        title = title + '.mp3'
+    return title
+
+
 def check_keywords(tokens1, tokens2):
     """
         Check if all the tokens from tokens1

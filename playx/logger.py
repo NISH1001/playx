@@ -1,4 +1,4 @@
-import logging
+
 from pathlib import Path
 import datetime
 import os
@@ -66,6 +66,15 @@ class Logger:
         self._console_format = '[{}]: {}'.format(self.name, message)
         self._file_format = '[{}]-[{}]: {}\n'.format(self.name, DATETIME_FORMAT, message)
 
+    def hold(self):
+        """
+        Hold the screen by using input()
+        """
+        LEVEL_NUMBER = 0
+
+        if LEVEL_NUMBER >= self.level:
+            input("Screen hold! Press any key to continue")
+
     def debug(self, message):
         """
         Add the message if the level is debug.
@@ -100,3 +109,4 @@ class Logger:
         """
         LEVEL_NUMBER = 4
         self._write(message, LEVEL_NUMBER)
+        exit()

@@ -13,7 +13,8 @@ from playx.playlist import (
     billboard,
     soundcloud,
     jiosaavn,
-    gaana
+    gaana,
+    playlistcache
 )
 
 import re
@@ -39,6 +40,8 @@ class Playlist:
         pl_end: Playlist end index.
         """
         self.URL = URL
+        self.file_path = None  # Used for cached playlists
+        self.temp_type = None  # Used for cached playlists
         self.pl_start = pl_start
         self.pl_end = pl_end
         self.type = 'N/A'
@@ -48,7 +51,8 @@ class Playlist:
                     'billboard': billboard,
                     'soundcloud': soundcloud,
                     'jiosaavn': jiosaavn,
-                    'gaana': gaana
+                    'gaana': gaana,
+                    'cached': playlistcache
                     }
 
     def _is_spotify(self):
@@ -112,6 +116,16 @@ class Playlist:
         if len(match):
             self.type = 'gaana'
 
+    def _is_cached(self):
+        """
+        Check if the playlist is cached.
+        """
+        playlist_cache = playlistcache.PlaylistCache(self.URL)
+        if playlist_cache.is_cached():
+            self.type = 'cached'
+            self.temp_type = playlist_cache.extract_playlist_type()
+            self.URL = playlist_cache.file_path
+
     def is_playlist(self):
         """Check if the playlist is valid."""
 
@@ -121,6 +135,7 @@ class Playlist:
         self._is_soundcloud()
         self._is_jiosaavn()
         self._is_gaana()
+        self._is_cached()
 
         if self.type != 'N/A':
             return True
@@ -146,4 +161,11 @@ class Playlist:
                                         len(data),
                                         'song' if len(data) < 2 else 'songs'
                                     ))
+        logger.debug(data[0].content())
+        # Cache the playlist if its not already there
+        if self.type != 'cached':
+            playlistcache.save_data(name, self.URL, self.type, data)
+        else:
+            self.type = self.temp_type
+
         return data
