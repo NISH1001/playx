@@ -9,5 +9,6 @@ __all__ = [
             'soundcloud',
             'playlistbase',
             'jiosaavn',
-            'gaana'
+            'gaana',
+            'playlistcache'
             ]

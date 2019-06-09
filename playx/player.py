@@ -5,7 +5,7 @@ from playx.utility import (
 )
 
 from playx.cache import (
-    search_locally
+    search_locally, update_URL_cache, search_URL
 )
 
 from playx.youtube import (
@@ -27,6 +27,8 @@ from playx.stringutils import (
 from playx.soundcloud import (
     get_track_info
 )
+
+from os.path import basename
 
 
 # Setup logger
@@ -61,6 +63,8 @@ class URLPlayer():
         """
         if not self.no_cache:
             dw(self.title, self.stream_url)
+            # Update the cache.
+            update_URL_cache(self.title, self.URL)
         else:
             logger.info('Caching is disabled')
 
@@ -109,10 +113,14 @@ class URLPlayer():
         else:
             self._extract_songObj()
 
+        logger.debug(self.title)
+
         # Now search the song locally
         if not self.dont_cache_search:
             match = search_locally(self.title)
             if match:
+                # Update the URL cache. This is necessary for the old songs.
+                update_URL_cache(self.title, self.URL)
                 # Change the value to local path
                 self.stream_url = match[1]
             else:
@@ -129,6 +137,16 @@ class URLPlayer():
         Play the song by using the URL.
         """
         self.URL = URL
+
+        # Make a search locally to see if the song is already cached.
+        if not self.dont_cache_search:
+            song_path = search_URL(self.URL)
+            if song_path is not None:
+                self.stream_url = song_path
+                self.title = basename(song_path)
+                direct_to_play(song_path, self.show_lyrics, self.title)
+                return
+
         self.URL_type = url_type(self.URL)
         if songObj is not None:
             self.songObj = songObj
@@ -245,7 +263,8 @@ class Player(URLPlayer, NamePlayer):
                                 'soundcloud',
                                 'billboard',
                                 'jiosaavn',
-                                'gaana'
+                                'gaana',
+                                'cached'
                               ]
         self._datatypes = [
                             'playlist',
@@ -287,7 +306,6 @@ class Player(URLPlayer, NamePlayer):
         elif self.datatype == "song":
             self.play_name(self.data)
         elif self.datatype == 'playlist':
-            logger.debug(len(self._iterable_list))
             for i in self._iterable_list:
                 # For different playlists the player needs to act
                 # differently

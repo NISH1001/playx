@@ -4,11 +4,14 @@ import os
 import threading
 import glob
 import sys
+import json
 import urllib.request
+
+from json.decoder import JSONDecodeError
 
 from playx.stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
-    check_keywords
+    check_keywords, fix_title
 )
 from playx.logger import Logger
 
@@ -137,6 +140,53 @@ def search_locally(song=None):
     else:
         match = []
     return match
+
+
+def search_URL(URL):
+    """
+    Check if the URL is cached.
+    """
+    file_path = os.path.expanduser('~/.playx/logs/urls.json')
+    logger.debug(URL)
+
+    # check if file exists
+    if not os.path.exists(file_path):
+        temp = open(file_path, 'w')
+        temp.close()
+        data = {}
+
+    try:
+        with open(file_path, 'r') as RSTREAM:
+            data = json.load(RSTREAM)
+            logger.info("Searching {} in the cached file".format(URL))
+    except JSONDecodeError:
+        data = {}
+    return data.get(URL, None)
+
+
+def update_URL_cache(title, URL):
+    """
+    Update the URL cache saved in the mapURL.json file.
+    """
+    log_dir = os.path.expanduser('~/.playx/logs')
+    songs_dir = os.path.expanduser('~/.playx/songs')
+    file_path = os.path.join(log_dir, 'urls.json')
+    song_path = os.path.join(songs_dir, fix_title(title))
+
+    if not os.path.exists(file_path):
+        temp = open(file_path, 'w')
+        temp.close()
+        data = {}
+    else:
+        with open(file_path, 'r') as RSTREAM:
+            try:
+                data = json.load(RSTREAM)
+            except JSONDecodeError: data = {}
+
+    data.update({URL: song_path})
+
+    with open(file_path, 'w') as WSTREAM:
+        json.dump(data, WSTREAM)
 
 
 if __name__ == "__main__":
