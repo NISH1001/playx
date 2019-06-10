@@ -10,5 +10,6 @@ __all__ = [
             'playlistbase',
             'jiosaavn',
             'gaana',
-            'playlistcache'
+            'playlistcache',
+            'ytrelated'
             ]
