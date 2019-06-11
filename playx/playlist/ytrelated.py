@@ -2,6 +2,7 @@
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+import re
 
 from playx.playlist.playlistbase import (
     SongMetadataBase, PlaylistBase
@@ -35,6 +36,20 @@ class YoutubeRelatedIE(PlaylistBase):
         super().__init__()
         self.url = url
 
+    def _not_name(self, name):
+        """
+        Check the passed name to see if its actually a name of song.
+
+        While extracting sometimes playlists are suggested in which
+        the extraction algo extracts the time of the playlist instead
+        of the name, so we need to remove it from the list of songs.
+        """
+        match = re.match(r'[0-9][0-9]?:[0-9][0-9]', name)
+        if match is None:
+            return False
+        else:
+            return True
+
     def extract_songs(self):
         chrome_options = Options()
         chrome_options.add_argument('--headless')
@@ -49,7 +64,8 @@ class YoutubeRelatedIE(PlaylistBase):
             contents = i.text.split('\n')
             song_name = contents[0]
             logger.debug(song_name)
-            self.list_content_tuple.append(YoutubeMetadata(song_name))
+            if not self._not_name(song_name):
+                self.list_content_tuple.append(YoutubeMetadata(song_name))
 
         driver.quit()
 
