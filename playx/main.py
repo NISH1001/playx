@@ -65,6 +65,10 @@ def parse():
     parser.add_argument('-d', '--dont-cache-search',
                         action='store_true',
                         help="Don't search the song in the cache.")
+    parser.add_argument('-r', '--no-related',
+                        action='store_true',
+                        help="Disable playing related songs extracted\
+                            from YouTube")
     parser.add_argument('-l', '--lyrics',
                         action='store_true',
                         help="Show lyircs of the song.")
@@ -109,6 +113,7 @@ def playx(parser, args, song):
         cache = Cache("~/.playx/songs")
         return stream_cache_all(cache)
     # Check if its a playlist
+    logger.debug(args.no_related)
     playlist = Playlist(song, args.pl_start, args.pl_end)
     if playlist.is_playlist():
         data = playlist.get_data()
@@ -117,7 +122,8 @@ def playx(parser, args, song):
                         playlisttype=playlist.type,
                         show_lyrics=args.lyrics,
                         dont_cache_search=args.dont_cache_search,
-                        no_cache=args.no_cache
+                        no_cache=args.no_cache,
+                        no_related=args.no_related
                         )
         player.play()
     elif not song:
@@ -127,7 +133,8 @@ def playx(parser, args, song):
                         song,
                         show_lyrics=args.lyrics,
                         dont_cache_search=args.dont_cache_search,
-                        no_cache=args.no_cache
+                        no_cache=args.no_cache,
+                        no_related=args.no_related
                         )
         player.play()
 

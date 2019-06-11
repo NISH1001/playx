@@ -237,7 +237,8 @@ class Player(URLPlayer, NamePlayer):
                 playlisttype=None,
                 show_lyrics=False,
                 dont_cache_search=False,
-                no_cache=False
+                no_cache=False,
+                no_related=False
                 ):
         """
         data can be anything of the above supported
@@ -267,6 +268,7 @@ class Player(URLPlayer, NamePlayer):
         self.data = data
         self.datatype = datatype
         self.playlisttype = playlisttype
+        self.no_related = no_related
         self._playlist_names = [
                                 'spotify',
                                 'youtube',
@@ -296,6 +298,9 @@ class Player(URLPlayer, NamePlayer):
         """
         Play related songs.
         """
+        if self.no_related:
+            return
+
         # Check if URL is not path
         logger.debug(url)
         if url != '':
@@ -312,6 +317,8 @@ class Player(URLPlayer, NamePlayer):
         """Check the type of the data"""
 
         if self.playlisttype is not None:
+            logger.debug(self.playlisttype)
+            logger.hold()
             if self.playlisttype not in self._playlist_names:
                 logger.critical('Passed playlist is not supported yet')
             else:
