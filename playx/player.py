@@ -28,6 +28,10 @@ from playx.soundcloud import (
     get_track_info
 )
 
+from playx.playlist.ytrelated import (
+    get_data
+)
+
 from os.path import basename
 
 
@@ -145,12 +149,13 @@ class URLPlayer():
                 self.stream_url = song_path
                 self.title = basename(song_path)
                 direct_to_play(song_path, self.show_lyrics, self.title)
-                return
+                return self.URL
 
         self.URL_type = url_type(self.URL)
         if songObj is not None:
             self.songObj = songObj
         self._stream_from_url()
+        return self.URL
 
 
 class NamePlayer():
@@ -166,6 +171,7 @@ class NamePlayer():
                 no_cache=False
                 ):
         self.name = name
+        self.URL = ''
         self.dont_cache_search = dont_cache_search
         self.no_cache = no_cache
         self.show_lyrics = show_lyrics
@@ -178,6 +184,7 @@ class NamePlayer():
         """
         data = search(self.name)
         self.title = data.title
+        self.URL = data.url
         self.stream_url = grab_link(data.url)
 
     def _stream_from_name(self):
@@ -194,6 +201,8 @@ class NamePlayer():
                 self.stream_url = match[1]
             else:
                 self._get_youtube_data_name()
+                # Update the URL cache
+                update_URL_cache(self.title, self.URL)
                 self._dw()
         else:
             self._get_youtube_data_name()
@@ -205,6 +214,7 @@ class NamePlayer():
         """
         self.name = name
         self._stream_from_name()
+        return self.URL
 
 
 class Player(URLPlayer, NamePlayer):
@@ -227,7 +237,8 @@ class Player(URLPlayer, NamePlayer):
                 playlisttype=None,
                 show_lyrics=False,
                 dont_cache_search=False,
-                no_cache=False
+                no_cache=False,
+                no_related=False
                 ):
         """
         data can be anything of the above supported
@@ -257,6 +268,7 @@ class Player(URLPlayer, NamePlayer):
         self.data = data
         self.datatype = datatype
         self.playlisttype = playlisttype
+        self.no_related = no_related
         self._playlist_names = [
                                 'spotify',
                                 'youtube',
@@ -282,10 +294,31 @@ class Player(URLPlayer, NamePlayer):
         else:
             self.datatype = "song"
 
+    def _play_related(self, url):
+        """
+        Play related songs.
+        """
+        if self.no_related:
+            return
+
+        # Check if URL is not path
+        logger.debug(url)
+        if url != '':
+            related_songs = get_data(url)
+        else:
+            return
+
+        if len(related_songs) != 0:
+            logger.info("Playing related songs")
+            for i in related_songs:
+                self.play_name(i.search_querry)
+
     def _check_type(self):
         """Check the type of the data"""
 
         if self.playlisttype is not None:
+            logger.debug(self.playlisttype)
+            logger.hold()
             if self.playlisttype not in self._playlist_names:
                 logger.critical('Passed playlist is not supported yet')
             else:
@@ -302,9 +335,11 @@ class Player(URLPlayer, NamePlayer):
         self._check_type()
 
         if self.datatype == 'URL':
-            self.play_url(self.data)
+            URL = self.play_url(self.data)
+            self._play_related(URL)
         elif self.datatype == "song":
-            self.play_name(self.data)
+            URL = self.play_name(self.data)
+            self._play_related(URL)
         elif self.datatype == 'playlist':
             for i in self._iterable_list:
                 # For different playlists the player needs to act

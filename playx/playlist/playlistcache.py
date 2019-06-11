@@ -89,7 +89,7 @@ class PlaylistCache:
         WSTREAM = open(self.dir_path.joinpath(file_name), 'w')
         WSTREAM.write('[Name]:[{}]\n'.format(name))
         WSTREAM.write('[URL]:[{}]\n'.format(url))
-        WSTREAM.write('[TYPE]:[{}\n]'.format(pltype))
+        WSTREAM.write('[TYPE]:[{}]\n'.format(pltype))
 
         for song in data:
             song_details = '[SONG]:[{},{},{}]'.format(

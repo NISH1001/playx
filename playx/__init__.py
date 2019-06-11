@@ -9,5 +9,5 @@ __all__ = ['main',
             'lyrics',
             'songfinder',
             'player',
-            'soundcloud'
+            'soundcloud',
             ]
