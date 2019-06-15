@@ -126,6 +126,46 @@ class Playlist:
             self.temp_type = playlist_cache.extract_playlist_type()
             self.URL = playlist_cache.file_path
 
+    def _get_data(self):
+        """
+        Internal function to call get_data of type and get the
+        data and name of the playlist.
+        """
+        data, name = self.dict[self.type].get_data(
+                                                self.URL,
+                                                self.pl_start,
+                                                self.pl_end
+                                                )
+        return data, name
+
+    def sync_playlist(self, value):
+        """
+        Sync the playlists saved in the playlists dir.
+        """
+        playlists = playlistcache.list_all()
+
+        if value.lower() == 'all':
+            for playlist in playlists:
+                self.type = playlist[2]
+                self.URL = playlist[1]
+                logger.info("Syncing {} with {}".format(playlist[0], self.type))
+                data, name = self._get_data()
+                playlistcache.save_data(name, self.URL, self.type, data)
+        else:
+            for playlist in playlists:
+                logger.debug('{}:{}'.format(playlist[0], value))
+                req_pl = playlist if playlist[0] == value else None
+                if req_pl is not None:
+                    logger.debug(req_pl[1])
+                    self.type = req_pl[2]
+                    self.URL = req_pl[1]
+                    logger.info("Syncing {} with {}".format(req_pl[0], self.type))
+                    data, name = self._get_data()
+                    playlistcache.save_data(name, self.URL, self.type, data)
+                    return
+
+            logger.error('{}: Not found in cached playlists'.format(value))
+
     def is_playlist(self):
         """Check if the playlist is valid."""
 
@@ -151,11 +191,7 @@ class Playlist:
             return []
 
         logger.info("{} Playlist passed.".format(self.type))
-        data, name = self.dict[self.type].get_data(
-                                                self.URL,
-                                                self.pl_start,
-                                                self.pl_end
-                                                )
+        data, name = self._get_data()
         logger.info("{}: {} {}".format(
                                         name,
                                         len(data),
