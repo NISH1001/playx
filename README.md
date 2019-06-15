@@ -83,8 +83,8 @@ python setup.py install
 For now, the application is in development phase.  
 
 ```
-usage: playx [-h] [-p] [-n] [-auto] [-d] [-l] [--pl-start PL_START]
-             [--pl-end PL_END]
+usage: playx [-h] [-p] [-n] [-auto] [-d] [-r] [--sync-playlist SYNC_PLAYLIST]
+             [-l] [--pl-start PL_START] [--pl-end PL_END]
              [song [song ...]]
 
 playx - Search and play any song that comes to your mind. If you have any
@@ -101,11 +101,16 @@ optional arguments:
   -auto, --auto         Auto generate playlist
   -d, --dont-cache-search
                         Don't search the song in the cache.
+  -r, --no-related      Disable playing related songs extracted from YouTube
+  --sync-playlist SYNC_PLAYLIST
+                        Sync the playlists. Pass the name as arguement. If all
+                        the playlists are to be synced, just pass [All].
   -l, --lyrics          Show lyircs of the song.
   --pl-start PL_START   Start position in case a playlist is passed. If passed
                         without a playlist it has no effect.
   --pl-end PL_END       End position in case a playlist is passed. If passed
                         without a playlist it has no effect.
+
 ```
 
 ------------
@@ -185,10 +190,14 @@ Structure is like:
 .playx
     |- songs/
     |- logs/
+    |- playlist/
+    |- playxlist/
 ```
 
 *songs*: This stores all the songs downloaded by `playx`  
 *logs*: This stores the log for user activities of songs that are searched and played with creation date. This will be used for recommendation of songs in future version
+*playlist*: This stores all the cached playlists files.
+*playxlist*: Stores all the playxlist files.
 
 ------------
 
