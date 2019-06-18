@@ -155,6 +155,25 @@ def save_data(PlaylistName, URL, pltype, data):
     playlist_cache.cache(PlaylistName, URL, pltype, data)
 
 
+def list_all():
+    """
+    Return all the playlist names with playlist URL's
+    """
+    dir_path = Path('~/.playx/playlist').expanduser()
+    files = [file for file in dir_path.iterdir()]
+    list_playlist = []
+
+    for file in files:
+        READSTREAM = open(file)
+        FILECONTENTS = READSTREAM.read().split('\n')
+        playlist_name = FILECONTENTS[0][FILECONTENTS[0].index(':')+2: -1]
+        URL = FILECONTENTS[1][FILECONTENTS[1].index(':')+2: -1]
+        TYPE = FILECONTENTS[2][FILECONTENTS[2].index(':')+2: -1]
+        list_playlist.append([playlist_name, URL, TYPE])
+
+    return list_playlist
+
+
 def get_data(URL, pl_start, pl_end):
     """Generic function. Should be called only when
     it is checked if the URL is a cached playlist.
