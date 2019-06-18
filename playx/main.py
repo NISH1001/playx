@@ -69,6 +69,11 @@ def parse():
                         action='store_true',
                         help="Disable playing related songs extracted\
                             from YouTube")
+    parser.add_argument('--sync-playlist',
+                        default=None, type=str,
+                        help="Sync the playlists. Pass the name as\
+                        arguement. If all the playlists are to be \
+                        synced, just pass [All].")
     parser.add_argument('-l', '--lyrics',
                         action='store_true',
                         help="Show lyircs of the song.")
@@ -148,6 +153,13 @@ def main():
     if args.auto:
         ap = CountBasedAutoPlaylist('~/.playx/logs/log.cat')
         song = ap.generate()
+
+    # Check if sync-playlists is passed
+    if args.sync_playlist is not None:
+        pl = Playlist(None, None, None)
+        pl.sync_playlist(args.sync_playlist)
+        exit(0)
+
     # Put a check to see if the passed arg is a list
     playx_list = Playxlist(song, args.pl_start, args.pl_end)
     if not playx_list.is_playx_list():
