@@ -125,6 +125,8 @@ class MarkovBasedAutoPlaylist(AbstractAutoPlaylist):
                     r = r.strip()
                     if r not in result:
                         result.append(r)
+        self.data = result
+        self.info()
         return result
 
     def _build_trie(self, pairs):
