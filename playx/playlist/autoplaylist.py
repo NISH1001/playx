@@ -114,17 +114,14 @@ class MarkovBasedAutoPlaylist(AbstractAutoPlaylist):
         # seed songs to use for markov chain
         songs_seed = list(set(random.choices(songs_frequent, arr/arr.sum(), k=20)))
 
-        # for now only get 50 songs
-        while len(result) < 50:
-            # song = random.choices(songs_frequent, arr/arr.sum())[0].strip()
-            for song in songs_seed:
-                song = song.strip()
-                result.append(song)
-                res = self._generate(trie, initial_song=song, max_len=10, verbose=False)
-                for r in res:
-                    r = r.strip()
-                    if r not in result:
-                        result.append(r)
+        for song in songs_seed:
+            song = song.strip()
+            result.append(song)
+            res = self._generate(trie, initial_song=song, max_len=10, verbose=False)
+            for r in res:
+                r = r.strip()
+                if r not in result:
+                    result.append(r)
         self.data = result
         self.info()
         return result
