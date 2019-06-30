@@ -217,7 +217,7 @@ Contributions are warmly welcome. Please do go through [CONTRIBUTING](https://gi
 - ~~play from other playlist (spotify, billboard, etc.)~~
 - ~~log activity~~
 - ~~auto generate playlist~~
-- use Markov Chains to improve auto-playlist
+- ~~use Markov Chains to improve auto-playlist~~
 - use Factorization Machines to improve auto-playlist
 - use logs to create simple recommendations
 
