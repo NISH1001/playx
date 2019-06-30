@@ -1,3 +1,4 @@
 youtube_dl
 requests
 beautifulsoup4
+numpy

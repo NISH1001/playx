@@ -43,6 +43,7 @@ Play any songs that come in your mind.
 
 > **Note**: These dependencies in linux can be installed in other variants.  
 > For *arch linux*, you can use **pacman** package manager accordingly.
+> Numpy is used for Markov-Chain based playlist.
 
 
 ------------
