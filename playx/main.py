@@ -34,7 +34,8 @@ from playx.logger import Logger
 from playx.songfinder import search
 
 from playx.playlist.autoplaylist import (
-    CountBasedAutoPlaylist
+    CountBasedAutoPlaylist,
+    MarkovBasedAutoPlaylist
 )
 
 
@@ -151,7 +152,8 @@ def main():
     song = ' '.join(args.song)
     # first check for auto playlist
     if args.auto:
-        ap = CountBasedAutoPlaylist('~/.playx/logs/log.cat')
+        # ap = CountBasedAutoPlaylist('~/.playx/logs/log.cat')
+        ap = MarkovBasedAutoPlaylist('~/.playx/logs/log.cat')
         song = ap.generate()
 
     # Check if sync-playlists is passed
