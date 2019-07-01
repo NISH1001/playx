@@ -56,7 +56,7 @@ class AbstractAutoPlaylist(ABC):
                     song = re.sub(r"[\[\]]+", '', song)
                     song = remove_punct(song)
                     song = remove_multiple_spaces(song)
-                    data.append((ts, song))
+                    data.append((ts.strip(), song.strip()))
                 except IndexError:
                     continue
         return data
@@ -115,11 +115,9 @@ class MarkovBasedAutoPlaylist(AbstractAutoPlaylist):
         songs_seed = list(set(random.choices(songs_frequent, arr/arr.sum(), k=20)))
 
         for song in songs_seed:
-            song = song.strip()
             result.append(song)
             res = self._generate(trie, initial_song=song, max_len=10, verbose=False)
             for r in res:
-                r = r.strip()
                 if r not in result:
                     result.append(r)
         self.data = result
