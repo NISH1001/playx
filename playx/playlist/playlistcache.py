@@ -75,7 +75,7 @@ class PlaylistCache:
             name, url = self._get_data(file)
             logger.debug("{}:{}".format(name, url))
             logger.debug(self.entity)
-            if (self.entity == name) or (self.entity == url):
+            if (self.entity.lower() == name.lower()) or (self.entity == url):
                 self.file_path = self.dir_path.joinpath(file)
                 return True
 
