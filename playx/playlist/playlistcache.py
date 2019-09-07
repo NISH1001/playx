@@ -69,7 +69,7 @@ class PlaylistCache:
         Check if the passed playlist name or URL
         is saved in the playlist dir.
         """
-        files = [file for file in self.dir_path.iterdir()]
+        files = [file for file in self.dir_path.glob("*.playlist")]
 
         for file in files:
             name, url = self._get_data(file)

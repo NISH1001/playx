@@ -32,6 +32,10 @@ from playx.playlist.ytrelated import (
     get_data
 )
 
+from playx.playlist import (
+    playlistcache
+)
+
 from os.path import basename
 
 
