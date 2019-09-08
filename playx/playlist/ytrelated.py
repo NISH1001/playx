@@ -3,6 +3,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import re
+from pathlib import Path
+import json
 
 from playx.playlist.playlistbase import (
     SongMetadataBase, PlaylistBase
@@ -35,6 +37,7 @@ class YoutubeRelatedIE(PlaylistBase):
     def __init__(self, url):
         super().__init__()
         self.url = url
+        self.playlist_name = ''
 
     def _not_name(self, name):
         """
@@ -72,10 +75,59 @@ class YoutubeRelatedIE(PlaylistBase):
 
 def get_data(url):
     logger.debug("Extracting related songs")
+    logger.debug("Checking if file is present.")
+
+    CACHE_PATH = Path("~/.playx/playlist").expanduser()
+    FILE_NAME = "related_{}.json".format(url.split('\\=')[-1])
+    FILE_PATH = CACHE_PATH.joinpath(Path(FILE_NAME))
+
+    logger.info("Checking related playlist cache")
+    # Check if FILE_NAME is present in CACHE_PATH
+    for file in CACHE_PATH.iterdir():
+        logger.debug("{}".format(file))
+        if file == FILE_PATH:
+            # Extract the data from FILE_PATH
+            with open(FILE_PATH) as RSTREAM:
+                data = json.load(RSTREAM)[1]["data"]
+                data_ = []
+                for title in data:
+                    data_.append(YoutubeMetadata(title))
+            return data_
+
+    logger.info("Fetching data online")
     youtube_related = YoutubeRelatedIE(url)
     youtube_related.extract_songs()
+    logger.debug("Saving the data...")
+    logger.debug(str(len(youtube_related.list_content_tuple)))
+
+    if len(youtube_related.list_content_tuple):
+        save_data(url, youtube_related.list_content_tuple)
+
     return youtube_related.list_content_tuple
 
 
+def save_data(url, data):
+    """
+    Save the data in a json file so that it can be accessed later.
+    """
+    CACHE_PATH = Path("~/.playx/playlist").expanduser()
+    FILE_NAME = "related_{}.json".format(url.split('=')[-1])
+    FILE_PATH = CACHE_PATH.joinpath(Path(FILE_NAME))
+
+    FILE_PATH.touch()
+
+    # Make the data a bit proper
+    data_ = []
+    for entity in data:
+        data_.append(entity.title)
+
+    with open(FILE_PATH, 'w') as WSTREAM:
+        DATA = [{'URL': url}, {'data': data_}]
+        json.dump(DATA, WSTREAM)
+
+
 if __name__ == '__main__':
-    print(str(get_data('https://www.youtube.com/watch\?v\=by3yRdlQvzs')))
+    # print(str(get_data('https://www.youtube.com/watch?v=xDbK1eZYVzg')))
+    d = get_data('https://www.youtube.com/watch?v=xDbK1eZYVzg')
+    for i in d:
+        print(i.title)
