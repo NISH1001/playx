@@ -63,9 +63,9 @@ python setup.py install
 ## Features
 
 <div align="center">
-<h3>
+<h4>
 Play Songs &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play YouTube URL&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play YouTube Playlist&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play Billboard Charts&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play Spotify Playlists&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play Soundcloud Playlist&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play JioSaavn Playlist&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play Gaana Playlist&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play Local Playilst &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Cache Support &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Auto generate Playlist &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Play Related songs fetched from YouTube
-</h3>
+</h4>
 </div>
 
 <!-- - play by query
