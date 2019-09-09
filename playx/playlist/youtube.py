@@ -102,6 +102,12 @@ class YoutubePlaylist(PlaylistBase):
             title = title.strip()
             if not title:
                 continue
+            # Check if the video is deleted. Some videos in playlist turn out
+            # to be deleted videos. We can put a check for that by checking
+            # if the title is [Deleted video]
+            if title.lower()[1:-1] == 'deleted video':
+                logger.debug(title.lower()[1:-1])
+                continue
             # Get video url using simple algorithm. This 3 index search is done
             # just to make sure when youtube playlist url has these query
             # params in shuffled order.
