@@ -19,19 +19,6 @@
 </a>
 </p>
 
-
-# playx  
-
-1. [Philosophy](#philosophy)
-2. [Requirements](#requirements)
-3. [Installation](#installation)
-4. [Features](#features)
-5. [Usage](#usage)
-6. [Example](#example)
-7. [Contribution](#contributions)
-8. [TO-DO](#to-do)
-9. [Acknowledgements](#acknowledgements)
-
 # Philosophy
 
 Play any songs that come in your mind.
