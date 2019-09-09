@@ -62,7 +62,13 @@ python setup.py install
 
 ## Features
 
-- play by query
+<div align="center">
+<h3>
+Play Songs &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play YouTube URL&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play YouTube Playlist&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play Billboard Charts&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play Spotify Playlists&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play Soundcloud Playlist&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play JioSaavn Playlist&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play Gaana Playlist&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Play Local Playilst &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Cache Support &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Auto generate Playlist &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Play Related songs fetched from YouTube
+</h3>
+</div>
+
+<!-- - play by query
 - play by youtube url
 - play a youtube playlist
 - play a billboard chart
@@ -74,7 +80,7 @@ python setup.py install
 - cache support
 - CLI using `mpv`
 - auto generate playlist
-------------
+------------ -->
 
 ## Usage
 For now, the application is in development phase.  
