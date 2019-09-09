@@ -3,6 +3,7 @@
 
 from playx.youtube import search_youtube
 
+
 def search(song):
     """Search the song in youtube."""
     videos = search_youtube(song)
