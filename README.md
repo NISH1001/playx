@@ -7,7 +7,9 @@
 </div>
 
 <div align="center">
-[Philosophy][#philosophy]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Requirements](#requirements)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Installation](#installation)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Features][#features]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Usage][#usage]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Example][#example]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Contribution][#contribution]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[TO-DO][#to-do]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Acknowledgement][#acknowledgement]
+<h3>
+<a href="#philosophy">Philosophy</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#requirements">Requirements</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#installation">Installation</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#features">Features</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#usage">Usage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#example">Example</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#contributions">Contribution</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#to-do">To-DO</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#acknowledgements">Acknowledgements</a>
+</h3>
 </div>
 
 # playx in action
