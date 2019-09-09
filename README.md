@@ -1,8 +1,14 @@
 <h1 align=center>
-<img src="logo/1024 bg.svg" width=100%>
+<img src="logo/1024 bg.svg" width=80%>
 </h1>
 
-## Search and play any song from terminal.
+<div align="center">
+<h1>Search and play any song from terminal.</h1>
+</div>
+
+<div align="center">
+[Philosophy][#philosophy]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Requirements](#requirements)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Installation](#installation)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Features][#features]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Usage][#usage]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Example][#example]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Contribution][#contribution]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[TO-DO][#to-do]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Acknowledgement][#acknowledgement]
+</div>
 
 # playx in action
 
@@ -25,6 +31,7 @@
 9. [Acknowledgements](#acknowledgements)
 
 # Philosophy
+
 Play any songs that come in your mind.
 > Hoping to make it an awesome music assistant
 ---------
