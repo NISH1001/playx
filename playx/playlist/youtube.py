@@ -5,6 +5,8 @@ defined.
 import requests
 from bs4 import BeautifulSoup
 import re
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 from playx.playlist.playlistbase import (
     PlaylistBase, SongMetadataBase
@@ -45,6 +47,10 @@ class YoutubePlaylist(PlaylistBase):
         self.URL = URL
         self.list_content_tuple = []
         self.playlist_name = ''
+        self._DELETED = [
+                            'deleted video',
+                            'मेटाइएको भिडियो',
+                        ]
 
     def extract_name(self, name):
         """Extract the name of the playlist."""
@@ -86,7 +92,7 @@ class YoutubePlaylist(PlaylistBase):
         # so, far this works
         links = soup.find_all(
             'a',
-            href=re.compile(r".*watch.*") # this regex can be improved in future
+            href=re.compile(r".*watch.*")  # this regex can be improved in future
         )
         for link in links:
             href = link['href']
@@ -102,28 +108,20 @@ class YoutubePlaylist(PlaylistBase):
             title = title.strip()
             if not title:
                 continue
-            # Check if the video is deleted. Some videos in playlist turn out
-            # to be deleted videos. We can put a check for that by checking
-            # if the title is [Deleted video]
-            if title.lower()[1:-1] == 'deleted video':
-                logger.debug(title.lower()[1:-1])
-                continue
             # Get video url using simple algorithm. This 3 index search is done
             # just to make sure when youtube playlist url has these query
             # params in shuffled order.
             slicer = self._get_url_slicer(href)
             url = url_base + href[:slicer]
+            # Check if the video is deleted. Some videos in playlist turn out
+            # to be deleted videos. We can put a check for that by checking
+            # if the title is [Deleted video]
+            # We have a simpler way to check for deleted videos
+            if title.lower()[1:-1] in self._DELETED:
+                logger.debug(title.lower()[1:-1])
+                logger.info("Skipping {}: DELETED or BLOCKED video.".format(url))
+                continue
             self.list_content_tuple.append(YoutubeMetadata(url, title))
-        # for i in soup:
-        #     a = re.findall(r'class="pl-video yt-uix-tile".*?data-title=.*?data-video-id=.*?>', str(i))
-        #     video_title = re.findall(r'data-title=".*?"', a[0])
-        #     video_id = re.findall(r'data-video-id=".*?"', a[0])
-        #     if len(video_title) != 0 and len(video_id) != 0:
-        #         video_title = video_title[0].replace("data-title=", '').replace('"', '')
-        #         video_id = video_id[0].replace("data-video-id=", '').replace('"', '')
-        #         url = url_prepend + video_id
-        #         title = video_title
-        #         self.list_content_tuple.append(YoutubeMetadata(url, title))
 
         if len(self.list_content_tuple) == 0:
             logger.warning("Are you sure you have videos in your playlist? Try changing\
