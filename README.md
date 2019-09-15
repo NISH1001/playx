@@ -1,8 +1,16 @@
 <h1 align=center>
-<img src="logo/1024 bg.svg" width=100%>
+<img src="logo/1024 bg.svg" width=80%>
 </h1>
 
-## Search and play any song from terminal.
+<div align="center">
+<h1>Search and play any song from terminal.</h1>
+</div>
+
+<div align="center">
+<h4>
+<a href="#philosophy">Philosophy</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#requirements">Requirements</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#installation">Installation</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#features">Features</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#usage">Usage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#example">Example</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#contributions">Contribution</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#to-do">To-DO</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#acknowledgements">Acknowledgements</a>
+</h4>
+</div>
 
 # playx in action
 
@@ -11,20 +19,8 @@
 </a>
 </p>
 
-
-# playx  
-
-1. [Philosophy](#philosophy)
-2. [Requirements](#requirements)
-3. [Installation](#installation)
-4. [Features](#features)
-5. [Usage](#usage)
-6. [Example](#example)
-7. [Contribution](#contributions)
-8. [TO-DO](#to-do)
-9. [Acknowledgements](#acknowledgements)
-
 # Philosophy
+
 Play any songs that come in your mind.
 > Hoping to make it an awesome music assistant
 ---------
