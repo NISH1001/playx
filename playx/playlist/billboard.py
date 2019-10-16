@@ -76,10 +76,10 @@ class BillboardIE:
         name = re.sub(
                     r'>|<',
                     '',
-                    str(re.findall(
+                    re.findall(
                         r'>.*<',
-                        re.findall(r'<span.*/span>', str(name))[0]
-                        ))
+                        re.findall(r'<span.*/span>', str(name[0]))[0]
+                        )[0]
                     )
         logger.debug(name)
         self.chart_name = name
