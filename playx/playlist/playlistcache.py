@@ -73,8 +73,6 @@ class PlaylistCache:
 
         for file in files:
             name, url = self._get_data(file)
-            logger.debug("{}:{}".format(name, url))
-            logger.debug(self.entity)
             if (self.entity.lower() == name.lower()) or (self.entity == url):
                 self.file_path = self.dir_path.joinpath(file)
                 return True
@@ -131,7 +129,6 @@ class CachedIE(PlaylistBase):
         FILECONTENTS = READSTREAM.read().split('\n')
 
         self.playlist_name = FILECONTENTS[0][FILECONTENTS[0].index(':')+2: -1]
-        logger.debug(self.playlist_name)
 
         for line in FILECONTENTS[3:-1]:
             logger.debug(line)

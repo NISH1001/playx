@@ -54,8 +54,7 @@ class BillboardIE:
         self.chart = []
         self.chart_name = ""
         self.get_name_of_chart()
-        self.get_number_one()
-        self.get_remaining_list()
+        self.get_chart()
         self.replace_symbols()
 
     def get_soup(self):
@@ -73,67 +72,55 @@ class BillboardIE:
     def get_name_of_chart(self):
         """Get the name of the chart from the webpage."""
         name = self.soup.findAll('h1',
-                                attrs={'class': 'chart-detail-header__chart-name'})
-        name = re.sub(r'\n', '', str(name))
-        try:
-            name = re.sub(
-                        r'img alt=|"', '',
-                        re.findall(r'img alt=".*?"', str(name))[0]
-                        )
-        except IndexError:
-            name = re.sub(
-                        r'[></]', '',
-                        re.findall(r'>.*?</', str(name))[0]
-                        )
+                                attrs={'class': 'charts-hero__chart-name'})
+        name = re.sub(
+                    r'>|<',
+                    '',
+                    str(re.findall(
+                        r'>.*<',
+                        re.findall(r'<span.*/span>', str(name))[0]
+                        ))
+                    )
+        logger.debug(name)
         self.chart_name = name
 
-    def get_number_one(self):
-        """The number one of the chart needs to be extracted seperately."""
-        soup = self.soup
+    def get_chart(self):
+        """New method to extract billboard chart data."""
+        chart_contents = self.soup.findAll('li',
+                                    attrs={'class': 'chart-list__element'})
 
-        # Some extraction related to number one
-        title = soup.findAll(
-                                    'div',
-                                    attrs={'class': 'chart-number-one__title'}
-                                    )[0]
-        title = re.sub(
-                            r'[<>]', '',
-                            re.findall(r'>.*?<', str(title))[0]
-                            )
-
-        artist = str(soup.findAll(
-                                    'div',
-                                    attrs={'class': 'chart-number-one__artist'}
-                                    )[0])
-        artist = artist.replace("\n", '')
-        artist = re.findall(
-                                    r'a href=.*?>.*?</a',
-                                    str(artist)
-                                    )[0]
-        artist = re.sub(
-                                r'[<>/]', '',
-                                re.findall(r'>.*?</', artist)[0]
-                                )
-        rank = 1
-
-        self.chart.append(Song(title, artist, rank))
-
-    def get_remaining_list(self):
-        soup = self.soup.findAll('div', attrs={'class': 'chart-list-item'})
-        for i in soup:
-            artist = re.sub(
-                                r'data-artist=|["]', '',
-                                re.findall(r'data-artist=".*?"', str(i))[0]
-                                )
-            title = re.sub(
-                                r'data-title=|["]', '',
-                                re.findall(r'data-title=".*?"', str(i))[0]
-                                )
+        for chart_element in chart_contents:
             rank = re.sub(
-                                r'data-rank=|["]', '',
-                                re.findall(r'data-rank=".*?"', str(i))[0]
-                                )
-            self.chart.append(Song(title, artist, rank))
+                        r'>|<',
+                        '',
+                        re.findall(
+                                r'>.*<',
+                                str(chart_element.findAll(
+                                        'span',
+                                        attrs={'class': 'chart-element__rank__number'})[0])
+                            )[0]
+                    )
+            track = re.sub(
+                        r'>|<',
+                        '',
+                        re.findall(
+                                r'>.*<',
+                                str(chart_element.findAll(
+                                        'span',
+                                        attrs={'class': 'chart-element__information__song'})[0])
+                            )[0]
+                    )
+            artist = re.sub(
+                        r'>|<',
+                        '',
+                        re.findall(
+                                r'>.*<',
+                                str(chart_element.findAll(
+                                        'span',
+                                        attrs={'class': 'chart-element__information__artist'})[0])
+                            )[0]
+                    )
+            self.chart.append(Song(track, artist, rank))
 
 
 class BillboardPlaylist(PlaylistBase):
