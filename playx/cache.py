@@ -69,11 +69,9 @@ class Cache:
     def _search_tokens(self, song_name):
         """Search song in the cache based on simple each word matching."""
         logger.info("Searching [{}] in the cache at [{}]".format(song_name, self.dir))
-        logger.debug("Preprocessing stuff before matching of song starts.")
         song_name = remove_stopwords(remove_multiple_spaces(song_name).lower())
         song_name = remove_punct(song_name)
         tokens1 = song_name.split()
-        logger.debug("Song1 after split: {}".format(tokens1))
         cached_songs = self.list_mp3()
 
         res = []
@@ -84,7 +82,6 @@ class Cache:
             name = remove_punct(name)
             name = remove_multiple_spaces(name)
             tokens2 = name.split()
-            logger.debug("Song2 after split and preprocess: {}".format(tokens2))
             match = check_keywords(tokens1, tokens2)
             if match:
                 dist = compute_jaccard(tokens1, tokens2)
