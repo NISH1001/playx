@@ -38,7 +38,6 @@ from playx.playlist.autoplaylist import (
     MarkovBasedAutoPlaylist
 )
 
-
 # Get the logger
 logger = Logger('main')
 
@@ -84,6 +83,8 @@ def parse():
     parser.add_argument('--pl-end', help="End position in case a \
                         playlist is passed. If passed without a playlist\
                         it has no effect.", default=None, type=int)
+    parser.add_argument('--skip', help="If passed does not add keywords to YouTube search query",
+                        action='store_true')
     args = parser.parse_args()
     return parser, args
 

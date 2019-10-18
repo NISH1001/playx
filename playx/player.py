@@ -38,7 +38,6 @@ from playx.playlist import (
 
 from os.path import basename
 
-
 # Setup logger
 logger = Logger('player')
 
@@ -49,13 +48,13 @@ class URLPlayer():
     """
 
     def __init__(
-                self,
-                URL=None,
-                songObj=None,
-                dont_cache_search=False,
-                show_lyrics=False,
-                no_cache=False
-                ):
+            self,
+            URL=None,
+            songObj=None,
+            dont_cache_search=False,
+            show_lyrics=False,
+            no_cache=False
+    ):
         self.URL = URL
         self.stream_url = ''
         self.title = ''
@@ -168,12 +167,13 @@ class NamePlayer():
     """
 
     def __init__(
-                self,
-                name=None,
-                dont_cache_search=False,
-                show_lyrics=False,
-                no_cache=False
-                ):
+            self,
+            name=None,
+            dont_cache_search=False,
+            show_lyrics=False,
+            no_cache=False,
+            no_kw_in_search=False
+    ):
         self.name = name
         self.URL = ''
         self.dont_cache_search = dont_cache_search
@@ -181,12 +181,13 @@ class NamePlayer():
         self.show_lyrics = show_lyrics
         self.title = ''
         self.stream_url = ''
+        self.no_kw_in_search = no_kw_in_search
 
     def _get_youtube_data_name(self):
         """
         Search youtube and get its data.
         """
-        data = search(self.name)
+        data = search(self.name, self.no_kw_in_search)
         self.title = data.title
         self.URL = data.url
         self.stream_url = grab_link(data.url)
@@ -235,15 +236,16 @@ class Player(URLPlayer, NamePlayer):
     """
 
     def __init__(
-                self,
-                data,
-                datatype=None,
-                playlisttype=None,
-                show_lyrics=False,
-                dont_cache_search=False,
-                no_cache=False,
-                no_related=False
-                ):
+            self,
+            data,
+            datatype=None,
+            playlisttype=None,
+            show_lyrics=False,
+            dont_cache_search=False,
+            no_cache=False,
+            no_related=False,
+            no_kw_in_search=False
+    ):
         """
         data can be anything of the above supported
         types.
@@ -257,36 +259,37 @@ class Player(URLPlayer, NamePlayer):
         - URL
         """
         URLPlayer.__init__(
-                            self,
-                            show_lyrics=show_lyrics,
-                            dont_cache_search=dont_cache_search,
-                            no_cache=no_cache
-                            )
+            self,
+            show_lyrics=show_lyrics,
+            dont_cache_search=dont_cache_search,
+            no_cache=no_cache
+        )
         NamePlayer.__init__(
-                            self,
-                            show_lyrics=show_lyrics,
-                            dont_cache_search=dont_cache_search,
-                            no_cache=no_cache
-                            )
+            self,
+            show_lyrics=show_lyrics,
+            dont_cache_search=dont_cache_search,
+            no_cache=no_cache,
+            no_kw_in_search=no_kw_in_search
+        )
         self._iterable_list = []
         self.data = data
         self.datatype = datatype
         self.playlisttype = playlisttype
         self.no_related = no_related
         self._playlist_names = [
-                                'spotify',
-                                'youtube',
-                                'soundcloud',
-                                'billboard',
-                                'jiosaavn',
-                                'gaana',
-                                'cached'
-                              ]
+            'spotify',
+            'youtube',
+            'soundcloud',
+            'billboard',
+            'jiosaavn',
+            'gaana',
+            'cached'
+        ]
         self._datatypes = [
-                            'playlist',
-                            'song',
-                            'URL'
-                          ]
+            'playlist',
+            'song',
+            'URL'
+        ]
         self.show_lyrics = show_lyrics
         self.dont_cache_search = dont_cache_search
         self.no_cache = no_cache
@@ -342,7 +345,9 @@ class Player(URLPlayer, NamePlayer):
             URL = self.play_url(self.data)
             self._play_related(URL)
         elif self.datatype == "song":
+
             URL = self.play_name(self.data)
+
             self._play_related(URL)
         elif self.datatype == 'playlist':
             for i in self._iterable_list:
