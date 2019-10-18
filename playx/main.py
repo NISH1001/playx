@@ -83,7 +83,7 @@ def parse():
     parser.add_argument('--pl-end', help="End position in case a \
                         playlist is passed. If passed without a playlist\
                         it has no effect.", default=None, type=int)
-    parser.add_argument('--skip', help="If passed does not add keywords to YouTube search query",
+    parser.add_argument('--skip-kw', help="If passed does not add keywords to YouTube search query",
                         action='store_true')
     args = parser.parse_args()
     return parser, args
@@ -141,7 +141,8 @@ def playx(parser, args, song):
                         show_lyrics=args.lyrics,
                         dont_cache_search=args.dont_cache_search,
                         no_cache=args.no_cache,
-                        no_related=args.no_related
+                        no_related=args.no_related,
+                        no_kw_in_search=args.skip_kw
                         )
         player.play()
 
