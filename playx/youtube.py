@@ -124,6 +124,7 @@ def search_youtube(query,skip_kw=False):
         duration = tile.find("span", {'class': 'video-time'})
         youtube_metadata.duration = duration.get_text() if duration else "unknown duration"
         videos.append(youtube_metadata)
+
     return videos
 
 

@@ -55,7 +55,7 @@ def run_mpv(stream_url, title=None):
     os.system(cli)
     """
     mpv_thread = MPVThread(stream_url, title)
-    mpv_thread.start()
+    mpv_thread.start()q
     # mpv_thread.join()
     """
 

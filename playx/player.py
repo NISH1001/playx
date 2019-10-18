@@ -13,7 +13,8 @@ from playx.youtube import (
 )
 
 from playx.songfinder import (
-    search
+    search,
+    search_with_exclude
 )
 
 from playx.logger import (
@@ -172,7 +173,8 @@ class NamePlayer():
             dont_cache_search=False,
             show_lyrics=False,
             no_cache=False,
-            no_kw_in_search=False
+            no_kw_in_search=False,
+            play_something_new=False
     ):
         self.name = name
         self.URL = ''
@@ -182,12 +184,18 @@ class NamePlayer():
         self.title = ''
         self.stream_url = ''
         self.no_kw_in_search = no_kw_in_search
+        self.play_something_new = play_something_new
 
     def _get_youtube_data_name(self):
         """
         Search youtube and get its data.
         """
-        data = search(self.name, self.no_kw_in_search)
+        match = search_locally(self.name)
+        if self.play_something_new and match:
+            data = search_with_exclude(self.name, match, self.no_kw_in_search)
+        else:
+            data = search(self.name)
+
         self.title = data.title
         self.URL = data.url
         self.stream_url = grab_link(data.url)
@@ -244,7 +252,8 @@ class Player(URLPlayer, NamePlayer):
             dont_cache_search=False,
             no_cache=False,
             no_related=False,
-            no_kw_in_search=False
+            no_kw_in_search=False,
+            play_something_new=False
     ):
         """
         data can be anything of the above supported
@@ -269,7 +278,9 @@ class Player(URLPlayer, NamePlayer):
             show_lyrics=show_lyrics,
             dont_cache_search=dont_cache_search,
             no_cache=no_cache,
-            no_kw_in_search=no_kw_in_search
+            no_kw_in_search=no_kw_in_search,
+            play_something_new=play_something_new
+
         )
         self._iterable_list = []
         self.data = data
