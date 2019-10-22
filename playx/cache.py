@@ -109,13 +109,21 @@ class Cache:
         """Download the song."""
         try:
             path = os.path.join(self.dir, name)
-            # Start downloading the song
-            # response = requests.get(link, stream=True)
-            u = urllib.request.urlopen(link)
-            f = open(path, 'wb')
+            headers = {}
 
+            # Put a check to see if the file already exists.
+            if os.path.exists(path):
+                remain_size = os.path.getsize(path)
+                headers = {"Range": "bytes={}-".format(remain_size)}
+                logger.info("Resuming download at {} byte".format(remain_size))
+
+            req = urllib.request.Request(url=link, headers=headers)
+            u = urllib.request.urlopen(req)
             block_sz = 8192
 
+            f = open(path, 'wb')
+
+            # Start downloading the song
             while True:
                 buffer = u.read(block_sz)
                 if not buffer:
