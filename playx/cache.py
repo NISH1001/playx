@@ -34,6 +34,7 @@ class Cache:
         """
         self.dir = os.path.expanduser(directory)
         self.create_cache_dir()
+        self.partial_log_file = os.path.expanduser('~/.playx/logs/partial_log')
 
     def create_cache_dir(self):
         """If cache dir is not already present make it."""
@@ -64,7 +65,14 @@ class Cache:
 
     def search(self, song_name):
         """Return results of search_tokens."""
-        return self._search_tokens(song_name)
+        ret = self._search_tokens(song_name)
+        if ret is None:
+            return ret
+
+        if self.in_partial_dw(ret[1]):
+            return []
+        else:
+            return ret
 
     def _search_tokens(self, song_name):
         """Search song in the cache based on simple each word matching."""
@@ -92,13 +100,40 @@ class Cache:
         else:
             return None
 
+    def in_partial_dw(self, song_name):
+        """Check if the file is present in partial dw file."""
+        if not os.path.exists(self.partial_log_file):
+            return False
+
+        data = open(self.partial_log_file, 'r').read()
+        if song_name in data:
+            return True
+
+    def log_partial_dw(self, song_name):
+        """Log the name of the song that is being downloaded."""
+        # Write the song_name and the size to the log_file
+        if not os.path.exists(self.partial_log_file):
+            open(self.partial_log_file, 'w').close()
+
+        with open(self.partial_log_file, 'a') as WSTREAM:
+            WSTREAM.write(song_name + '\n')
+
+    def unlog_partial_dw(self, song_name):
+        """Remove the song_name from the file."""
+        if not os.path.exists(self.partial_log_file):
+            return
+
+        data = open(self.partial_log_file, 'r').read()
+        data = data.replace(song_name + '\n', '')
+        open(self.partial_log_file, 'w').write(data)
+
     @staticmethod
     def dw(link, name):
         """Download the song."""
         dw = Cache()
         # check if song is already downloaded...
         songs = dw.list_mp3()
-        if name in songs:
+        if name in songs and not dw.in_partial_dw(name):
             logger.info("{} already downloaded.".format(name))
             return
         logger.info("Downloading {}".format(name))
@@ -123,6 +158,8 @@ class Cache:
 
             f = open(path, 'wb')
 
+            # Log the file in the partial_log_file.
+            self.log_partial_dw(path)
             # Start downloading the song
             while True:
                 buffer = u.read(block_sz)
@@ -131,6 +168,7 @@ class Cache:
 
                 f.write(buffer)
 
+            self.unlog_partial_dw(path)
             logger.info("Download complete.")
             return name
         except Exception:
