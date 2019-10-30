@@ -99,9 +99,10 @@ def add_better_search_kw(query):
     return query
 
 
-def search_youtube(query):
+def search_youtube(query, disable_kw=False):
     """Behold the greatest magic trick ever : crawl and crawl."""
-    query = add_better_search_kw(query)
+    if not disable_kw:
+        query = add_better_search_kw(query)
     logger.info("Searching youtube for :: {}".format(query))
     base_url = "https://www.youtube.com"
     url = base_url + "//results?sp=EgIQAVAU&q=" + query

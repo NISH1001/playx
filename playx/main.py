@@ -70,6 +70,10 @@ def parse():
                         action='store_true',
                         help="Disable playing related songs extracted\
                             from YouTube")
+    parser.add_argument('-k', '--disable-kw',
+                        action='store_true',
+                        help="Disable addition of keywords while\
+                            searching the song on YouTube.")
     parser.add_argument('--sync-pl',
                         default=None, type=str,
                         help="Sync the playlists. Pass the name as\
@@ -142,7 +146,8 @@ def playx(parser, args, song):
                         show_lyrics=args.lyrics,
                         dont_cache_search=args.skip_cached,
                         no_cache=args.no_cache,
-                        no_related=args.no_related
+                        no_related=args.no_related,
+                        disable_kw=args.disable_kw
                         )
         player.play()
 

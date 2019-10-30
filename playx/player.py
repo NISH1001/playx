@@ -172,7 +172,8 @@ class NamePlayer():
                 name=None,
                 dont_cache_search=False,
                 show_lyrics=False,
-                no_cache=False
+                no_cache=False,
+                disable_kw=False
                 ):
         self.name = name
         self.URL = ''
@@ -181,12 +182,13 @@ class NamePlayer():
         self.show_lyrics = show_lyrics
         self.title = ''
         self.stream_url = ''
+        self.disable_kw = disable_kw
 
     def _get_youtube_data_name(self):
         """
         Search youtube and get its data.
         """
-        data = search(self.name)
+        data = search(self.name, self.disable_kw)
         self.title = data.title
         self.URL = data.url
         self.stream_url = grab_link(data.url)
@@ -242,7 +244,8 @@ class Player(URLPlayer, NamePlayer):
                 show_lyrics=False,
                 dont_cache_search=False,
                 no_cache=False,
-                no_related=False
+                no_related=False,
+                disable_kw=False
                 ):
         """
         data can be anything of the above supported
@@ -266,7 +269,8 @@ class Player(URLPlayer, NamePlayer):
                             self,
                             show_lyrics=show_lyrics,
                             dont_cache_search=dont_cache_search,
-                            no_cache=no_cache
+                            no_cache=no_cache,
+                            disable_kw=disable_kw
                             )
         self._iterable_list = []
         self.data = data
