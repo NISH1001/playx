@@ -80,10 +80,12 @@ def parse():
                         help="Show lyircs of the song.")
     parser.add_argument('--pl-start', help="Start position in case a\
                          playlist is passed. If passed without a playlist\
-                         it has no effect.", default=None, type=int, metavar="START")
+                         it has no effect.", default=None, type=int,
+                         metavar="START")
     parser.add_argument('--pl-end', help="End position in case a \
                         playlist is passed. If passed without a playlist\
-                        it has no effect." + "\n", default=None, type=int, metavar="END")
+                        it has no effect." + "\n", default=None, type=int,
+                        metavar="END")
     args = parser.parse_args()
     return parser, args
 
