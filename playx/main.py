@@ -60,7 +60,7 @@ def parse():
     parser.add_argument('-n', '--no-cache',
                         action='store_true',
                         help="Don't download the song for later use.")
-    parser.add_argument('-auto', '--auto',
+    parser.add_argument('-a', '--auto',
                         action='store_true',
                         help="Auto generate playlist")
     parser.add_argument('-d', '--dont-cache-search',
