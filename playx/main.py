@@ -56,34 +56,34 @@ def parse():
     parser.add_argument('-p', '--play-cache',
                         action='store_true',
                         help="Play all songs from the cache.\
-                        The cache is located at ~/.playx/songs/ by default")
+                        The cache is located at [~/.playx/songs/] by default")
     parser.add_argument('-n', '--no-cache',
                         action='store_true',
                         help="Don't download the song for later use.")
     parser.add_argument('-a', '--auto',
                         action='store_true',
                         help="Auto generate playlist")
-    parser.add_argument('-d', '--dont-cache-search',
+    parser.add_argument('-d', '--skip-cached',
                         action='store_true',
                         help="Don't search the song in the cache.")
     parser.add_argument('-r', '--no-related',
                         action='store_true',
                         help="Disable playing related songs extracted\
                             from YouTube")
-    parser.add_argument('--sync-playlist',
+    parser.add_argument('--sync-pl',
                         default=None, type=str,
                         help="Sync the playlists. Pass the name as\
                         arguement. If all the playlists are to be \
-                        synced, just pass [All].")
+                        synced, just pass [All].", metavar="PLAYLIST")
     parser.add_argument('-l', '--lyrics',
                         action='store_true',
                         help="Show lyircs of the song.")
     parser.add_argument('--pl-start', help="Start position in case a\
                          playlist is passed. If passed without a playlist\
-                         it has no effect.", default=None, type=int)
+                         it has no effect.", default=None, type=int, metavar="START")
     parser.add_argument('--pl-end', help="End position in case a \
                         playlist is passed. If passed without a playlist\
-                        it has no effect.", default=None, type=int)
+                        it has no effect." + "\n", default=None, type=int, metavar="END")
     args = parser.parse_args()
     return parser, args
 
@@ -127,7 +127,7 @@ def playx(parser, args, song):
                         data,
                         playlisttype=playlist.type,
                         show_lyrics=args.lyrics,
-                        dont_cache_search=args.dont_cache_search,
+                        dont_cache_search=args.skip_cached,
                         no_cache=args.no_cache,
                         no_related=args.no_related
                         )
@@ -138,7 +138,7 @@ def playx(parser, args, song):
         player = Player(
                         song,
                         show_lyrics=args.lyrics,
-                        dont_cache_search=args.dont_cache_search,
+                        dont_cache_search=args.skip_cached,
                         no_cache=args.no_cache,
                         no_related=args.no_related
                         )
@@ -157,7 +157,7 @@ def main():
         song = ap.generate()
 
     # Check if sync-playlists is passed
-    if args.sync_playlist is not None:
+    if args.sync_pl is not None:
         pl = Playlist(None, None, None)
         pl.sync_playlist(args.sync_playlist)
         exit(0)
