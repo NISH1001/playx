@@ -56,7 +56,7 @@ class YoutubeRelatedIE(PlaylistBase):
     def extract_songs(self):
         chrome_options = Options()
         chrome_options.add_argument('--headless')
-        driver = webdriver.Chrome(chrome_options=chrome_options)
+        driver = webdriver.Chrome(options=chrome_options)
 
         driver.implicitly_wait(30)
         driver.get(self.url)
