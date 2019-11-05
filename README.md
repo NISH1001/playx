@@ -37,6 +37,8 @@ Play any songs that come in your mind.
 
  * Get <a href = https://github.com/mpv-player/mpv>MPV (github)</a> from here.
 
+4. [Chromium](https://download-chromium.appspot.com/)
+
 > **Note**: These dependencies in linux can be installed in other variants.  
 > For *arch linux*, you can use **pacman** package manager accordingly.
 > Numpy is used for Markov-Chain based playlist.
