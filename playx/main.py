@@ -82,6 +82,9 @@ def parse():
     parser.add_argument('-l', '--lyrics',
                         action='store_true',
                         help="Show lyircs of the song.")
+    parser.add_argument('--shuffle', help="Shuffle the playlist in case\
+                        it is one, else the option will have no effect.",
+                        action="store_true")
     parser.add_argument('--pl-start', help="Start position in case a\
                          playlist is passed. If passed without a playlist\
                          it has no effect.", default=None, type=int,
@@ -126,7 +129,7 @@ def playx(parser, args, song):
         return stream_cache_all(cache)
     # Check if its a playlist
     logger.debug(args.no_related)
-    playlist = Playlist(song, args.pl_start, args.pl_end)
+    playlist = Playlist(song, args.pl_start, args.pl_end, args.shuffle)
     if playlist.is_playlist():
         data = playlist.get_data()
         player = Player(

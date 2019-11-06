@@ -134,7 +134,6 @@ class CachedIE(PlaylistBase):
             logger.debug(line)
             song_details = line[line.index(':')+2:-1].split(',')
             logger.debug(str(song_details))
-            logger.hold()
             logger.debug("{}:{}:{}".format(song_details[0], song_details[1], song_details[2]))
             self.list_content_tuple.append(CachedSongs(
                                                         song_details[0],

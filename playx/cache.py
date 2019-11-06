@@ -136,7 +136,7 @@ class Cache:
         if name in songs and not dw.in_partial_dw(name):
             logger.info("{} already downloaded.".format(name))
             return
-        logger.info("Downloading {}".format(name))
+        logger.debug("Downloading {}".format(name))
         dw_thread = threading.Thread(target=dw.dw_song, args=(link, name))
         dw_thread.start()
 

@@ -18,6 +18,7 @@ from playx.playlist import (
 )
 
 import re
+from random import shuffle
 from playx.logger import Logger
 
 # Get the logger
@@ -33,7 +34,7 @@ __github__ = github.com/deepjyoti30
 class Playlist:
     """Class for every kind of playlist supported."""
 
-    def __init__(self, URL, pl_start, pl_end):
+    def __init__(self, URL, pl_start, pl_end, is_shuffle):
         """
         URL: Passed URL
         pl_start: Playlist start index.
@@ -44,6 +45,7 @@ class Playlist:
         self.temp_type = None  # Used for cached playlists
         self.pl_start = pl_start
         self.pl_end = pl_end
+        self.is_shuffle = is_shuffle
         self.type = 'N/A'
         self.dict = {
                     'spotify': spotify,
@@ -166,6 +168,15 @@ class Playlist:
 
             logger.error('{}: Not found in cached playlists'.format(value))
 
+    def _shuffle(self, data):
+        """Shuffle the data in case is_shuffle is True."""
+        if not self.is_shuffle:
+            return data
+        else:
+            logger.info("Shuffling the playlist...")
+            shuffle(data)
+            return data
+
     def is_playlist(self):
         """Check if the playlist is valid."""
 
@@ -203,5 +214,8 @@ class Playlist:
             playlistcache.save_data(name, self.URL, self.type, data)
         else:
             self.type = self.temp_type
+
+        # Shuffle the data in case is_shuffle is True
+        data = self._shuffle(data)
 
         return data
