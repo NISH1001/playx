@@ -201,7 +201,7 @@ class Playlist:
         if self.type == 'N/A':
             return []
 
-        logger.info("{} Playlist passed.".format(self.type))
+        logger.info("{} Playlist passed.".format(self.type[0].upper() + self.type[1:]))
         data, name = self._get_data()
         logger.info("{}: {} {}".format(
                                         name,
