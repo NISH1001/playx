@@ -81,7 +81,7 @@ python setup.py install
 ## Usage
 For now, the application is in development phase.  
 
-```
+```console
 usage: playx [-h] [-p] [-n] [-auto] [-d] [-r] [--sync-playlist SYNC_PLAYLIST]
              [-l] [--pl-start PL_START] [--pl-end PL_END]
              [song [song ...]]

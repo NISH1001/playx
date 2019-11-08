@@ -376,24 +376,27 @@ class Player(URLPlayer, NamePlayer):
 
         on_repeat_time = self._get_repeat_times()
 
-        while on_repeat_time > 0:
+        try:
+            while on_repeat_time > 0:
 
-            if self.datatype == 'URL':
-                URL = self.play_url(self.data)
-            elif self.datatype == "song":
-                URL = self.play_name(self.data)
-            elif self.datatype == 'playlist':
-                for i in self._iterable_list:
-                    # For different playlists the player needs to act
-                    # differently
-                    if self.playlisttype == 'soundcloud':
-                        self.play_url(i.URL, i)
-                    elif self.playlisttype == 'youtube':
-                        self.play_url(i.search_querry, i)
-                    else:
-                        self.play_name(i.search_querry)
+                if self.datatype == 'URL':
+                    URL = self.play_url(self.data)
+                elif self.datatype == "song":
+                    URL = self.play_name(self.data)
+                elif self.datatype == 'playlist':
+                    for i in self._iterable_list:
+                        # For different playlists the player needs to act
+                        # differently
+                        if self.playlisttype == 'soundcloud':
+                            self.play_url(i.URL, i)
+                        elif self.playlisttype == 'youtube':
+                            self.play_url(i.search_querry, i)
+                        else:
+                            self.play_name(i.search_querry)
 
-            on_repeat_time -= 1
+                on_repeat_time -= 1
+        except KeyboardInterrupt:
+            logger.info("KeyboardInterrupt passed.")
 
         if URL is not None:
             self._play_related(URL)

@@ -87,9 +87,10 @@ def parse():
                         action="store_true")
     parser.add_argument('--repeat', help="Put the passed entity on repeat\
                         , be it a playlist or a song. If an arg is not\
-                        passed, infinite loop is considered.", type=int,
-                        nargs='?', choices=range(1, 5000), metavar="NUMBER",
-                        default=1)
+                        passed, infinite loop is considered. (default = \
+                        Infinite)",
+                        type=int, nargs='?', choices=range(1, 5000),
+                        metavar="NUMBER", default=1)
     parser.add_argument('--pl-start', help="Start position in case a\
                          playlist is passed. If passed without a playlist\
                          it has no effect.", default=None, type=int,
