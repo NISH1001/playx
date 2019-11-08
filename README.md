@@ -23,7 +23,30 @@
 
 Play any songs that come in your mind.
 > Hoping to make it an awesome music assistant
+
 ---------
+
+## Installation
+
+- For Arch Linux users, it is available in AUR with the name [python-playx](https://aur.archlinux.org/packages/python-playx/).
+
+- For others, it can be installed manually.
+
+  __Make sure all the [dependencies](#Requirements/Dependencies) are installed.__
+
+  Run the following command in the root directory to install playx.
+
+  ```
+  pip install -e .
+  ```
+
+  Or install using setup.py as:
+
+  ```bash
+  python setup.py install
+  ```
+
+------------
 
 ## Requirements/Dependencies
 
@@ -43,22 +66,6 @@ Play any songs that come in your mind.
 > For *arch linux*, you can use **pacman** package manager accordingly.
 > Numpy is used for Markov-Chain based playlist.
 
-
-------------
-
-## Installation
-
- * Run the following command in the root directory to install playx.
-
-```
-pip install -e .
-```
-
-* Or install using setup.py as:
-
-```bash
-python setup.py install
-```
 
 ------------
 
