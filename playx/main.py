@@ -85,6 +85,11 @@ def parse():
     parser.add_argument('--shuffle', help="Shuffle the playlist in case\
                         it is one, else the option will have no effect.",
                         action="store_true")
+    parser.add_argument('--repeat', help="Put the passed entity on repeat\
+                        , be it a playlist or a song. If an arg is not\
+                        passed, infinite loop is considered.", type=int,
+                        nargs='?', choices=range(1, 5000), metavar="NUMBER",
+                        default=1)
     parser.add_argument('--pl-start', help="Start position in case a\
                          playlist is passed. If passed without a playlist\
                          it has no effect.", default=None, type=int,
@@ -138,7 +143,8 @@ def playx(parser, args, song):
                         show_lyrics=args.lyrics,
                         dont_cache_search=args.skip_cached,
                         no_cache=args.no_cache,
-                        no_related=args.no_related
+                        no_related=args.no_related,
+                        on_repeat=args.repeat
                         )
         player.play()
     elif not song:
@@ -150,6 +156,7 @@ def playx(parser, args, song):
                         dont_cache_search=args.skip_cached,
                         no_cache=args.no_cache,
                         no_related=args.no_related,
+                        on_repeat=args.repeat,
                         disable_kw=args.disable_kw
                         )
         player.play()
