@@ -51,7 +51,7 @@ def direct_to_play(url, show_lyrics, title):
 def run_mpv(stream_url, title=None):
     # print("Playing using mpv...")
     logger.info("Playing [{}]".format(title))
-    cli = 'mpv "{}" --really-quiet'.format(stream_url)
+    cli = 'mpv "{}" --really-quiet --no-video --audio-display=no'.format(stream_url)
     os.system(cli)
     """
     mpv_thread = MPVThread(stream_url, title)
