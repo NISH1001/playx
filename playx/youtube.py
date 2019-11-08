@@ -109,7 +109,7 @@ def search_youtube(query, disable_kw=False):
     try:
         response = requests.get(url)
     except Exception as e:
-        logger.error("ERROR: ", e)
+        logger.error("ERROR: {}".format(e))
         exit()
     soup = BeautifulSoup(response.content, "html.parser")
 
