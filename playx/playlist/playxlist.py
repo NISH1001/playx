@@ -52,7 +52,7 @@ class Playxlist(PlaylistBase):
 
     def get_list_contents(self):
         """Return the tuple containing the list data."""
-        logger.info("Extracting Playlist Content")
+        logger.debug("Extracting Playlist Content")
         self.extract_list_contents()
         self.strip_to_start_end()
         data = self.list_content_tuple

@@ -177,7 +177,7 @@ def get_data(URL, pl_start, pl_end):
     Returns a tuple containing the songs and name of
     the playlist.
     """
-    logger.info("Extracting Playlist Contents")
+    logger.debug("Extracting Playlist Contents")
     cached_playlist = CachedIE(URL, pl_start, pl_end)
     cached_playlist.get_data()
 

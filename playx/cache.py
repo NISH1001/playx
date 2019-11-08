@@ -76,7 +76,7 @@ class Cache:
 
     def _search_tokens(self, song_name):
         """Search song in the cache based on simple each word matching."""
-        logger.info("Searching [{}] in the cache at [{}]".format(song_name, self.dir))
+        logger.debug("Searching [{}] in the cache at [{}]".format(song_name, self.dir))
         song_name = remove_stopwords(remove_multiple_spaces(song_name).lower())
         song_name = remove_punct(song_name)
         tokens1 = song_name.split()
@@ -134,7 +134,7 @@ class Cache:
         # check if song is already downloaded...
         songs = dw.list_mp3()
         if name in songs and not dw.in_partial_dw(name):
-            logger.info("{} already downloaded.".format(name))
+            logger.debug("{} already downloaded.".format(name))
             return
         logger.debug("Downloading {}".format(name))
         dw_thread = threading.Thread(target=dw.dw_song, args=(link, name))
@@ -150,7 +150,7 @@ class Cache:
             if os.path.exists(path):
                 remain_size = os.path.getsize(path)
                 headers = {"Range": "bytes={}-".format(remain_size)}
-                logger.info("Resuming download at {} byte".format(remain_size))
+                logger.debug("Resuming download at {} byte".format(remain_size))
 
             req = urllib.request.Request(url=link, headers=headers)
             u = urllib.request.urlopen(req)
@@ -169,7 +169,7 @@ class Cache:
                 f.write(buffer)
 
             self.unlog_partial_dw(path)
-            logger.info("Download complete.")
+            logger.debug("Download complete.")
             return name
         except Exception:
             return False
@@ -201,7 +201,7 @@ def search_URL(URL):
     try:
         with open(file_path, 'r') as RSTREAM:
             data = json.load(RSTREAM)
-            logger.info("Searching {} in the cached file".format(URL))
+            logger.debug("Searching {} in the cached file".format(URL))
     except JSONDecodeError:
         data = {}
     return data.get(URL, None)

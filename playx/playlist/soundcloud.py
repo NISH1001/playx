@@ -85,7 +85,7 @@ def get_data(URL, pl_start, pl_end):
     Returns a tuple containing the songs and name of
     the playlist.
     """
-    logger.info("Extracting Playlist Contents")
+    logger.debug("Extracting Playlist Contents")
     sound_cloud_playlist = SoundCloudPlaylistExtractor(URL, pl_start, pl_end)
     sound_cloud_playlist.get_tracks()
     return sound_cloud_playlist.list_content_tuple, sound_cloud_playlist.set_name

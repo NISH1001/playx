@@ -180,7 +180,7 @@ def get_data(URL, pl_start, pl_end):
     the chart.
     """
 
-    logger.info("Extracting Playlist Content")
+    logger.debug("Extracting Playlist Content")
     billboard_playlist = BillboardPlaylist(
                                             URL,
                                             pl_start,
