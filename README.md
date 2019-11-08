@@ -28,7 +28,7 @@ Play any songs that come in your mind.
 
 ## Installation
 
-- For Arch Linux users, it is available in AUR with the name [python-playx](https://aur.archlinux.org/packages/python-playx/).
+- For Arch Linux users, it is available in AUR with the name [playx](https://aur.archlinux.org/packages/playx/).
 
 - For others, it can be installed manually.
 
