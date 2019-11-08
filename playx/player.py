@@ -207,9 +207,16 @@ class NamePlayer():
                 self.stream_url = match[1]
             else:
                 self._get_youtube_data_name()
-                # Update the URL cache
-                update_URL_cache(self.title, self.URL)
-                self._dw()
+                local_path = search_URL(self.URL)
+
+                # Try to check if the URL is mapped locally.
+                if local_path is not None:
+                    logger.debug("Replacing the stream URL with the local.")
+                    self.stream_url = local_path
+                else:
+                    # Update the URL cache
+                    update_URL_cache(self.title, self.URL)
+                    self._dw()
         else:
             self._get_youtube_data_name()
         direct_to_play(self.stream_url, self.show_lyrics, self.title)
