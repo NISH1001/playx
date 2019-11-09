@@ -35,6 +35,13 @@ class Logger:
             f = open(self._log_file, 'w')
             f.close()
 
+    def _write_file(self):
+        """Write to the file regardless of the LEVEL_NUMBER."""
+        with open(self._log_file, 'a') as f:
+            # The file log is to be written to the _log_file file
+            f = open(self._log_file, 'a')
+            f.write(self._file_format)
+
     def _write(self, message, LEVEL_NUMBER):
         """
             Write the logs.
@@ -42,12 +49,9 @@ class Logger:
             LEVEL_NUMBER is the levelnumber of the level that is calling the
             _write function.
         """
+        self._make_format(message)
+        self._write_file()
         if LEVEL_NUMBER >= self.level:
-            self._make_format(message)
-            with open(self._log_file, 'a') as f:
-                # The file log is to be written to the _log_file file
-                f = open(self._log_file, 'a')
-                f.write(self._file_format)
             print(self._console_format)
 
     def _make_format(self, message):

@@ -77,7 +77,7 @@ def get_youtube_title(url):
     """
     Extract title of video from url.
     """
-    logger.info("Extracting title of passed URL")
+    logger.debug("Extracting title of passed URL")
     try:
         r = requests.get(url)
     except Exception as e:
@@ -99,16 +99,17 @@ def add_better_search_kw(query):
     return query
 
 
-def search_youtube(query):
+def search_youtube(query, disable_kw=False):
     """Behold the greatest magic trick ever : crawl and crawl."""
-    query = add_better_search_kw(query)
-    logger.info("Searching youtube for :: {}".format(query))
+    if not disable_kw:
+        query = add_better_search_kw(query)
+    logger.debug("Searching youtube for :: {}".format(query))
     base_url = "https://www.youtube.com"
     url = base_url + "//results?sp=EgIQAVAU&q=" + query
     try:
         response = requests.get(url)
     except Exception as e:
-        logger.error("ERROR: ", e)
+        logger.error("ERROR: {}".format(e))
         exit()
     soup = BeautifulSoup(response.content, "html.parser")
 

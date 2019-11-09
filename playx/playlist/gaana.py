@@ -137,7 +137,7 @@ def get_data(URL, pl_start, pl_end):
     the playlist.
     """
 
-    logger.info("Extracting Playlist Content")
+    logger.debug("Extracting Playlist Content")
     gaana_IE = GaanaIE(URL, pl_start, pl_end)
     gaana_IE.extract_data()
 

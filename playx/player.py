@@ -172,7 +172,8 @@ class NamePlayer():
                 name=None,
                 dont_cache_search=False,
                 show_lyrics=False,
-                no_cache=False
+                no_cache=False,
+                disable_kw=False
                 ):
         self.name = name
         self.URL = ''
@@ -181,12 +182,13 @@ class NamePlayer():
         self.show_lyrics = show_lyrics
         self.title = ''
         self.stream_url = ''
+        self.disable_kw = disable_kw
 
     def _get_youtube_data_name(self):
         """
         Search youtube and get its data.
         """
-        data = search(self.name)
+        data = search(self.name, self.disable_kw)
         self.title = data.title
         self.URL = data.url
         self.stream_url = grab_link(data.url)
@@ -205,9 +207,16 @@ class NamePlayer():
                 self.stream_url = match[1]
             else:
                 self._get_youtube_data_name()
-                # Update the URL cache
-                update_URL_cache(self.title, self.URL)
-                self._dw()
+                local_path = search_URL(self.URL)
+
+                # Try to check if the URL is mapped locally.
+                if local_path is not None:
+                    logger.debug("Replacing the stream URL with the local.")
+                    self.stream_url = local_path
+                else:
+                    # Update the URL cache
+                    update_URL_cache(self.title, self.URL)
+                    self._dw()
         else:
             self._get_youtube_data_name()
         direct_to_play(self.stream_url, self.show_lyrics, self.title)
@@ -237,12 +246,14 @@ class Player(URLPlayer, NamePlayer):
     def __init__(
                 self,
                 data,
+                on_repeat,
                 datatype=None,
                 playlisttype=None,
                 show_lyrics=False,
                 dont_cache_search=False,
                 no_cache=False,
-                no_related=False
+                no_related=False,
+                disable_kw=False,
                 ):
         """
         data can be anything of the above supported
@@ -266,13 +277,15 @@ class Player(URLPlayer, NamePlayer):
                             self,
                             show_lyrics=show_lyrics,
                             dont_cache_search=dont_cache_search,
-                            no_cache=no_cache
+                            no_cache=no_cache,
+                            disable_kw=disable_kw
                             )
         self._iterable_list = []
         self.data = data
         self.datatype = datatype
         self.playlisttype = playlisttype
         self.no_related = no_related
+        self.on_repeat = on_repeat
         self._playlist_names = [
                                 'spotify',
                                 'youtube',
@@ -334,23 +347,62 @@ class Player(URLPlayer, NamePlayer):
         else:
             self._determine_datatype()
 
+    def _get_repeat_times(self):
+        """Return the number of times the song is supposed to repeat."""
+        # The passed arg on_repeat is used to check that.
+
+        # The arg passes 1 in case the --repeat flag is not passed
+        # which means we simply need to loop for once.
+
+        # The arg passes None in case the --repeat flag is passed but
+        # without a value. In this case, we need to make sure the song goes
+        # on an infinite loop. Though, in our case, we will make the loop run
+        # for a really large value like 1000
+
+        # The arg passes the number of times the loop is supposed the run in
+        # case the value is passed by the user.
+
+        if self.on_repeat == 1:
+            return 1
+        elif self.on_repeat is None:
+            logger.info("Repeating indefinitely")
+            return 5000
+        else:
+            logger.info("Repeating {} {}".format(
+                    self.on_repeat,
+                    'time' if self.on_repeat == 1 else 'times'
+            ))
+            return self.on_repeat
+
     def play(self):
         """Play the data."""
         self._check_type()
 
-        if self.datatype == 'URL':
-            URL = self.play_url(self.data)
+        # Stored the returned URL, useful for playing related songs.
+        URL = None
+
+        on_repeat_time = self._get_repeat_times()
+
+        while on_repeat_time > 0:
+            try:
+                if self.datatype == 'URL':
+                    URL = self.play_url(self.data)
+                elif self.datatype == "song":
+                    URL = self.play_name(self.data)
+                elif self.datatype == 'playlist':
+                    for i in self._iterable_list:
+                        # For different playlists the player needs to act
+                        # differently
+                        if self.playlisttype == 'soundcloud':
+                            self.play_url(i.URL, i)
+                        elif self.playlisttype == 'youtube':
+                            self.play_url(i.search_querry, i)
+                        else:
+                            self.play_name(i.search_querry)
+                on_repeat_time -= 1
+            except KeyboardInterrupt:
+                on_repeat_time = -1
+                logger.info("Exitting peacefully")
+
+        if URL is not None:
             self._play_related(URL)
-        elif self.datatype == "song":
-            URL = self.play_name(self.data)
-            self._play_related(URL)
-        elif self.datatype == 'playlist':
-            for i in self._iterable_list:
-                # For different playlists the player needs to act
-                # differently
-                if self.playlisttype == 'soundcloud':
-                    self.play_url(i.URL, i)
-                elif self.playlisttype == 'youtube':
-                    self.play_url(i.search_querry, i)
-                else:
-                    self.play_name(i.search_querry)

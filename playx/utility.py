@@ -49,15 +49,17 @@ def direct_to_play(url, show_lyrics, title):
 
 
 def run_mpv(stream_url, title=None):
-    # print("Playing using mpv...")
+
+    if title.endswith('.mp3'):
+        title = ''.join(title.split('.')[:-1])
+
     logger.info("Playing [{}]".format(title))
-    cli = 'mpv "{}" --really-quiet'.format(stream_url)
-    os.system(cli)
-    """
-    mpv_thread = MPVThread(stream_url, title)
-    mpv_thread.start()
+    #cli = 'mpv "{}" --really-quiet --no-video --audio-display=no'.format(stream_url)
+    cli = ['mpv', stream_url, '--really-quiet', "-no-video", "--audio-display=no"]
+    subprocess.Popen(cli).wait()
+    #mpv_thread = MPVThread(stream_url, title)
+    #mpv_thread.start()
     # mpv_thread.join()
-    """
 
 
 def run_mpv_dir(directory):
