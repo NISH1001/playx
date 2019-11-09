@@ -8,8 +8,6 @@ from playx.lyrics import search_lyricswikia
 from playx.logger import Logger
 import threading
 
-from mpv import MPV
-
 # Setup logger
 logger = Logger('utility')
 
@@ -23,9 +21,9 @@ class MPVThread(threading.Thread):
 
     def run(self):
         logger.info("Playing [{}]".format(self.title))
-        player = MPV(ytdl=True)
-        player.play(self.songURL)
-        player.wait_for_playback()
+        #player = MPV(ytdl=True)
+        #player.play(self.songURL)
+        #player.wait_for_playback()
         pass
 
 
