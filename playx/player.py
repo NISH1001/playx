@@ -383,9 +383,8 @@ class Player(URLPlayer, NamePlayer):
 
         on_repeat_time = self._get_repeat_times()
 
-        try:
-            while on_repeat_time > 0:
-
+        while on_repeat_time > 0:
+            try:
                 if self.datatype == 'URL':
                     URL = self.play_url(self.data)
                 elif self.datatype == "song":
@@ -400,10 +399,10 @@ class Player(URLPlayer, NamePlayer):
                             self.play_url(i.search_querry, i)
                         else:
                             self.play_name(i.search_querry)
-
                 on_repeat_time -= 1
-        except KeyboardInterrupt:
-            logger.info("KeyboardInterrupt passed.")
+            except KeyboardInterrupt:
+                on_repeat_time = -1
+                logger.info("Exitting peacefully")
 
         if URL is not None:
             self._play_related(URL)
