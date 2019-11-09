@@ -70,9 +70,7 @@ class URLPlayer():
         Add the song to download.
         """
         if not self.no_cache:
-            dw(self.title, self.stream_url)
-            # Update the cache.
-            update_URL_cache(self.title, self.URL)
+            dw(self.title, self.stream_url, self.URL)
         else:
             logger.info('Caching is disabled')
 
@@ -214,9 +212,9 @@ class NamePlayer():
                     logger.debug("Replacing the stream URL with the local.")
                     self.stream_url = local_path
                 else:
+                    self._dw()
                     # Update the URL cache
                     update_URL_cache(self.title, self.URL)
-                    self._dw()
         else:
             self._get_youtube_data_name()
         direct_to_play(self.stream_url, self.show_lyrics, self.title)
