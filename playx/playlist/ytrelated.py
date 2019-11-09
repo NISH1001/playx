@@ -56,7 +56,7 @@ class YoutubeRelatedIE(PlaylistBase):
     def extract_songs(self):
         chrome_options = Options()
         chrome_options.add_argument('--headless')
-        driver = webdriver.Chrome(chrome_options=chrome_options)
+        driver = webdriver.Chrome(options=chrome_options)
 
         driver.implicitly_wait(30)
         driver.get(self.url)
@@ -81,7 +81,7 @@ def get_data(url):
     FILE_NAME = "related_{}.json".format(url.split('\\=')[-1])
     FILE_PATH = CACHE_PATH.joinpath(Path(FILE_NAME))
 
-    logger.info("Checking related playlist cache")
+    logger.debug("Checking related playlist cache")
     # Check if FILE_NAME is present in CACHE_PATH
     for file in CACHE_PATH.iterdir():
         logger.debug("{}".format(file))

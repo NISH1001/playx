@@ -34,6 +34,7 @@ class Cache:
         """
         self.dir = os.path.expanduser(directory)
         self.create_cache_dir()
+        self.partial_log_file = os.path.expanduser('~/.playx/logs/partial_log')
 
     def create_cache_dir(self):
         """If cache dir is not already present make it."""
@@ -64,11 +65,18 @@ class Cache:
 
     def search(self, song_name):
         """Return results of search_tokens."""
-        return self._search_tokens(song_name)
+        ret = self._search_tokens(song_name)
+        if ret is None:
+            return ret
+
+        if self.in_partial_dw(ret[1]):
+            return []
+        else:
+            return ret
 
     def _search_tokens(self, song_name):
         """Search song in the cache based on simple each word matching."""
-        logger.info("Searching [{}] in the cache at [{}]".format(song_name, self.dir))
+        logger.debug("Searching [{}] in the cache at [{}]".format(song_name, self.dir))
         song_name = remove_stopwords(remove_multiple_spaces(song_name).lower())
         song_name = remove_punct(song_name)
         tokens1 = song_name.split()
@@ -92,16 +100,43 @@ class Cache:
         else:
             return None
 
+    def in_partial_dw(self, song_name):
+        """Check if the file is present in partial dw file."""
+        if not os.path.exists(self.partial_log_file):
+            return False
+
+        data = open(self.partial_log_file, 'r').read()
+        if song_name in data:
+            return True
+
+    def log_partial_dw(self, song_name):
+        """Log the name of the song that is being downloaded."""
+        # Write the song_name and the size to the log_file
+        if not os.path.exists(self.partial_log_file):
+            open(self.partial_log_file, 'w').close()
+
+        with open(self.partial_log_file, 'a') as WSTREAM:
+            WSTREAM.write(song_name + '\n')
+
+    def unlog_partial_dw(self, song_name):
+        """Remove the song_name from the file."""
+        if not os.path.exists(self.partial_log_file):
+            return
+
+        data = open(self.partial_log_file, 'r').read()
+        data = data.replace(song_name + '\n', '')
+        open(self.partial_log_file, 'w').write(data)
+
     @staticmethod
     def dw(link, name):
         """Download the song."""
         dw = Cache()
         # check if song is already downloaded...
         songs = dw.list_mp3()
-        if name in songs:
-            logger.info("{} already downloaded.".format(name))
+        if name in songs and not dw.in_partial_dw(name):
+            logger.debug("{} already downloaded.".format(name))
             return
-        logger.info("Downloading {}".format(name))
+        logger.debug("Downloading {}".format(name))
         dw_thread = threading.Thread(target=dw.dw_song, args=(link, name))
         dw_thread.start()
 
@@ -109,13 +144,23 @@ class Cache:
         """Download the song."""
         try:
             path = os.path.join(self.dir, name)
-            # Start downloading the song
-            # response = requests.get(link, stream=True)
-            u = urllib.request.urlopen(link)
-            f = open(path, 'wb')
+            headers = {}
 
+            # Put a check to see if the file already exists.
+            if os.path.exists(path):
+                remain_size = os.path.getsize(path)
+                headers = {"Range": "bytes={}-".format(remain_size)}
+                logger.debug("Resuming download at {} byte".format(remain_size))
+
+            req = urllib.request.Request(url=link, headers=headers)
+            u = urllib.request.urlopen(req)
             block_sz = 8192
 
+            f = open(path, 'wb')
+
+            # Log the file in the partial_log_file.
+            self.log_partial_dw(path)
+            # Start downloading the song
             while True:
                 buffer = u.read(block_sz)
                 if not buffer:
@@ -123,7 +168,8 @@ class Cache:
 
                 f.write(buffer)
 
-            logger.info("Download complete.")
+            self.unlog_partial_dw(path)
+            logger.debug("Download complete.")
             return name
         except Exception:
             return False
@@ -155,7 +201,7 @@ def search_URL(URL):
     try:
         with open(file_path, 'r') as RSTREAM:
             data = json.load(RSTREAM)
-            logger.info("Searching {} in the cached file".format(URL))
+            logger.debug("Searching {} in the cached file".format(URL))
     except JSONDecodeError:
         data = {}
     return data.get(URL, None)

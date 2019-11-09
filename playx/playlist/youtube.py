@@ -147,7 +147,7 @@ def get_data(URL, pl_start, pl_end):
     the playlist.
     """
 
-    logger.info("Extracting Playlist Content")
+    logger.debug("Extracting Playlist Content")
     youtube_playlist = YoutubePlaylist(URL, pl_start, pl_end)
     youtube_playlist.extract_playlistdata()
 

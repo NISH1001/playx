@@ -81,7 +81,7 @@ def get_data(URL, pl_start, pl_end):
     the playlist.
     """
 
-    logger.info('Extracting Playlist Content')
+    logger.debug('Extracting Playlist Content')
     jio_saavn_IE = JioSaavnIE(URL, pl_start, pl_end)
     jio_saavn_IE.get_data()
     return jio_saavn_IE.list_content_tuple, jio_saavn_IE.playlist_name

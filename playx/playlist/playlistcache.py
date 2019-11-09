@@ -134,7 +134,6 @@ class CachedIE(PlaylistBase):
             logger.debug(line)
             song_details = line[line.index(':')+2:-1].split(',')
             logger.debug(str(song_details))
-            logger.hold()
             logger.debug("{}:{}:{}".format(song_details[0], song_details[1], song_details[2]))
             self.list_content_tuple.append(CachedSongs(
                                                         song_details[0],
@@ -178,7 +177,7 @@ def get_data(URL, pl_start, pl_end):
     Returns a tuple containing the songs and name of
     the playlist.
     """
-    logger.info("Extracting Playlist Contents")
+    logger.debug("Extracting Playlist Contents")
     cached_playlist = CachedIE(URL, pl_start, pl_end)
     cached_playlist.get_data()
 
