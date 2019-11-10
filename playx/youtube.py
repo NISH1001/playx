@@ -138,10 +138,10 @@ def grab_link(value):
     return value
 
 
-def dw(title, url):
+def dw(title, s_url, url=None):
     # Start downloading
     title = fix_title(title)
-    Cache.dw(url, title)
+    Cache.dw(s_url, title, url)
 
 
 def main():
