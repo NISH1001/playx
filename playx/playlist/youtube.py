@@ -9,6 +9,7 @@ import re
 from playx.playlist.playlistbase import (
     PlaylistBase, SongMetadataBase
 )
+from playx.utility import exe
 
 from playx.logger import Logger
 
@@ -48,6 +49,7 @@ class YoutubePlaylist(PlaylistBase):
         self._DELETED = [
                             'deleted video',
                             'मेटाइएको भिडियो',
+                            'private video',
                         ]
 
     def extract_name(self, name):
@@ -69,6 +71,25 @@ class YoutubePlaylist(PlaylistBase):
             return False
 
         return True
+
+    def _check_valid(self, url):
+        """Check if the passed URL is valid."""
+        h = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux \
+            x86_64; rv:49.0) Gecko/20100101 Firefox/49.0'}
+        s = BeautifulSoup(requests.get(url, headers=h).text, 'lxml')
+        t = 'window["ytInitialData"] = '
+        i = next((i for i in s.find_all('script') if t in str(i)))
+        i = i.get_text().replace(t, '').replace('\n', '')
+        i = re.sub(r'^.*"playabilityStatus"', '', i)
+        i = i.split(',')
+        status = re.sub(r':|\{|"|status', '', i[0])
+        if status == "OK":
+            return True
+        else:
+            reason = next((r for r in i if '"reason"' in r))
+            reason = re.sub(r':|\{|"|reason|simpleText|}', '', reason)
+            logger.info("Skipping {}: {} {}".format(url, status, reason))
+            return False
 
     def extract_playlistdata(self):
         """Extract all the videos into YoutubeMetadata objects."""
@@ -117,8 +138,12 @@ class YoutubePlaylist(PlaylistBase):
             # We have a simpler way to check for deleted videos
             if title.lower()[1:-1] in self._DELETED:
                 logger.debug(title.lower()[1:-1])
-                logger.info("Skipping {}: DELETED or BLOCKED video.".format(url))
+                logger.info("Skipping {}: DELETED/BLOCKED/PRIVATE video.".format(url))
                 continue
+
+            if not self._check_valid(url):
+                continue
+
             self.list_content_tuple.append(YoutubeMetadata(url, title))
 
         if len(self.list_content_tuple) == 0:
