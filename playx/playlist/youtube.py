@@ -9,7 +9,6 @@ import re
 from playx.playlist.playlistbase import (
     PlaylistBase, SongMetadataBase
 )
-from playx.utility import exe
 
 from playx.logger import Logger
 
