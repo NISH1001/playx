@@ -70,6 +70,7 @@ class Cache:
             return ret
 
         if self.in_partial_dw(ret[1]):
+            logger.debug("Found in partial downloads.")
             return []
         else:
             return ret
@@ -128,7 +129,7 @@ class Cache:
         open(self.partial_log_file, 'w').write(data)
 
     @staticmethod
-    def dw(link, name):
+    def dw(link, name, URL=None):
         """Download the song."""
         dw = Cache()
         # check if song is already downloaded...
@@ -137,10 +138,10 @@ class Cache:
             logger.debug("{} already downloaded.".format(name))
             return
         logger.debug("Downloading {}".format(name))
-        dw_thread = threading.Thread(target=dw.dw_song, args=(link, name))
+        dw_thread = threading.Thread(target=dw.dw_song, args=(link, name, URL))
         dw_thread.start()
 
-    def dw_song(self, link, name):
+    def dw_song(self, link, name, URL):
         """Download the song."""
         try:
             path = os.path.join(self.dir, name)
@@ -170,6 +171,8 @@ class Cache:
 
             self.unlog_partial_dw(path)
             logger.debug("Download complete.")
+            if URL is not None and not search_URL(URL):
+                update_URL_cache(name, URL)
             return name
         except Exception:
             return False
