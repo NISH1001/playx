@@ -11,5 +11,6 @@ __all__ = [
             'jiosaavn',
             'gaana',
             'playlistcache',
-            'ytrelated'
+            'ytrelated',
+            'ytmusic'
             ]
