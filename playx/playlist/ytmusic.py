@@ -8,6 +8,7 @@ from selenium.webdriver.chrome.options import Options
 from playx.playlist.playlistbase import (
     PlaylistBase, SongMetadataBase
 )
+from playx.stringutils import remove_punct
 
 from playx.logger import Logger
 
@@ -61,6 +62,7 @@ class YtMusicPlaylist(PlaylistBase):
             URL = song.find_element_by_tag_name('a').get_attribute('href')
             title = song.find_element_by_class_name('title').text
             artist = song.find_element_by_class_name('flex-column').text
+            artist = remove_punct(artist)
             self.list_content_tuple.append(YtMusicMetadata(
                                 URL, title, artist
                             ))

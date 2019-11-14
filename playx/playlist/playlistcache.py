@@ -132,6 +132,7 @@ class CachedIE(PlaylistBase):
 
         for line in FILECONTENTS[3:-1]:
             logger.debug(line)
+            logger.hold()
             song_details = line[line.index(':')+2:-1].split(',')
             logger.debug(str(song_details))
             logger.debug("{}:{}:{}".format(song_details[0], song_details[1], song_details[2]))
