@@ -14,7 +14,8 @@ from playx.playlist import (
     soundcloud,
     jiosaavn,
     gaana,
-    playlistcache
+    playlistcache,
+    ytmusic
 )
 
 import re
@@ -54,7 +55,8 @@ class Playlist:
                     'soundcloud': soundcloud,
                     'jiosaavn': jiosaavn,
                     'gaana': gaana,
-                    'cached': playlistcache
+                    'cached': playlistcache,
+                    'youtubeMusic': ytmusic
                     }
 
     def _is_spotify(self):
@@ -128,6 +130,14 @@ class Playlist:
             self.temp_type = playlist_cache.extract_playlist_type()
             self.URL = playlist_cache.file_path
 
+    def _is_ytmusic(self):
+        """
+        Check if the passed URL is youtube music URL.
+        """
+        playlist_part = "https://music.youtube.com/playlist?list"
+        if playlist_part in str(self.URL):
+            self.type = "youtubeMusic"
+
     def _get_data(self):
         """
         Internal function to call get_data of type and get the
@@ -187,6 +197,7 @@ class Playlist:
         self._is_jiosaavn()
         self._is_gaana()
         self._is_cached()
+        self._is_ytmusic()
 
         if self.type != 'N/A':
             return True

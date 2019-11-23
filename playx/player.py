@@ -84,7 +84,10 @@ class URLPlayer():
         """
         Search youtube and get its data.
         """
-        self.title = get_youtube_title(self.URL)
+        # Need to put a check because in some cases the URL is already passed
+        # by the playlist extractor.
+        if self.title == '':
+            self.title = get_youtube_title(self.URL)
         self.stream_url = grab_link(self.URL)
 
     def _extract_data(self):
@@ -291,7 +294,8 @@ class Player(URLPlayer, NamePlayer):
                                 'billboard',
                                 'jiosaavn',
                                 'gaana',
-                                'cached'
+                                'cached',
+                                'youtubemusic'
                               ]
         self._datatypes = [
                             'playlist',
@@ -334,7 +338,7 @@ class Player(URLPlayer, NamePlayer):
         if self.playlisttype is not None:
             logger.debug(self.playlisttype)
             logger.hold()
-            if self.playlisttype not in self._playlist_names:
+            if self.playlisttype.lower() not in self._playlist_names:
                 logger.critical('Passed playlist is not supported yet')
             else:
                 self.datatype = "playlist"
