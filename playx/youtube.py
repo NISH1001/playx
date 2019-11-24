@@ -8,6 +8,7 @@ due to all those crawling shit
 
 from bs4 import BeautifulSoup
 import requests
+import youtube_dl
 from playx.stringutils import (
     fix_title,
     is_song_url
@@ -44,6 +45,21 @@ class YoutubeMetadata:
         """Be informative."""
         logger.info("Title: {}".format(self.title))
         logger.info("Duration: {}".format(self.duration))
+
+
+def get_audio_URL(link):
+    """Return true if the song is downloaded else false."""
+    ydl_opts = {}
+    ydl_opts['quiet'] = True
+    ydl_opts['nocheckcertificate'] = True
+
+    ydl = youtube_dl.YoutubeDL(ydl_opts)
+    info = ydl.extract_info(link, download=False)
+    try:
+        audio_url = info['formats'][1]['url']
+        return audio_url
+    except Exception as e:
+        logger.critical("Could not extract the audio URL: {}".format(e))
 
 
 def get_youtube_streams(url):
@@ -129,13 +145,11 @@ def search_youtube(query, disable_kw=False):
 
 def grab_link(value):
     """Return the audio link of the song."""
-    stream = get_youtube_streams(value)
+    stream = get_audio_URL(value)
     logger.debug(stream)
-    if stream['audio'] is None: return None
-    value = stream['audio']
     # if not no_cache:
     #    Cache.dw(value, title)
-    return value
+    return stream
 
 
 def dw(title, s_url, url=None):
