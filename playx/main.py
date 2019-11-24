@@ -176,7 +176,7 @@ def main():
 
     # Check if sync-playlists is passed
     if args.sync_pl is not None:
-        pl = Playlist(None, None, None)
+        pl = Playlist(None, None, None, None)
         pl.sync_playlist(args.sync_pl)
         exit(0)
 

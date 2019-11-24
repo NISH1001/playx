@@ -2,6 +2,8 @@
 
 from pathlib import Path
 from os import makedirs
+import os
+import glob
 
 from playx.playlist.playlistbase import (
     PlaylistBase, SongMetadataBase
@@ -157,17 +159,17 @@ def list_all():
     Return all the playlist names with playlist URL's
     """
     dir_path = Path('~/.playx/playlist').expanduser()
-    files = [file for file in dir_path.iterdir()]
+    files = glob.glob(os.path.join(dir_path, '*.playlist'))
+    # files = [file for file in dir_path.iterdir()]
     list_playlist = []
 
-    for file in files:
-        READSTREAM = open(file)
-        FILECONTENTS = READSTREAM.read().split('\n')
-        playlist_name = FILECONTENTS[0][FILECONTENTS[0].index(':')+2: -1]
-        URL = FILECONTENTS[1][FILECONTENTS[1].index(':')+2: -1]
-        TYPE = FILECONTENTS[2][FILECONTENTS[2].index(':')+2: -1]
-        list_playlist.append([playlist_name, URL, TYPE])
-
+    for f in files:
+        with open(f) as READSTREAM:
+            FILECONTENTS = READSTREAM.read().split('\n')
+            playlist_name = FILECONTENTS[0][FILECONTENTS[0].index(':')+2: -1]
+            URL = FILECONTENTS[1][FILECONTENTS[1].index(':')+2: -1]
+            TYPE = FILECONTENTS[2][FILECONTENTS[2].index(':')+2: -1]
+            list_playlist.append((playlist_name, URL, TYPE))
     return list_playlist
 
 
