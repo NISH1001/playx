@@ -96,7 +96,7 @@ def remove_duplicates(string):
 def fix_title(title):
     title = remove_punct(title)
     title = remove_multiple_spaces(title)
-    if not title.endswith('.mp3'):
+    if not title.endswith('mp3'):
         title = title + '.mp3'
     return title
 
