@@ -330,7 +330,7 @@ class Player(URLPlayer, NamePlayer):
         if len(related_songs) != 0:
             logger.info("Playing related songs")
             for i in related_songs:
-                self.play_name(i.search_querry)
+                self.play_name(i.search_query)
 
     def _check_type(self):
         """Check the type of the data"""
@@ -398,9 +398,9 @@ class Player(URLPlayer, NamePlayer):
                         if self.playlisttype == 'soundcloud':
                             self.play_url(i.URL, i)
                         elif self.playlisttype == 'youtube':
-                            self.play_url(i.search_querry, i)
+                            self.play_url(i.search_query, i)
                         else:
-                            self.play_name(i.search_querry)
+                            self.play_name(i.search_query)
                 on_repeat_time -= 1
             except KeyboardInterrupt:
                 on_repeat_time = -1

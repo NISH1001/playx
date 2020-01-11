@@ -3,6 +3,7 @@
 from pathlib import Path
 from os import makedirs
 import os
+import json
 import glob
 
 from playx.playlist.playlistbase import (
@@ -25,7 +26,7 @@ class PlaylistCache:
     |[Name]:[<name of the playlist>]        |
     |[URL]:[<URL of the playlist>]          |
     |[Type]:[<PlaylistType>]                |
-    |[Song]:[Song name, URL of song, querry]|
+    |[Song]:[Song name, URL of song, query]|
     |........                               |
     |........                               |
     -----------------------------------------
@@ -95,11 +96,99 @@ class PlaylistCache:
             song_details = '[SONG]:[{},{},{}]'.format(
                                                     song.title,
                                                     song.URL,
-                                                    song.search_querry
+                                                    song.search_query
                                                 )
             WSTREAM.write(song_details + '\n')
 
         WSTREAM.close()
+
+class PlaylistCache2:
+    """
+        This is a new and improved (structured) version for the playlist cache.
+        Each playlistcache corresponds to a json file for a playlist which is
+        structured as:
+
+        some-playlist.json
+        ```json
+            {
+                "name": <playlist name> (string)
+                "type": <playlist type> (string)
+                "url": <playlist url> (string)
+                "data": <list of the song metadata> (list)
+            }
+        ```
+
+        Each song metadata is actually another dict/json
+        The "data" part is a list of song metadata which is structured as:
+            [
+                { "title": <title>, "url": <url>, "search_query": <search_query> }
+                { "title": <title>, "url": <url>, "search_query": <search_query> }
+                ...
+            ]
+    """
+    def __init__(self, entity):
+        self.entity = entity  # Entity can be either a name or an URL
+        self.dir_path = Path('~/.playx/playlist').expanduser()
+        self.file_path = None
+        self._check_dir()
+
+    def _check_dir(self):
+        """
+        Check if the dir_path is available or not.
+        If not, create the dir.
+        """
+        if not self.dir_path.exists():
+            makedirs(self.dir_path, exist_ok=True)
+
+    def cache(self, name, url, pltype, data):
+        """
+            Save the data locally.
+        """
+        res = {
+            'name' : name,
+            'type': pltype,
+            'url': url,
+            'data': []
+        }
+        for song in data:
+            s = {
+                'title': song.title,
+                'url': song.URL,
+                'search_query': song.search_query
+            }
+            res['data'].append(s)
+        file_name = name + '-' + pltype + '.json'
+        with open(self.dir_path.joinpath(file_name), 'w') as f:
+            json.dump(res, f, indent=4)
+
+    def extract_playlist_type(self):
+        """
+        Extract the type of the playlist.
+        """
+        with open(self.file_path) as f:
+            playlist = json.load(f)
+            return playlist['type']
+
+    def _get_data(self, path_to_file):
+        """
+        Extract the name and URL from the passed file.
+        """
+        with open(self.dir_path.joinpath(path_to_file), 'r') as f:
+            playlist = json.load(f)
+            return (playlist['name'], playlist['url'])
+
+    def is_cached(self):
+        """
+        Check if the passed playlist name or URL
+        is saved in the playlist dir.
+        """
+        files = [fname for fname in self.dir_path.glob("*.json")]
+        for fname in files:
+            name, url = self._get_data(fname)
+            if (self.entity.lower() == name.lower()) or (self.entity == url):
+                self.file_path = self.dir_path.joinpath(fname)
+                return True
+        return False
 
 
 class CachedSongs(SongMetadataBase):
@@ -107,12 +196,8 @@ class CachedSongs(SongMetadataBase):
     Class to contain songs extracted from the cached
     playlist.
     """
-    def __init__(self, title, URL, querry):
-        super().__init__()
-        self.title = title
-        self.URL = URL
-        self.search_querry = querry
-
+    def __init__(self, title, URL, query):
+        super().__init__(title, URL, query)
 
 class CachedIE(PlaylistBase):
     """
@@ -145,31 +230,57 @@ class CachedIE(PlaylistBase):
                                                     ))
         self.strip_to_start_end()
 
+class CachedIE2(PlaylistBase):
+    """
+    Class to extract data in cached playlists.
+    """
+    def __init__(self, URL, pl_start=None, pl_end=None):
+        super().__init__(pl_start, pl_end)
+        self.URL = URL  # Here the URL is actually a local dir path
+        self.playlist_name = ''
+
+    def get_data(self):
+        """
+        Extract the data from the cached playlist.
+        """
+        playlist = {}
+        with open(self.URL, 'r') as f:
+            playlist = json.load(f)
+        if not playlist:
+            return []
+        self.playlist_name = playlist['name']
+        for song in playlist['data']:
+            self.list_content_tuple.append(CachedSongs(
+                song['title'],
+                song['url'],
+                song['search_query']
+            ))
+        self.strip_to_start_end()
+
 
 def save_data(PlaylistName, URL, pltype, data):
     """
     Cache the playlist data to a local file.
     """
-    playlist_cache = PlaylistCache(None)
+    playlist_cache = PlaylistCache2(None)
     playlist_cache.cache(PlaylistName, URL, pltype, data)
-
 
 def list_all():
     """
     Return all the playlist names with playlist URL's
     """
     dir_path = Path('~/.playx/playlist').expanduser()
-    files = glob.glob(os.path.join(dir_path, '*.playlist'))
+    files = glob.glob(os.path.join(dir_path, '*.json'))
     # files = [file for file in dir_path.iterdir()]
     list_playlist = []
 
-    for f in files:
-        with open(f) as READSTREAM:
-            FILECONTENTS = READSTREAM.read().split('\n')
-            playlist_name = FILECONTENTS[0][FILECONTENTS[0].index(':')+2: -1]
-            URL = FILECONTENTS[1][FILECONTENTS[1].index(':')+2: -1]
-            TYPE = FILECONTENTS[2][FILECONTENTS[2].index(':')+2: -1]
-            list_playlist.append((playlist_name, URL, TYPE))
+    for fname in files:
+        with open(fname) as f:
+            pl = json.load(f)
+            name = pl['name']
+            url = pl['url']
+            pl_type = pl['type']
+            list_playlist.append((name, url, pl_type))
     return list_playlist
 
 
@@ -181,7 +292,6 @@ def get_data(URL, pl_start, pl_end):
     the playlist.
     """
     logger.debug("Extracting Playlist Contents")
-    cached_playlist = CachedIE(URL, pl_start, pl_end)
+    cached_playlist = CachedIE2(URL, pl_start, pl_end)
     cached_playlist.get_data()
-
     return cached_playlist.list_content_tuple, cached_playlist.playlist_name
