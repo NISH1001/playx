@@ -182,8 +182,7 @@ class PlaylistCache2:
         Check if the passed playlist name or URL
         is saved in the playlist dir.
         """
-        files = [fname for fname in self.dir_path.glob("*.json")]
-        for fname in files:
+        for fname in self.dir_path.glob("*.json"):
             name, url = self._get_data(fname)
             if (self.entity.lower() == name.lower()) or (self.entity == url):
                 self.file_path = self.dir_path.joinpath(fname)
@@ -191,7 +190,7 @@ class PlaylistCache2:
         return False
 
 
-class CachedSongs(SongMetadataBase):
+class CachedSong(SongMetadataBase):
     """
     Class to contain songs extracted from the cached
     playlist.
@@ -223,7 +222,7 @@ class CachedIE(PlaylistBase):
             song_details = line[line.index(':')+2:-1].split(',')
             logger.debug(str(song_details))
             logger.debug("{}:{}:{}".format(song_details[0], song_details[1], song_details[2]))
-            self.list_content_tuple.append(CachedSongs(
+            self.list_content_tuple.append(CachedSong(
                                                         song_details[0],
                                                         song_details[1],
                                                         song_details[2],
@@ -250,7 +249,7 @@ class CachedIE2(PlaylistBase):
             return []
         self.playlist_name = playlist['name']
         for song in playlist['data']:
-            self.list_content_tuple.append(CachedSongs(
+            self.list_content_tuple.append(CachedSong(
                 song['title'],
                 song['url'],
                 song['search_query']
