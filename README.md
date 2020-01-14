@@ -90,7 +90,7 @@ Play any songs that come in your mind.
 For now, the application is in development phase.  
 
 ```console
-usage: playx [-h] [-p] [-n] [-a] [-d] [-r] [-k] [--sync-pl PLAYLIST] [-l]
+usage: playx [-h] [-p] [-n] [-a] [-d] [-r] [-k] [-c] [--sync-pl PLAYLIST] [-l]
              [--shuffle] [--repeat [NUMBER]] [--pl-start START] [--pl-end END]
              [song [song ...]]
 
@@ -110,6 +110,7 @@ optional arguments:
   -r, --no-related    Disable playing related songs extracted from YouTube
   -k, --disable-kw    Disable addition of keywords while searching the song on
                       YouTube.
+  -c, --clean         Clean(fix) broken references
   --sync-pl PLAYLIST  Sync the playlists. Pass the name as arguement. If all
                       the playlists are to be synced, just pass [All].
   -l, --lyrics        Show lyircs of the song.
@@ -122,7 +123,6 @@ optional arguments:
                       without a playlist it has no effect.
   --pl-end END        End position in case a playlist is passed. If passed
                       without a playlist it has no effect.
-
 ```
 
 ------------
