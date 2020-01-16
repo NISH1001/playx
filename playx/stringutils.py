@@ -40,14 +40,14 @@ def escape_quotes(string):
     return re.sub(r'"', '\\"', string)
 
 def remove_multiple_spaces(string):
-    return re.sub(r'\s+', ' ', string)
+    return re.sub(r'\s+', ' ', string).strip()
 
 def replace_space(string, replacer):
     return re.sub(r"\s", replacer, string)
 
 def remove_punct(string):
     string = re.sub(r"[']+", '', string)
-    return re.sub(r"[-:_!,/\[\].()#?;&\n]+", ' ', string)
+    return re.sub(r"[-:_!,/\[\].()#?;&\n]+", ' ', string).strip()
 
 def replace_character(string, character, replacer):
     return re.sub(r"{}".format(character), replacer, string)
@@ -94,9 +94,11 @@ def remove_duplicates(string):
 
 
 def fix_title(title):
+    if title.endswith('.mp3'):
+        title = title[:-4]
     title = remove_punct(title)
     title = remove_multiple_spaces(title)
-    if not title.endswith('.mp3'):
+    if not title.endswith('mp3'):
         title = title + '.mp3'
     return title
 
