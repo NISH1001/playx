@@ -102,6 +102,7 @@ class PlaylistCache:
 
         WSTREAM.close()
 
+
 class PlaylistCache2:
     """
         This is a new and improved (structured) version for the playlist cache.
@@ -145,7 +146,7 @@ class PlaylistCache2:
             Save the data locally.
         """
         res = {
-            'name' : name,
+            'name': name,
             'type': pltype,
             'url': url,
             'data': []
@@ -215,6 +216,8 @@ class CachedIE(PlaylistBase):
         FILECONTENTS = READSTREAM.read().split('\n')
 
         self.playlist_name = FILECONTENTS[0][FILECONTENTS[0].index(':')+2: -1]
+        self.actual_URL = FILECONTENTS[1][FILECONTENTS[1].index(':')+2: -1]
+        self.type = FILECONTENTS[2][FILECONTENTS[2].index(':')+2: -1]
 
         for line in FILECONTENTS[3:-1]:
             logger.debug(line)
@@ -294,3 +297,23 @@ def get_data(URL, pl_start, pl_end):
     cached_playlist = CachedIE2(URL, pl_start, pl_end)
     cached_playlist.get_data()
     return cached_playlist.list_content_tuple, cached_playlist.playlist_name
+
+
+def migrate2(src):
+    """Migrate to the new playlist structure."""
+    # Open the src file using the older extractor class
+    # Open the des using the new extractor
+    old_playlist = CachedIE(src)
+    old_playlist.get_data()
+    new_one = PlaylistCache2(None)
+    new_one.cache(
+                    old_playlist.playlist_name,
+                    old_playlist.actual_URL,
+                    old_playlist.type,
+                    old_playlist.list_content_tuple
+                )
+
+
+if __name__ == "__main__":
+    old_file = "/home/deepjyoti30/.playx/playlist/Secret Stash-spotify.playlist"
+    migrate2(old_file)
