@@ -13,7 +13,7 @@ setup(
             'playx = playx.main:main'
         ]
     },
-    version='1.4.1',
+    version='1.5.0',
     license='MIT',
     install_requires=['youtube_dl', 'requests', 'beautifulsoup4', 'selenium', 'lxml', 'numpy'],
 )
