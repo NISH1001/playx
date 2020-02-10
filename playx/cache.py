@@ -75,6 +75,31 @@ class Cache:
         else:
             return ret
 
+    def search_terms(self, *terms):
+        logger.debug("Searching terms [{}] in the cache at [{}]".format(terms, self.dir))
+        if type(terms) in [list, tuple, set]:
+            song_name = " ".join(*terms)
+        if type(terms) is str:
+            song_name = terms
+        song_name = remove_stopwords(remove_multiple_spaces(song_name).lower())
+        song_name = remove_punct(song_name)
+        tokens1 = song_name.split()
+        cached_songs = self.list_mp3()
+
+        res = []
+        for song in cached_songs:
+            name = os.path.splitext(song)[0].lower()
+            title = name
+            name = remove_stopwords(name)
+            name = remove_punct(name)
+            name = remove_multiple_spaces(name)
+            tokens2 = name.split()
+            match = check_keywords(tokens1, tokens2)
+            if match:
+                dist = compute_jaccard(tokens1, tokens2)
+                res.append((song_name, song, title, dist))
+        return sorted(res, key=lambda x: x[-1], reverse=True)
+
     def _search_tokens(self, song_name):
         """Search song in the cache based on simple each word matching."""
         logger.debug("Searching [{}] in the cache at [{}]".format(song_name, self.dir))
