@@ -16,10 +16,10 @@ class SongMetadataBase:
     Base class to store song metadata.
     """
 
-    def __init__(self):
-        self.title = ''
-        self.search_querry = ''
-        self.URL = ''
+    def __init__(self, title, url, query):
+        self.title = title
+        self.search_query = query
+        self.URL = url
         self.better_search_kw = [
                                 # ' audio',
                                 # ' lyrics',
@@ -31,23 +31,22 @@ class SongMetadataBase:
         Add the keywords in better_search_kw list to get a better result.
         """
         for kw in self.better_search_kw:
-            self.search_querry += kw
+            self.search_query += kw
 
     def _remove_duplicates(self):
         """
-        Remove duplicate words from the searchquerry.
+        Remove duplicate words from the search query
         """
-        self.search_querry = remove_duplicates(self.search_querry)
+        self.search_query = remove_duplicates(self.search_query)
+
+    def __str__(self):
+        return f"(title={self.title}, url={self.URL}, search_query={self.search_query})"
 
     def content(self):
-        """
-        Show the content of the class
-        """
-        return "{}:{}:{}".format(
-                                self.title,
-                                self.URL,
-                                self.search_querry
-                            )
+        return self.__str__()
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class PlaylistBase:

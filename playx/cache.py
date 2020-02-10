@@ -234,6 +234,33 @@ def update_URL_cache(title, URL):
     with open(file_path, 'w') as WSTREAM:
         json.dump(data, WSTREAM)
 
+def clean_url_cache():
+    """
+        Remove URLs for which file paths do not exist.
+        (Most probably the file has been manually deleted by the user)
+    """
+    log_dir = os.path.expanduser('~/.playx/logs')
+    file_path = os.path.join(log_dir, 'urls.json')
+    logger.debug(f"Cleaning URL Cache at {file_path}")
+    if not os.path.exists(file_path):
+        return False
+    with open(file_path, 'r') as f:
+        try:
+            data = json.load(f)
+        except JSONDecodeError:
+            data = {}
+    processed = {}
+    for url, fname in data.items():
+        if not os.path.exists(fname):
+            logger.info(f"File [{fname}] does not exist.")
+            continue
+        processed[url] = fname
+    with open(file_path, 'w') as f:
+        json.dump(processed, f)
+    return True
+
+
+
 
 if __name__ == "__main__":
     name = ' '.join(sys.argv[1:])

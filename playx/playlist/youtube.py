@@ -20,16 +20,14 @@ logger = Logger('YoutubePlaylist')
 class YoutubeMetadata(SongMetadataBase):
 
     def __init__(self, url='', title=''):
-        super().__init__()
-        self.URL = url
-        self.title = title
-        self._create_search_querry()
+        super().__init__(title, url, '')
+        self._create_search_query()
 
-    def _create_search_querry(self):
+    def _create_search_query(self):
         """
         Create a search querry.
         """
-        self.search_querry = self.URL
+        self.search_query = self.URL
 
     def display(self):
         """Be informative."""

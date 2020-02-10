@@ -124,7 +124,7 @@ class Playlist:
         """
         Check if the playlist is cached.
         """
-        playlist_cache = playlistcache.PlaylistCache(self.URL)
+        playlist_cache = playlistcache.PlaylistCache2(self.URL)
         if playlist_cache.is_cached():
             self.type = 'cached'
             self.temp_type = playlist_cache.extract_playlist_type()
@@ -228,5 +228,4 @@ class Playlist:
 
         # Shuffle the data in case is_shuffle is True
         data = self._shuffle(data)
-
         return data

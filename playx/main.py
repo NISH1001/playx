@@ -7,7 +7,8 @@
 import argparse
 
 from playx.cache import (
-    Cache, search_locally
+    Cache, search_locally,
+    clean_url_cache
 )
 
 from playx.utility import (
@@ -74,6 +75,9 @@ def parse():
                         action='store_true',
                         help="Disable addition of keywords while\
                             searching the song on YouTube.")
+    parser.add_argument('-c', '--clean',
+                        action='store_true',
+                        help="Clean(fix) broken references")
     parser.add_argument('--sync-pl',
                         default=None, type=str,
                         help="Sync the playlists. Pass the name as\
@@ -133,6 +137,10 @@ def playx(parser, args, song):
     if not song and args.play_cache:
         cache = Cache("~/.playx/songs")
         return stream_cache_all(cache)
+    # clean
+    if args.clean:
+        clean_url_cache()
+        return True
     # Check if its a playlist
     logger.debug(args.no_related)
     playlist = Playlist(song, args.pl_start, args.pl_end, args.shuffle)
