@@ -54,6 +54,9 @@ def parse():
     parser.add_argument('song',
                         help="Name or youtube link of song to download",
                         default=None, type=str, nargs="*")
+    parser.add_argument('-rsearch', '--rsearch',
+                        help="Play based on terms provided",
+                        default=None, type=str, nargs="*")
     parser.add_argument('-p', '--play-cache',
                         action='store_true',
                         help="Play all songs from the cache.\
@@ -175,12 +178,23 @@ def main():
     # Before doing anything, make sure all songs are in the new song dir
     # move_songs()
     parser, args = parse()
-    song = ' '.join(args.song)
+    if args.rsearch:
+        cache = Cache("~/.playx/songs")
+        song = [s[-2] for s in cache.search_terms(args.rsearch)]
+        logger.info(f"[{len(song)}] song found")
+        if not len(song):
+            return
+
+    elif args.song:
+        song = ' '.join(args.song)
+
     # first check for auto playlist
-    if args.auto:
+    elif args.auto:
         # ap = CountBasedAutoPlaylist('~/.playx/logs/log.cat')
         ap = MarkovBasedAutoPlaylist('~/.playx/logs/log.cat')
         song = ap.generate()
+    else:
+        song = ''
 
     # Check if sync-playlists is passed
     if args.sync_pl is not None:

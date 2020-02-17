@@ -65,7 +65,7 @@ class Cache:
 
     def search(self, song_name):
         """Return results of search_tokens."""
-        ret = self._search_tokens(song_name)
+        ret = self.search_single(song_name)
         if ret is None:
             return ret
 
@@ -74,6 +74,14 @@ class Cache:
             return []
         else:
             return ret
+
+    def search_terms(self, *terms):
+        logger.debug("Searching terms [{}] in the cache at [{}]".format(terms, self.dir))
+        if type(terms) in [list, tuple, set]:
+            song_name = " ".join(*terms)
+        if type(terms) is str:
+            song_name = terms
+        return self._search_tokens(song_name)
 
     def _search_tokens(self, song_name):
         """Search song in the cache based on simple each word matching."""
@@ -95,7 +103,10 @@ class Cache:
             if match:
                 dist = compute_jaccard(tokens1, tokens2)
                 res.append((song_name, song, title, dist))
-        res = sorted(res, key=lambda x: x[-1], reverse=True)
+        return sorted(res, key=lambda x: x[-1], reverse=True)
+
+    def search_single(self, song_name):
+        res = self._search_tokens(song_name)
         if res and res[0][-1] > 0:
             return res[0][2], self.get_full_location(res[0][1])
         else:
