@@ -131,6 +131,7 @@ class PlaylistCache2:
         self.entity = entity  # Entity can be either a name or an URL
         self.dir_path = Path('~/.playx/playlist').expanduser()
         self.file_path = None
+        self._file_ext = "playlist"
         self._check_dir()
 
     def _check_dir(self):
@@ -158,7 +159,7 @@ class PlaylistCache2:
                 'search_query': song.search_query
             }
             res['data'].append(s)
-        file_name = name + '-' + pltype + '.json'
+        file_name = name + '-' + pltype + '.{}'.format(self._file_ext)
         with open(self.dir_path.joinpath(file_name), 'w') as f:
             json.dump(res, f, indent=4)
 
@@ -183,7 +184,7 @@ class PlaylistCache2:
         Check if the passed playlist name or URL
         is saved in the playlist dir.
         """
-        for fname in self.dir_path.glob("*.json"):
+        for fname in self.dir_path.glob("*.{}".format(self._file_ext)):
             name, url = self._get_data(fname)
             if (self.entity.lower() == name.lower()) or (self.entity == url):
                 self.file_path = self.dir_path.joinpath(fname)
@@ -272,7 +273,7 @@ def list_all():
     Return all the playlist names with playlist URL's
     """
     dir_path = Path('~/.playx/playlist').expanduser()
-    files = glob.glob(os.path.join(dir_path, '*.json'))
+    files = glob.glob(os.path.join(dir_path, '*.playlist'))
     # files = [file for file in dir_path.iterdir()]
     list_playlist = []
 
