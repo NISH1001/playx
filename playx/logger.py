@@ -9,7 +9,12 @@ class Logger:
         Custom logger that meets the requirements of using multiple logging setup.
     """
 
-    def __init__(self, name='', level='INFO'):
+    def __init__(
+            self,
+            name='',
+            level='DEBUG',
+            disable_file=True
+        ):
         self.name = name
         self._file_format = ''
         self._console_format = ''
@@ -23,6 +28,7 @@ class Logger:
                                 'CRITICAL': 4
                              }
         self.level = self._level_number[level]
+        self._disable_file = disable_file
 
     def _check_logfile(self):
         """
@@ -37,6 +43,9 @@ class Logger:
 
     def _write_file(self):
         """Write to the file regardless of the LEVEL_NUMBER."""
+        if self._disable_file:
+            return
+
         with open(self._log_file, 'a') as f:
             # The file log is to be written to the _log_file file
             f = open(self._log_file, 'a')
