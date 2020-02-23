@@ -35,7 +35,7 @@ __github__ = github.com/deepjyoti30
 class Playlist:
     """Class for every kind of playlist supported."""
 
-    def __init__(self, URL, pl_start, pl_end, is_shuffle):
+    def __init__(self, URL, pl_start, pl_end, is_shuffle=False):
         """
         URL: Passed URL
         pl_start: Playlist start index.
