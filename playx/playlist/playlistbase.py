@@ -1,14 +1,12 @@
 """File to modify the playlists."""
 
-from playx.logger import (
-    Logger
-)
+from playx.logger import Logger
 
 from playx.stringutils import remove_duplicates
 
 
 # Setup logger
-logger = Logger('PlaylistBase')
+logger = Logger("PlaylistBase")
 
 
 class SongMetadataBase:
@@ -21,10 +19,10 @@ class SongMetadataBase:
         self.search_query = query
         self.URL = url
         self.better_search_kw = [
-                                # ' audio',
-                                # ' lyrics',
-                                # ' full'
-                                ]
+            # ' audio',
+            # ' lyrics',
+            # ' full'
+        ]
 
     def _add_better_search_words(self):
         """
@@ -54,10 +52,12 @@ class PlaylistBase:
         Base class for all the playlist that implements some common functionalitites
         such as fixing the start-end markers
     """
-    def __init__(self, pl_start=-1, pl_end=-1):
+
+    def __init__(self, pl_start=-1, pl_end=-1, shuffle=False):
         self.pl_start = pl_start
         self.pl_end = pl_end
         self.list_content_tuple = []
+        self.shuffle = shuffle
 
     def _is_valid(self, s, e):
         if s and e:
@@ -80,6 +80,6 @@ class PlaylistBase:
         end = max(self.pl_start, self.pl_end)
         step = 1 if (self.pl_start <= self.pl_end) else -1
         if self._is_valid(start, end):
-            self.list_content_tuple = self.list_content_tuple[start-1 : end]
+            self.list_content_tuple = self.list_content_tuple[start - 1 : end]
             if step == -1:
                 self.list_content_tuple = self.list_content_tuple[::-1]
