@@ -170,7 +170,7 @@ class YoutubePlaylist(PlaylistBase):
         return min(slicers)
 
 
-class YoutubePlaylist2(PlaylistBase):
+class YoutubePlaylist2(YoutubePlaylist):
     """
         Class to store YouTube playlist data.
         This uses youtube-dl --flat-playlist command to fetch everything.
@@ -178,36 +178,6 @@ class YoutubePlaylist2(PlaylistBase):
         Plus this solves the issue with ajax/scrolling if playlist has more than
         100 songs.
     """
-
-    def __init__(self, URL, pl_start=None, pl_end=None):
-        """Init the URl."""
-        super().__init__(pl_start, pl_end)
-        self.URL = URL
-        self.list_content_tuple = []
-        self.playlist_name = ""
-        self._DELETED = [
-            "deleted video",
-            "मेटाइएको भिडियो",
-            "private video",
-        ]
-
-    def extract_name(self, name):
-        """Extract the name of the playlist."""
-        name = str(name).replace("\n", "")
-        name = "".join(re.findall(r">.*?<", name)).replace(">", "").replace("<", "")
-        name = " ".join(re.findall(r"[^ ]+", name))
-        self.playlist_name = name
-
-    def _is_connection_possible(self):
-        """Make a simple request to check if connection is possible.
-        i:e check if internet is connected.
-        """
-        url = "https://google.com"
-        try:
-            requests.get(url)
-        except requests.exceptions.ConnectionError:
-            return False
-        return True
 
     def extract_playlistdata(self):
         url_prepend = "https://www.youtube.com/watch?v="
@@ -236,11 +206,18 @@ class YoutubePlaylist2(PlaylistBase):
             title = video["title"].strip()
             url = video["url"]
             url = url_prepend + url
+
             if title.lower()[1:-1] in self._DELETED:
                 logger.debug(title.lower()[1:-1])
                 logger.info(f"Skipping [{url}] Possibly DELETED/BLOCKED/PRIVATE video.")
                 continue
+
+            logger.info(f"Checking if [{title}] [{url}] is available")
+            if not self._check_valid(url):
+                logger.info("Skipping...")
+                continue
             self.list_content_tuple.append(YoutubeMetadata(url, title))
+
         if len(self.list_content_tuple) == 0:
             logger.warning(
                 "Are you sure you have videos in your playlist? Try changing\
