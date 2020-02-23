@@ -12,8 +12,8 @@ class Logger:
     def __init__(
             self,
             name='',
-            level='DEBUG',
-            disable_file=True
+            level='INFO',
+            disable_file=False
         ):
         self.name = name
         self._file_format = ''
