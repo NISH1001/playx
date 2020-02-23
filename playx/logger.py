@@ -1,7 +1,11 @@
-
 from pathlib import Path
 import datetime
 import os
+
+import sys
+from loguru import logger
+
+logger.remove()
 
 
 class Logger:
@@ -9,19 +13,19 @@ class Logger:
         Custom logger that meets the requirements of using multiple logging setup.
     """
 
-    def __init__(self, name='', level='INFO'):
+    def __init__(self, name="", level="INFO"):
         self.name = name
-        self._file_format = ''
-        self._console_format = ''
-        self._log_file = Path('~/.playx/logs/log.cat').expanduser()
+        self._file_format = ""
+        self._console_format = ""
+        self._log_file = Path("~/.playx/logs/log.cat").expanduser()
         self._check_logfile()
         self._level_number = {
-                                'DEBUG': 0,
-                                'INFO': 1,
-                                'WARNING': 2,
-                                'ERROR': 3,
-                                'CRITICAL': 4
-                             }
+            "DEBUG": 0,
+            "INFO": 1,
+            "WARNING": 2,
+            "ERROR": 3,
+            "CRITICAL": 4,
+        }
         self.level = self._level_number[level]
 
     def _check_logfile(self):
@@ -32,14 +36,14 @@ class Logger:
         if not self._log_file.exists():
             if not self._log_file.parent.exists():
                 os.makedirs(self._log_file.parent)
-            f = open(self._log_file, 'w')
+            f = open(self._log_file, "w")
             f.close()
 
     def _write_file(self):
         """Write to the file regardless of the LEVEL_NUMBER."""
-        with open(self._log_file, 'a') as f:
+        with open(self._log_file, "a") as f:
             # The file log is to be written to the _log_file file
-            f = open(self._log_file, 'a')
+            f = open(self._log_file, "a")
             f.write(self._file_format)
 
     def _write(self, message, LEVEL_NUMBER):
@@ -59,16 +63,13 @@ class Logger:
         Make the format of the string that is to be written.
         """
         t = datetime.datetime.now()
-        DATETIME_FORMAT = '{}-{}-{} {}:{}:{}'.format(
-                                t.year,
-                                t.month,
-                                t.day,
-                                t.hour,
-                                t.minute,
-                                t.second
-                              )
-        self._console_format = '[{}]: {}'.format(self.name, message)
-        self._file_format = '[{}]-[{}]: {}\n'.format(self.name, DATETIME_FORMAT, message)
+        DATETIME_FORMAT = "{}-{}-{} {}:{}:{}".format(
+            t.year, t.month, t.day, t.hour, t.minute, t.second
+        )
+        self._console_format = "[{}]: {}".format(self.name, message)
+        self._file_format = "[{}]-[{}]: {}\n".format(
+            self.name, DATETIME_FORMAT, message
+        )
 
     def hold(self):
         """
@@ -114,3 +115,58 @@ class Logger:
         LEVEL_NUMBER = 4
         self._write(message, LEVEL_NUMBER)
         exit()
+
+
+class LoguruConfig:
+    """
+        The behaviour of loguru's logger is:
+        If we keep on adding handlers, it will automatically send message to all of them.
+
+        FLOG is used to create a handler for file-based logging which is invoked as:
+            logger.log("FLOG", "This is a message string")
+        This will add the message to the log file as well as shows in the standard output
+
+        However, if we call logger.info, logger.error the messages will be displayed twice.
+        First it goes through default stdout and second through flog.
+        So, most of the time, we have to do logger.log().
+
+        However, if we are using for debugging purposes, we can simply use
+        logger.debug() which doesn't write messages to the log file.
+
+        We can tweak this implementation later. For now, everything is logged
+        to the file except when debugging. This is handy since during experiments
+        and feature additions, we often execute playx that might create jibberish logs.
+        So, instead we simply use logger.debug in case.
+    """
+
+    FLOG = logger.level("FLOG", no=10, color="<blue>")
+    FORMAT_FILE = "[{module}]-[{time:YYYY-MM-DD at HH:mm:ss}]: {message}"
+    FORMAT_STDOUT = "[{module}]: {message}"
+    LOGFILE = Path("~/.playx/logs/log.cat").expanduser()
+    ROTATION = "50 MB"
+
+    @staticmethod
+    def setup_all():
+        logger.add(
+            LoguruConfig.LOGFILE,
+            format=LoguruConfig.FORMAT_FILE,
+            rotation=LoguruConfig.ROTATION,
+            level=LoguruConfig.FLOG.name,
+            colorize=True,
+        )
+        for (out, lname) in zip(
+            [sys.stderr, sys.stdout, sys.stdout, sys.stdout],
+            ["INFO", "DEBUG", "WARNING", "ERROR"],
+        ):
+            logger.add(
+                out, format=LoguruConfig.FORMAT_STDOUT, level=lname, colorize=True,
+            )
+
+
+def main():
+    logger2 = Logger("logger")
+    logger2.debug("Test debug")
+
+
+if __name__ == "__main__":
+    main()

@@ -5,10 +5,12 @@ import random
 
 from playx.playlist.playlistbase import PlaylistBase
 
-from playx.logger import Logger
+from loguru import logger
+
+# from playx.logger import Logger
 
 # Setup logger
-logger = Logger("Playxlist")
+# logger = Logger("Playxlist")
 
 
 class Playxlist(PlaylistBase):
@@ -49,19 +51,22 @@ class Playxlist(PlaylistBase):
 
     def get_list_contents(self):
         """Return the tuple containing the list data."""
-        logger.debug("Extracting Playlist Content")
+        logger.log("FLOG", "Extracting Playlist Content")
         self.extract_list_contents()
         self.strip_to_start_end()
         data = self.list_content_tuple
         if self.file_path:
-            logger.info(
+            logger.log(
+                "FLOG",
                 "{}: {} {}".format(
                     self.file_path, len(data), "song" if len(data) < 2 else "songs"
-                )
+                ),
             )
         else:
-            logger.info("{} {}".format(len(data), "song" if len(data) < 2 else "songs"))
+            logger.log(
+                "FLOG", "{} {}".format(len(data), "song" if len(data) < 2 else "songs")
+            )
         if self.shuffle:
-            logger.info("Shuffling...")
+            logger.log("FLOG", "Shuffling...")
             random.shuffle(self.list_content_tuple)
         return self.list_content_tuple

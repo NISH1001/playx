@@ -19,14 +19,18 @@ from playx.playlist.playxlist import Playxlist
 
 from playx.player import Player
 
-from playx.logger import Logger
 from playx.songfinder import search
 
 from playx.playlist.autoplaylist import CountBasedAutoPlaylist, MarkovBasedAutoPlaylist
 
+from loguru import logger
+from playx.logger import LoguruConfig
+
+LoguruConfig.setup_all()
+
 
 # Get the logger
-logger = Logger("main")
+# logger = Logger("main")
 
 
 def parse():
@@ -180,7 +184,6 @@ def playx(parser, args, song):
         clean_url_cache()
         return True
     # Check if its a playlist
-    logger.debug(args.no_related)
     playlist = Playlist(song, args.pl_start, args.pl_end, args.shuffle)
     if playlist.is_playlist():
         data = playlist.get_data()
@@ -216,7 +219,7 @@ def main():
     if args.rsearch:
         cache = Cache("~/.playx/songs")
         song = [s[-2] for s in cache.search_terms(args.rsearch)]
-        logger.info(f"[{len(song)}] song found")
+        logger.log("FLOG", f"[{len(song)}] song found")
         if not len(song):
             return
 
