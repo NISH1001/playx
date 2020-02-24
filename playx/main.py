@@ -5,28 +5,20 @@
 """
 
 import argparse
-import random
-
-from playx.cache import Cache, search_locally, clean_url_cache
-
-from playx.utility import direct_to_play, run_mpv_dir, move_songs
-
-from playx.youtube import grab_link
-
-from playx.playlist.playlist import Playlist
-
-from playx.playlist.playxlist import Playxlist
-
-from playx.player import Player
 
 from playx.logger import Logger
-from playx.songfinder import search
-
-from playx.playlist.autoplaylist import CountBasedAutoPlaylist, MarkovBasedAutoPlaylist
-
-
 # Get the logger
-logger = Logger("main")
+logger = Logger("main", level="INFO")
+
+
+from playx.cache import Cache, clean_url_cache
+from playx.utility import run_mpv_dir
+from playx.youtube import grab_link
+from playx.playlist.playlist import Playlist
+from playx.playlist.playxlist import Playxlist
+from playx.player import Player
+from playx.songfinder import search
+from playx.playlist.autoplaylist import MarkovBasedAutoPlaylist
 
 
 def parse():

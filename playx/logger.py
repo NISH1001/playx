@@ -4,7 +4,7 @@ import datetime
 import os
 
 
-class Logger:
+class LoggerBase:
     """
         Custom logger that meets the requirements of using multiple logging setup.
     """
@@ -14,7 +14,7 @@ class Logger:
             name='',
             level='INFO',
             disable_file=False
-        ):
+    ):
         self.name = name
         self._file_format = ''
         self._console_format = ''
@@ -123,3 +123,19 @@ class Logger:
         LEVEL_NUMBER = 4
         self._write(message, LEVEL_NUMBER)
         exit()
+
+
+class Logger:
+    instance = None
+
+    def __init__(
+            self,
+            name='',
+            level='INFO',
+            disable_file=False
+    ):
+        if not Logger.instance:
+            Logger.instance = LoggerBase(name, level, disable_file)
+
+    def __getattr__(self, name):
+        return getattr(self.instance, name)
