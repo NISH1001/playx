@@ -8,7 +8,7 @@ import argparse
 
 from playx.logger import Logger
 # Get the logger
-logger = Logger("main", level="INFO")
+logger = Logger("main", level="DEBUG")
 
 
 from playx.cache import Cache, clean_url_cache

@@ -2,16 +2,19 @@
 from pathlib import Path
 import datetime
 import os
+import inspect
 
 
-class LoggerBase:
+class Logger:
     """
         Custom logger that meets the requirements of using multiple logging setup.
     """
+    is_init = False
+    passed_level = None
 
     def __init__(
             self,
-            name='',
+            name,
             level='INFO',
             disable_file=False
     ):
@@ -27,8 +30,19 @@ class LoggerBase:
                                 'ERROR': 3,
                                 'CRITICAL': 4
                              }
-        self.level = self._level_number[level]
+        self.level = self._level_number[self._get_level(level)]
         self._disable_file = disable_file
+
+    def _get_level(self, level):
+        """
+        Check if the logger is already initiated.
+        """
+        if not Logger.is_init:
+            Logger.is_init = True
+            Logger._level_number = level
+            return level
+        else:
+            return Logger._level_number
 
     def _check_logfile(self):
         """
@@ -125,8 +139,14 @@ class LoggerBase:
         exit()
 
 
-class Logger:
+class LoggerB:
     instance = None
+    is_init = False
+    args = {
+        "level": None,
+        "disable_file": None,
+        "name": None
+    }
 
     def __init__(
             self,
@@ -134,8 +154,15 @@ class Logger:
             level='INFO',
             disable_file=False
     ):
-        if not Logger.instance:
-            Logger.instance = LoggerBase(name, level, disable_file)
+        if not Logger.is_init:
+            Logger.is_init = True
+            Logger.args["level"] = level
+            Logger.args["disable_file"] = disable_file
+            Logger.args["name"] = name
+
+        Logger.instance = LoggerBase(name, Logger.args["level"], Logger.args["disable_file"])
+        # if not Logger.instance:
+        #    Logger.instance = LoggerBase(inspect.stack()[1], level, disable_file)
 
     def __getattr__(self, name):
         return getattr(self.instance, name)
