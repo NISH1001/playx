@@ -90,13 +90,11 @@ Play any songs that come in your mind.
 For now, the application is in development phase.  
 
 ```console
-usage: playx [-h] [-rsearch [RSEARCH [RSEARCH ...]]] [-p] [-n] [-a] [-d] [-r]
-             [-k] [-c] [--sync-pl PLAYLIST] [-l] [--shuffle]
-             [--repeat [NUMBER]] [--pl-start START] [--pl-end END]
+usage: playx [-h] [-rsearch [RSEARCH [RSEARCH ...]]] [-p] [-n] [-a] [-d] [-r] [-k] [-c] [--sync-pl PLAYLIST] [-l] [--shuffle] [--repeat [NUMBER]] [--pl-start START] [--pl-end END]
+             [--level LEVEL] [--disable-file] [--list-level]
              [song [song ...]]
 
-playx - Search and play any song that comes to your mind. If you have any
-issues, raise an issue in the github (https://github.com/NISH1001/playx) page
+playx - Search and play any song that comes to your mind. If you have any issues, raise an issue in the github (https://github.com/NISH1001/playx) page
 
 positional arguments:
   song                  Name or youtube link of song to download
@@ -105,27 +103,24 @@ optional arguments:
   -h, --help            show this help message and exit
   -rsearch [RSEARCH [RSEARCH ...]], --rsearch [RSEARCH [RSEARCH ...]]
                         Play based on terms provided
-  -p, --play-cache      Play all songs from the cache. The cache is located at
-                        [~/.playx/songs/] by default
+  -p, --play-cache      Play all songs from the cache. The cache is located at [~/.playx/songs/] by default
   -n, --no-cache        Don't download the song for later use.
   -a, --auto            Auto generate playlist
   -d, --skip-cached     Don't search the song in the cache.
   -r, --no-related      Disable playing related songs extracted from YouTube
-  -k, --disable-kw      Disable addition of keywords while searching the song
-                        on YouTube.
+  -k, --disable-kw      Disable addition of keywords while searching the song on YouTube.
   -c, --clean           Clean(fix) broken references
-  --sync-pl PLAYLIST    Sync the playlists. Pass the name as arguement. If all
-                        the playlists are to be synced, just pass [All].
+  --sync-pl PLAYLIST    Sync the playlists. Pass the name as arguement. If all the playlists are to be synced, just pass [All].
   -l, --lyrics          Show lyircs of the song.
-  --shuffle             Shuffle the playlist in case it is one, else the
-                        option will have no effect.
-  --repeat [NUMBER]     Put the passed entity on repeat , be it a playlist or
-                        a song. If an arg is not passed, infinite loop is
-                        considered. (default = Infinite)
-  --pl-start START      Start position in case a playlist is passed. If passed
-                        without a playlist it has no effect.
-  --pl-end END          End position in case a playlist is passed. If passed
-                        without a playlist it has no effect.
+  --shuffle             Shuffle the playlist in case it is one, else the option will have no effect.
+  --repeat [NUMBER]     Put the passed entity on repeat , be it a playlist or a song. If an arg is not passed, infinite loop is considered. (default = Infinite)
+  --pl-start START      Start position in case a playlist is passed. If passed without a playlist it has no effect.
+  --pl-end END          End position in case a playlist is passed. If passed without a playlist it has no effect.
+
+Logger:
+  --level LEVEL         The level of the logger that will be used while verbosing. Use `--list-level` to check available options.
+  --disable-file        Disable logging to files
+  --list-level          List all the available logger levels.
 ```
 
 ------------
