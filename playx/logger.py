@@ -87,8 +87,20 @@ class Logger:
         Update all the instances of the class with the passed
         level.
         """
+        # First check if the passed level is present in the supported ones
+        if level not in self._level_number:
+            print("Can't update logger level to invalid value")
+            return
+
         for instance in Logger._instances:
             instance.level = self._level_number[level]
+
+    def update_disable_file(self, disable_file):
+        """
+        Update the disable file variable.
+        """
+        for instance in Logger._instances:
+            instance.disable_file = disable_file
 
     def hold(self):
         """
@@ -134,32 +146,3 @@ class Logger:
         LEVEL_NUMBER = 4
         self._write(message, LEVEL_NUMBER)
         exit()
-
-
-class LoggerB:
-    instance = None
-    is_init = False
-    args = {
-        "level": None,
-        "disable_file": None,
-        "name": None
-    }
-
-    def __init__(
-            self,
-            name='',
-            level='INFO',
-            disable_file=False
-    ):
-        if not Logger.is_init:
-            Logger.is_init = True
-            Logger.args["level"] = level
-            Logger.args["disable_file"] = disable_file
-            Logger.args["name"] = name
-
-        Logger.instance = LoggerBase(name, Logger.args["level"], Logger.args["disable_file"])
-        # if not Logger.instance:
-        #    Logger.instance = LoggerBase(inspect.stack()[1], level, disable_file)
-
-    def __getattr__(self, name):
-        return getattr(self.instance, name)

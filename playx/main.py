@@ -138,20 +138,13 @@ def parse():
         "--level",
         help="The level of the logger that will be used while verbosing.",
         default="INFO",
-        type=str,
+        type=str
     )
     logger_group.add_argument(
         "--disable-file",
         help="Disable logging to files",
         default=False,
-        type=bool,
-        metavar="bool".upper()
-    )
-    logger_group.add_argument(
-        "--verbose",
-        help="Verbose the output according to the passed level number.",
-        default=None,
-        type=int
+        action="store_true",
     )
     args = parser.parse_args()
     return parser, args
@@ -225,7 +218,18 @@ def main():
     # Before doing anything, make sure all songs are in the new song dir
     # move_songs()
     parser, args = parse()
-    logger.update_level("DEBUG")
+
+    # Update the logger flags, in case those are not the default ones.
+    if args.level.lower != "info":
+        logger.update_level(args.level.upper())
+
+    if args.disable_file:
+        logger.update_disable_file(True)
+        logger.debug("Writing logs to file disabled")
+
+    # Just a message to make the user aware of the current running state
+    logger.debug("Logger running in DEBUG mode")
+
     if args.rsearch:
         cache = Cache("~/.playx/songs")
         song = [s[-2] for s in cache.search_terms(args.rsearch)]
