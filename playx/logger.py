@@ -102,6 +102,14 @@ class Logger:
         for instance in Logger._instances:
             instance.disable_file = disable_file
 
+    def list_available_levels(self):
+        """
+        List all the available logger levels.
+        """
+        print("Available logger levels are: ")
+        for key in self._level_number:
+            print("{} : {}".format(self._level_number[key], key.upper()))
+
     def hold(self):
         """
         Hold the screen by using input()

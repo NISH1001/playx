@@ -136,7 +136,8 @@ def parse():
     logger_group = parser.add_argument_group("Logger")
     logger_group.add_argument(
         "--level",
-        help="The level of the logger that will be used while verbosing.",
+        help="The level of the logger that will be used while verbosing.\
+            Use `--list-level` to check available options." + "\n",
         default="INFO",
         type=str
     )
@@ -145,6 +146,11 @@ def parse():
         help="Disable logging to files",
         default=False,
         action="store_true",
+    )
+    logger_group.add_argument(
+        "--list-level",
+        help="List all the available logger levels.",
+        action="store_true"
     )
     args = parser.parse_args()
     return parser, args
@@ -218,6 +224,10 @@ def main():
     # Before doing anything, make sure all songs are in the new song dir
     # move_songs()
     parser, args = parse()
+
+    if args.list_level:
+        logger.list_available_levels()
+        exit(0)
 
     # Update the logger flags, in case those are not the default ones.
     if args.level.lower != "info":
