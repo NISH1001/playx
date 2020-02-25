@@ -9,8 +9,7 @@ class Logger:
     """
         Custom logger that meets the requirements of using multiple logging setup.
     """
-    is_init = False
-    passed_level = None
+    _instances = []
 
     def __init__(
             self,
@@ -30,19 +29,9 @@ class Logger:
                                 'ERROR': 3,
                                 'CRITICAL': 4
                              }
-        self.level = self._level_number[self._get_level(level)]
+        self.level = self._level_number[level]
         self._disable_file = disable_file
-
-    def _get_level(self, level):
-        """
-        Check if the logger is already initiated.
-        """
-        if not Logger.is_init:
-            Logger.is_init = True
-            Logger._level_number = level
-            return level
-        else:
-            return Logger._level_number
+        self._instances.append(self)
 
     def _check_logfile(self):
         """
@@ -92,6 +81,14 @@ class Logger:
                               )
         self._console_format = '[{}]: {}'.format(self.name, message)
         self._file_format = '[{}]-[{}]: {}\n'.format(self.name, DATETIME_FORMAT, message)
+
+    def update_level(self, level):
+        """
+        Update all the instances of the class with the passed
+        level.
+        """
+        for instance in Logger._instances:
+            instance.level = self._level_number[level]
 
     def hold(self):
         """

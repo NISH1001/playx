@@ -7,9 +7,6 @@
 import argparse
 
 from playx.logger import Logger
-# Get the logger
-logger = Logger("main", level="DEBUG")
-
 
 from playx.cache import Cache, clean_url_cache
 from playx.utility import run_mpv_dir
@@ -19,6 +16,9 @@ from playx.playlist.playxlist import Playxlist
 from playx.player import Player
 from playx.songfinder import search
 from playx.playlist.autoplaylist import MarkovBasedAutoPlaylist
+
+# Get the logger
+logger = Logger("main")
 
 
 def parse():
@@ -133,6 +133,26 @@ def parse():
         type=int,
         metavar="END",
     )
+    logger_group = parser.add_argument_group("Logger")
+    logger_group.add_argument(
+        "--level",
+        help="The level of the logger that will be used while verbosing.",
+        default="INFO",
+        type=str,
+    )
+    logger_group.add_argument(
+        "--disable-file",
+        help="Disable logging to files",
+        default=False,
+        type=bool,
+        metavar="bool".upper()
+    )
+    logger_group.add_argument(
+        "--verbose",
+        help="Verbose the output according to the passed level number.",
+        default=None,
+        type=int
+    )
     args = parser.parse_args()
     return parser, args
 
@@ -205,6 +225,7 @@ def main():
     # Before doing anything, make sure all songs are in the new song dir
     # move_songs()
     parser, args = parse()
+    logger.update_level("DEBUG")
     if args.rsearch:
         cache = Cache("~/.playx/songs")
         song = [s[-2] for s in cache.search_terms(args.rsearch)]
