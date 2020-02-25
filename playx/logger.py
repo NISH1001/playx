@@ -2,7 +2,6 @@
 from pathlib import Path
 import datetime
 import os
-import inspect
 
 
 class Logger:
@@ -80,7 +79,11 @@ class Logger:
                                 t.second
                               )
         self._console_format = '[{}]: {}'.format(self.name, message)
-        self._file_format = '[{}]-[{}]: {}\n'.format(self.name, DATETIME_FORMAT, message)
+        self._file_format = '[{}]-[{}]: {}\n'.format(
+                                self.name,
+                                DATETIME_FORMAT,
+                                message
+                            )
 
     def update_level(self, level):
         """
