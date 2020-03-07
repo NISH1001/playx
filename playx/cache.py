@@ -271,8 +271,6 @@ def clean_url_cache():
     return True
 
 
-
-
 if __name__ == "__main__":
     name = ' '.join(sys.argv[1:])
     cache = Cache()

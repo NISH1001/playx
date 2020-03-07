@@ -8,13 +8,14 @@ class Logger:
     """
         Custom logger that meets the requirements of using multiple logging setup.
     """
+    _instances = []
 
     def __init__(
             self,
-            name='',
+            name,
             level='INFO',
             disable_file=False
-        ):
+    ):
         self.name = name
         self._file_format = ''
         self._console_format = ''
@@ -29,6 +30,7 @@ class Logger:
                              }
         self.level = self._level_number[level]
         self._disable_file = disable_file
+        self._instances.append(self)
 
     def _check_logfile(self):
         """
@@ -77,7 +79,39 @@ class Logger:
                                 t.second
                               )
         self._console_format = '[{}]: {}'.format(self.name, message)
-        self._file_format = '[{}]-[{}]: {}\n'.format(self.name, DATETIME_FORMAT, message)
+        self._file_format = '[{}]-[{}]: {}\n'.format(
+                                self.name,
+                                DATETIME_FORMAT,
+                                message
+                            )
+
+    def update_level(self, level):
+        """
+        Update all the instances of the class with the passed
+        level.
+        """
+        # First check if the passed level is present in the supported ones
+        if level not in self._level_number:
+            print("Can't update logger level to invalid value")
+            return
+
+        for instance in Logger._instances:
+            instance.level = self._level_number[level]
+
+    def update_disable_file(self, disable_file):
+        """
+        Update the disable file variable.
+        """
+        for instance in Logger._instances:
+            instance.disable_file = disable_file
+
+    def list_available_levels(self):
+        """
+        List all the available logger levels.
+        """
+        print("Available logger levels are: ")
+        for key in self._level_number:
+            print("{} : {}".format(self._level_number[key], key.upper()))
 
     def hold(self):
         """

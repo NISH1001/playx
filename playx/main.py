@@ -5,25 +5,17 @@
 """
 
 import argparse
-import random
-
-from playx.cache import Cache, search_locally, clean_url_cache
-
-from playx.utility import direct_to_play, run_mpv_dir, move_songs
-
-from playx.youtube import grab_link
-
-from playx.playlist.playlist import Playlist
-
-from playx.playlist.playxlist import Playxlist
-
-from playx.player import Player
 
 from playx.logger import Logger
+
+from playx.cache import Cache, clean_url_cache
+from playx.utility import run_mpv_dir
+from playx.youtube import grab_link
+from playx.playlist.playlist import Playlist
+from playx.playlist.playxlist import Playxlist
+from playx.player import Player
 from playx.songfinder import search
-
-from playx.playlist.autoplaylist import CountBasedAutoPlaylist, MarkovBasedAutoPlaylist
-
+from playx.playlist.autoplaylist import MarkovBasedAutoPlaylist
 
 # Get the logger
 logger = Logger("main")
@@ -141,6 +133,25 @@ def parse():
         type=int,
         metavar="END",
     )
+    logger_group = parser.add_argument_group("Logger")
+    logger_group.add_argument(
+        "--level",
+        help="The level of the logger that will be used while verbosing.\
+            Use `--list-level` to check available options." + "\n",
+        default="INFO",
+        type=str
+    )
+    logger_group.add_argument(
+        "--disable-file",
+        help="Disable logging to files",
+        default=False,
+        action="store_true",
+    )
+    logger_group.add_argument(
+        "--list-level",
+        help="List all the available logger levels.",
+        action="store_true"
+    )
     args = parser.parse_args()
     return parser, args
 
@@ -213,6 +224,22 @@ def main():
     # Before doing anything, make sure all songs are in the new song dir
     # move_songs()
     parser, args = parse()
+
+    if args.list_level:
+        logger.list_available_levels()
+        exit(0)
+
+    # Update the logger flags, in case those are not the default ones.
+    if args.level.lower != "info":
+        logger.update_level(args.level.upper())
+
+    if args.disable_file:
+        logger.update_disable_file(True)
+        logger.debug("Writing logs to file disabled")
+
+    # Just a message to make the user aware of the current running state
+    logger.debug("Logger running in DEBUG mode")
+
     if args.rsearch:
         cache = Cache("~/.playx/songs")
         song = [s[-2] for s in cache.search_terms(args.rsearch)]
