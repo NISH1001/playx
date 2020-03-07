@@ -16,6 +16,7 @@ from playx.playlist.playxlist import Playxlist
 from playx.player import Player
 from playx.songfinder import search
 from playx.playlist.autoplaylist import MarkovBasedAutoPlaylist
+from playx.playlist.playlistcache import list_all
 
 # Get the logger
 logger = Logger("main")
@@ -133,6 +134,12 @@ def parse():
         type=int,
         metavar="END",
     )
+    parser.add_argument(
+        "--list-cached-pl",
+        help="List all the cached playlists.",
+        default=False,
+        action="store_true"
+    )
     logger_group = parser.add_argument_group("Logger")
     logger_group.add_argument(
         "--level",
@@ -239,6 +246,18 @@ def main():
 
     # Just a message to make the user aware of the current running state
     logger.debug("Logger running in DEBUG mode")
+
+    if args.list_cached_pl:
+        counter = 0
+        playlists = list_all()
+        logger.info("Printing all the cached playlists.")
+        logger.info("Printing format: [Name] | [URL] | [Type]")
+        print()
+        for playlist in playlists:
+            print("{}".format(counter + 1), end=": ")
+            print("{} | {} | {}".format(*playlist))  # * used to unpack the tuple
+            counter += 1
+        exit(0)
 
     if args.rsearch:
         cache = Cache("~/.playx/songs")
