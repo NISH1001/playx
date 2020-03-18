@@ -6,7 +6,6 @@ import subprocess
 from shutil import move
 from playx.lyrics import search_lyricswikia
 from playx.logger import Logger
-import threading
 
 # Setup logger
 logger = Logger('utility')

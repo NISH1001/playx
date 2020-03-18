@@ -211,14 +211,14 @@ class CachedIE(PlaylistBase):
         READSTREAM = open(self.URL, "r")
         FILECONTENTS = READSTREAM.read().split("\n")
 
-        self.playlist_name = FILECONTENTS[0][FILECONTENTS[0].index(":") + 2 : -1]
-        self.actual_URL = FILECONTENTS[1][FILECONTENTS[1].index(":") + 2 : -1]
-        self.type = FILECONTENTS[2][FILECONTENTS[2].index(":") + 2 : -1]
+        self.playlist_name = FILECONTENTS[0][FILECONTENTS[0].index(":") + 2: -1]
+        self.actual_URL = FILECONTENTS[1][FILECONTENTS[1].index(":") + 2: -1]
+        self.type = FILECONTENTS[2][FILECONTENTS[2].index(":") + 2: -1]
 
         for line in FILECONTENTS[3:-1]:
             logger.debug(line)
             logger.hold()
-            song_details = line[line.index(":") + 2 : -1].split(",")
+            song_details = line[line.index(":") + 2: -1].split(",")
             logger.debug(str(song_details))
             logger.debug(
                 "{}:{}:{}".format(song_details[0], song_details[1], song_details[2])
