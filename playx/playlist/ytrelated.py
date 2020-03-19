@@ -28,7 +28,7 @@ class YoutubeMetadata(SongMetadataBase):
         """
         Create a search querry.
         """
-        self.search_querry = self.title
+        self.search_query = self.title
 
 
 class YoutubeRelatedIE(PlaylistBase):

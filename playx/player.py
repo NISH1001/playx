@@ -190,6 +190,8 @@ class NamePlayer():
         Search youtube and get its data.
         """
         data = search(self.name, self.disable_kw)
+        logger.debug("{}".format(data))
+        logger.hold()
         self.title = data.title
         self.URL = data.url
         self.stream_url = grab_link(data.url)

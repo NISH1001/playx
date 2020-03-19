@@ -108,6 +108,8 @@ def add_better_search_kw(query):
     """
     Add some keywords to the search querry to get better results.
     """
+    logger.debug("{}".format(query))
+    logger.hold()
     if not is_song_url(query):
         for kw in better_search_kw:
             query += kw
