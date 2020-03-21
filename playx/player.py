@@ -177,7 +177,7 @@ class NamePlayer():
                 disable_kw=False
                 ):
         self.name = name
-        self.URL = ''
+        self.URL = None
         self.dont_cache_search = dont_cache_search
         self.no_cache = no_cache
         self.show_lyrics = show_lyrics
@@ -190,11 +190,17 @@ class NamePlayer():
         Search youtube and get its data.
         """
         data = search(self.name, self.disable_kw)
-        logger.debug("{}".format(data))
-        logger.hold()
+
+        # Handle if the data returned is None
+        # That probably means the song wasn't found on YT
+        # and we need to skip playing that song.
+        if data is None:
+            return False
+
         self.title = data.title
         self.URL = data.url
         self.stream_url = grab_link(data.url)
+        return True
 
     def _stream_from_name(self):
         """Start streaming the song.
@@ -209,7 +215,9 @@ class NamePlayer():
                 self.title = match[0]
                 self.stream_url = match[1]
             else:
-                self._get_youtube_data_name()
+                if not self._get_youtube_data_name():
+                    return
+
                 local_path = search_URL(self.URL)
 
                 # Try to check if the URL is mapped locally.
