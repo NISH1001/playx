@@ -10,19 +10,23 @@ import urllib.request
 from json.decoder import JSONDecodeError
 
 from playx.stringutils import (
-    remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
-    check_keywords, fix_title
+    remove_multiple_spaces,
+    remove_punct,
+    compute_jaccard,
+    remove_stopwords,
+    check_keywords,
+    fix_title,
 )
 from playx.logger import Logger
 
 # Setup logger
-logger = Logger('cache')
+logger = Logger("cache")
 
 
 class Cache:
     """Class to cache the song to a dir for quick acces."""
 
-    def __init__(self, directory='~/.playx/songs'):
+    def __init__(self, directory="~/.playx/songs"):
         """
             Init the stuff.
             directory: the directory where songs lie
@@ -34,7 +38,7 @@ class Cache:
         """
         self.dir = os.path.expanduser(directory)
         self.create_cache_dir()
-        self.partial_log_file = os.path.expanduser('~/.playx/logs/partial_log')
+        self.partial_log_file = os.path.expanduser("~/.playx/logs/partial_log")
 
     def create_cache_dir(self):
         """If cache dir is not already present make it."""
@@ -76,7 +80,9 @@ class Cache:
             return ret
 
     def search_terms(self, *terms):
-        logger.debug("Searching terms [{}] in the cache at [{}]".format(terms, self.dir))
+        logger.debug(
+            "Searching terms [{}] in the cache at [{}]".format(terms, self.dir)
+        )
         if type(terms) in [list, tuple, set]:
             song_name = " ".join(*terms)
         if type(terms) is str:
@@ -117,7 +123,7 @@ class Cache:
         if not os.path.exists(self.partial_log_file):
             return False
 
-        data = open(self.partial_log_file, 'r').read()
+        data = open(self.partial_log_file, "r").read()
         if song_name in data:
             return True
 
@@ -125,19 +131,19 @@ class Cache:
         """Log the name of the song that is being downloaded."""
         # Write the song_name and the size to the log_file
         if not os.path.exists(self.partial_log_file):
-            open(self.partial_log_file, 'w').close()
+            open(self.partial_log_file, "w").close()
 
-        with open(self.partial_log_file, 'a') as WSTREAM:
-            WSTREAM.write(song_name + '\n')
+        with open(self.partial_log_file, "a") as WSTREAM:
+            WSTREAM.write(song_name + "\n")
 
     def unlog_partial_dw(self, song_name):
         """Remove the song_name from the file."""
         if not os.path.exists(self.partial_log_file):
             return
 
-        data = open(self.partial_log_file, 'r').read()
-        data = data.replace(song_name + '\n', '')
-        open(self.partial_log_file, 'w').write(data)
+        data = open(self.partial_log_file, "r").read()
+        data = data.replace(song_name + "\n", "")
+        open(self.partial_log_file, "w").write(data)
 
     @staticmethod
     def dw(link, name, URL=None):
@@ -168,7 +174,7 @@ class Cache:
             u = urllib.request.urlopen(req)
             block_sz = 8192
 
-            f = open(path, 'wb')
+            f = open(path, "wb")
 
             # Log the file in the partial_log_file.
             self.log_partial_dw(path)
@@ -203,17 +209,17 @@ def search_URL(URL):
     """
     Check if the URL is cached.
     """
-    file_path = os.path.expanduser('~/.playx/logs/urls.json')
+    file_path = os.path.expanduser("~/.playx/logs/urls.json")
     logger.debug(URL)
 
     # check if file exists
     if not os.path.exists(file_path):
-        temp = open(file_path, 'w')
+        temp = open(file_path, "w")
         temp.close()
         data = {}
 
     try:
-        with open(file_path, 'r') as RSTREAM:
+        with open(file_path, "r") as RSTREAM:
             data = json.load(RSTREAM)
             logger.debug("Searching {} in the cached file".format(URL))
     except JSONDecodeError:
@@ -225,37 +231,39 @@ def update_URL_cache(title, URL):
     """
     Update the URL cache saved in the mapURL.json file.
     """
-    log_dir = os.path.expanduser('~/.playx/logs')
-    songs_dir = os.path.expanduser('~/.playx/songs')
-    file_path = os.path.join(log_dir, 'urls.json')
+    log_dir = os.path.expanduser("~/.playx/logs")
+    songs_dir = os.path.expanduser("~/.playx/songs")
+    file_path = os.path.join(log_dir, "urls.json")
     song_path = os.path.join(songs_dir, fix_title(title))
 
     if not os.path.exists(file_path):
-        temp = open(file_path, 'w')
+        temp = open(file_path, "w")
         temp.close()
         data = {}
     else:
-        with open(file_path, 'r') as RSTREAM:
+        with open(file_path, "r") as RSTREAM:
             try:
                 data = json.load(RSTREAM)
-            except JSONDecodeError: data = {}
+            except JSONDecodeError:
+                data = {}
 
     data.update({URL: song_path})
 
-    with open(file_path, 'w') as WSTREAM:
+    with open(file_path, "w") as WSTREAM:
         json.dump(data, WSTREAM)
+
 
 def clean_url_cache():
     """
         Remove URLs for which file paths do not exist.
         (Most probably the file has been manually deleted by the user)
     """
-    log_dir = os.path.expanduser('~/.playx/logs')
-    file_path = os.path.join(log_dir, 'urls.json')
+    log_dir = os.path.expanduser("~/.playx/logs")
+    file_path = os.path.join(log_dir, "urls.json")
     logger.debug(f"Cleaning URL Cache at {file_path}")
     if not os.path.exists(file_path):
         return False
-    with open(file_path, 'r') as f:
+    with open(file_path, "r") as f:
         try:
             data = json.load(f)
         except JSONDecodeError:
@@ -266,13 +274,13 @@ def clean_url_cache():
             logger.info(f"File [{fname}] does not exist.")
             continue
         processed[url] = fname
-    with open(file_path, 'w') as f:
+    with open(file_path, "w") as f:
         json.dump(processed, f)
     return True
 
 
 if __name__ == "__main__":
-    name = ' '.join(sys.argv[1:])
+    name = " ".join(sys.argv[1:])
     cache = Cache()
     res = search_locally(name)
     print(res)
