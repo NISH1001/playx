@@ -47,26 +47,7 @@ def parse():
         nargs="*",
     )
     parser.add_argument(
-        "-p",
-        "--play-cache",
-        action="store_true",
-        help="Play all songs from the cache.\
-                        The cache is located at [~/.playx/songs/] by default",
-    )
-    parser.add_argument(
-        "-n",
-        "--no-cache",
-        action="store_true",
-        help="Don't download the song for later use.",
-    )
-    parser.add_argument(
-        "-a", "--auto", action="store_true", help="Auto generate playlist"
-    )
-    parser.add_argument(
-        "-d",
-        "--skip-cached",
-        action="store_true",
-        help="Don't search the song in the cache.",
+        "-l", "--lyrics", action="store_true", help="Show lyircs of the song."
     )
     parser.add_argument(
         "-r",
@@ -83,27 +64,6 @@ def parse():
                             searching the song on YouTube.",
     )
     parser.add_argument(
-        "-c", "--clean", action="store_true", help="Clean(fix) broken references"
-    )
-    parser.add_argument(
-        "--sync-pl",
-        default=None,
-        type=str,
-        help="Sync the playlists. Pass the name as\
-                        arguement. If all the playlists are to be \
-                        synced, just pass [All].",
-        metavar="PLAYLIST",
-    )
-    parser.add_argument(
-        "-l", "--lyrics", action="store_true", help="Show lyircs of the song."
-    )
-    parser.add_argument(
-        "--shuffle",
-        help="Shuffle the playlist in case\
-                        it is one, else the option will have no effect.",
-        action="store_true",
-    )
-    parser.add_argument(
         "--repeat",
         help="Put the passed entity on repeat\
                         , be it a playlist or a song. If an arg is not\
@@ -115,7 +75,49 @@ def parse():
         metavar="NUMBER",
         default=1,
     )
-    parser.add_argument(
+    cache_group = parser.add_argument_group("Cache")
+    cache_group.add_argument(
+        "-p",
+        "--play-cache",
+        action="store_true",
+        help="Play all songs from the cache.\
+                        The cache is located at [~/.playx/songs/] by default",
+    )
+    cache_group.add_argument(
+        "-n",
+        "--no-cache",
+        action="store_true",
+        help="Don't download the song for later use.",
+    )
+    cache_group.add_argument(
+        "-d",
+        "--skip-cached",
+        action="store_true",
+        help="Don't search the song in the cache.",
+    )
+    cache_group.add_argument(
+        "-c", "--clean", action="store_true", help="Clean(fix) broken references"
+    )
+    playlist_group = parser.add_argument_group("Playlist")
+    playlist_group.add_argument(
+        "-a", "--auto", action="store_true", help="Auto generate playlist"
+    )
+    playlist_group.add_argument(
+        "--sync-pl",
+        default=None,
+        type=str,
+        help="Sync the playlists. Pass the name as\
+                        arguement. If all the playlists are to be \
+                        synced, just pass [All].",
+        metavar="PLAYLIST",
+    )
+    playlist_group.add_argument(
+        "--shuffle",
+        help="Shuffle the playlist in case\
+                        it is one, else the option will have no effect.",
+        action="store_true",
+    )
+    playlist_group.add_argument(
         "--pl-start",
         help="Start position in case a\
                          playlist is passed. If passed without a playlist\
@@ -124,7 +126,7 @@ def parse():
         type=int,
         metavar="START",
     )
-    parser.add_argument(
+    playlist_group.add_argument(
         "--pl-end",
         help="End position in case a \
                         playlist is passed. If passed without a playlist\
@@ -134,7 +136,7 @@ def parse():
         type=int,
         metavar="END",
     )
-    parser.add_argument(
+    playlist_group.add_argument(
         "--list-cached-pl",
         help="List all the cached playlists.",
         default=False,
@@ -265,7 +267,6 @@ def main():
         logger.info(f"[{len(song)}] song found")
         if not len(song):
             return
-
     elif args.song:
         song = " ".join(args.song)
 
