@@ -3,8 +3,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import re
 from pathlib import Path
 import json
 
@@ -27,7 +25,7 @@ class YoutubeMetadata(SongMetadataBase):
         """
         Update the search query using the passed URL.
         """
-        self.query = self.url
+        self.search_query = self.url
 
 
 class YoutubeRelatedIE(PlaylistBase):
@@ -70,7 +68,7 @@ class YoutubeRelatedIE(PlaylistBase):
         # Extract the songs into the MetaData class' objects
         for song in songs["entries"]:
             self.list_content_tuple.append(YoutubeMetadata(
-                self.youtube_base.format(song["url"])
+                song["url"]
             ))
         self.playlist_name = songs["title"]
 

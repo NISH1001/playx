@@ -402,6 +402,4 @@ class Player(URLPlayer, NamePlayer):
                 logger.info("Exitting peacefully")
 
         if URL is not None:
-            logger.debug("{} Passed URL".format(URL))
-            logger.hold()
             self._play_related(URL)
