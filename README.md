@@ -73,6 +73,7 @@ Play any songs that come in your mind.
 
 - play by query
 - play by youtube url
+- play by youtube music URL
 - play a youtube playlist
 - play a billboard chart
 - play a spotify playlist
