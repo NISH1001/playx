@@ -1,4 +1,3 @@
-
 from pathlib import Path
 import datetime
 import os
@@ -8,26 +7,22 @@ class Logger:
     """
         Custom logger that meets the requirements of using multiple logging setup.
     """
+
     _instances = []
 
-    def __init__(
-            self,
-            name,
-            level='INFO',
-            disable_file=False
-    ):
+    def __init__(self, name, level="INFO", disable_file=False):
         self.name = name
-        self._file_format = ''
-        self._console_format = ''
-        self._log_file = Path('~/.playx/logs/log.cat').expanduser()
+        self._file_format = ""
+        self._console_format = ""
+        self._log_file = Path("~/.playx/logs/log.cat").expanduser()
         self._check_logfile()
         self._level_number = {
-                                'DEBUG': 0,
-                                'INFO': 1,
-                                'WARNING': 2,
-                                'ERROR': 3,
-                                'CRITICAL': 4
-                             }
+            "DEBUG": 0,
+            "INFO": 1,
+            "WARNING": 2,
+            "ERROR": 3,
+            "CRITICAL": 4,
+        }
         self.level = self._level_number[level]
         self._disable_file = disable_file
         self._instances.append(self)
@@ -40,7 +35,7 @@ class Logger:
         if not self._log_file.exists():
             if not self._log_file.parent.exists():
                 os.makedirs(self._log_file.parent)
-            f = open(self._log_file, 'w')
+            f = open(self._log_file, "w")
             f.close()
 
     def _write_file(self):
@@ -48,9 +43,9 @@ class Logger:
         if self._disable_file:
             return
 
-        with open(self._log_file, 'a') as f:
+        with open(self._log_file, "a") as f:
             # The file log is to be written to the _log_file file
-            f = open(self._log_file, 'a')
+            f = open(self._log_file, "a")
             f.write(self._file_format)
 
     def _write(self, message, LEVEL_NUMBER):
@@ -70,20 +65,13 @@ class Logger:
         Make the format of the string that is to be written.
         """
         t = datetime.datetime.now()
-        DATETIME_FORMAT = '{}-{}-{} {}:{}:{}'.format(
-                                t.year,
-                                t.month,
-                                t.day,
-                                t.hour,
-                                t.minute,
-                                t.second
-                              )
-        self._console_format = '[{}]: {}'.format(self.name, message)
-        self._file_format = '[{}]-[{}]: {}\n'.format(
-                                self.name,
-                                DATETIME_FORMAT,
-                                message
-                            )
+        DATETIME_FORMAT = "{}-{}-{} {}:{}:{}".format(
+            t.year, t.month, t.day, t.hour, t.minute, t.second
+        )
+        self._console_format = "[{}]: {}".format(self.name, message)
+        self._file_format = "[{}]-[{}]: {}\n".format(
+            self.name, DATETIME_FORMAT, message
+        )
 
     def update_level(self, level):
         """

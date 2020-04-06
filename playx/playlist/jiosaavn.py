@@ -1,25 +1,20 @@
 """Functions related to jiosaavn."""
 
-from playx.playlist.playlistbase import (
-    PlaylistBase, SongMetadataBase
-)
+from playx.playlist.playlistbase import PlaylistBase, SongMetadataBase
 
 from bs4 import BeautifulSoup
 import requests
 from json import JSONDecoder
 import re
 
-from playx.logger import (
-    Logger
-)
+from playx.logger import Logger
 
 # Setup logger
-logger = Logger('JioSaavn')
+logger = Logger("JioSaavn")
 
 
 class SongMetadata(SongMetadataBase):
-
-    def __init__(self, title='', subtitle=''):
+    def __init__(self, title="", subtitle=""):
         super().__init__()
         self.title = title
         self.subtitle = subtitle
@@ -30,7 +25,7 @@ class SongMetadata(SongMetadataBase):
         """
         Create a search querry.
         """
-        self.search_querry = self.title + ' ' + self.subtitle
+        self.search_querry = self.title + " " + self.subtitle
 
 
 class JioSaavnIE(PlaylistBase):
@@ -46,31 +41,31 @@ class JioSaavnIE(PlaylistBase):
         super().__init__(pl_start, pl_end)
         self.URL = URL
         self._headers = {
-                    'User-Agent': 'Mozilla/5.0 \
+            "User-Agent": "Mozilla/5.0 \
                                    (X11; Ubuntu; Linux x86_64; rv:49.0)\
-                                   Gecko/20100101 Firefox/49.0'
-                       }
+                                   Gecko/20100101 Firefox/49.0"
+        }
         self.list_content_tuple = []
-        self.playlist_name = ''
+        self.playlist_name = ""
 
     def get_data(self):
         """
         Get the data from the page.
         """
         response = requests.get(self.URL, headers=self._headers)
-        soup = BeautifulSoup(response.text, 'lxml')
-        songs = soup.find_all('div', {'class': 'hide song-json'})
+        soup = BeautifulSoup(response.text, "lxml")
+        songs = soup.find_all("div", {"class": "hide song-json"})
 
         for i in songs:
             obj = JSONDecoder().decode(i.text)
-            self.list_content_tuple.append(SongMetadata(obj['title'], obj['singers']))
+            self.list_content_tuple.append(SongMetadata(obj["title"], obj["singers"]))
 
         self.strip_to_start_end()
 
         # Extract the name of the playlist
-        self.playlist_name = soup.find_all('h1', {'class': 'page-title ellip'})
-        self.playlist_name = re.findall(r'>.*?<', str(self.playlist_name))[0]
-        self.playlist_name = re.sub(r'>|<', '', self.playlist_name)
+        self.playlist_name = soup.find_all("h1", {"class": "page-title ellip"})
+        self.playlist_name = re.findall(r">.*?<", str(self.playlist_name))[0]
+        self.playlist_name = re.sub(r">|<", "", self.playlist_name)
 
 
 def get_data(URL, pl_start, pl_end):
@@ -81,7 +76,7 @@ def get_data(URL, pl_start, pl_end):
     the playlist.
     """
 
-    logger.debug('Extracting Playlist Content')
+    logger.debug("Extracting Playlist Content")
     jio_saavn_IE = JioSaavnIE(URL, pl_start, pl_end)
     jio_saavn_IE.get_data()
     return jio_saavn_IE.list_content_tuple, jio_saavn_IE.playlist_name

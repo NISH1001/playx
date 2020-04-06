@@ -140,15 +140,16 @@ def parse():
         "--list-cached-pl",
         help="List all the cached playlists.",
         default=False,
-        action="store_true"
+        action="store_true",
     )
     logger_group = parser.add_argument_group("Logger")
     logger_group.add_argument(
         "--level",
         help="The level of the logger that will be used while verbosing.\
-            Use `--list-level` to check available options." + "\n",
+            Use `--list-level` to check available options."
+        + "\n",
         default="INFO",
-        type=str
+        type=str,
     )
     logger_group.add_argument(
         "--disable-file",
@@ -159,7 +160,7 @@ def parse():
     logger_group.add_argument(
         "--list-level",
         help="List all the available logger levels.",
-        action="store_true"
+        action="store_true",
     )
     args = parser.parse_args()
     return parser, args

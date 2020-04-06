@@ -14,12 +14,7 @@ class SongMetadataBase:
     Base class to store song metadata.
     """
 
-    def __init__(  
-            self,
-            title=None,
-            url=None,
-            query=None
-            ):
+    def __init__(self, title=None, url=None, query=None):
         self.title = title
         self.search_query = query
         self.URL = url

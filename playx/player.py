@@ -1,64 +1,46 @@
 """File to handle player related functions."""
 
-from playx.utility import (
-    direct_to_play
-)
+from playx.utility import direct_to_play
 
-from playx.cache import (
-    search_locally, update_URL_cache, search_URL
-)
+from playx.cache import search_locally, update_URL_cache, search_URL
 
-from playx.youtube import (
-    grab_link, dw, get_youtube_title
-)
+from playx.youtube import grab_link, dw, get_youtube_title
 
-from playx.songfinder import (
-    search
-)
+from playx.songfinder import search
 
-from playx.logger import (
-    Logger
-)
+from playx.logger import Logger
 
-from playx.stringutils import (
-    is_song_url, url_type
-)
+from playx.stringutils import is_song_url, url_type
 
-from playx.soundcloud import (
-    get_track_info
-)
+from playx.soundcloud import get_track_info
 
-from playx.playlist.ytrelated import (
-    get_data
-)
+from playx.playlist.ytrelated import get_data
 
-from playx.playlist import (
-    playlistcache
-)
+from playx.playlist import playlistcache
 
 from os.path import basename
 
 
 # Setup logger
-logger = Logger('player')
+logger = Logger("player")
 
 
-class URLPlayer():
+class URLPlayer:
     """
     Currently support for soundcloud and youtube URL's are added.
     """
 
     def __init__(
-                self,
-                URL=None,
-                songObj=None,
-                dont_cache_search=False,
-                show_lyrics=False,
-                no_cache=False
-                ):
+        self,
+        URL=None,
+        songObj=None,
+        dont_cache_search=False,
+        show_lyrics=False,
+        no_cache=False,
+    ):
         self.URL = URL
-        self.stream_url = ''
-        self.title = ''
+        self.stream_url = ""
+        self.title = ""
         self.URL_type = url_type(self.URL) if self.URL is not None else None
         self.songObj = songObj
         self.dont_cache_search = dont_cache_search
@@ -72,7 +54,7 @@ class URLPlayer():
         if not self.no_cache:
             dw(self.title, self.stream_url, self.URL)
         else:
-            logger.info('Caching is disabled')
+            logger.info("Caching is disabled")
 
     def _get_soundcloud_data(self):
         """
@@ -86,7 +68,7 @@ class URLPlayer():
         """
         # Need to put a check because in some cases the URL is already passed
         # by the playlist extractor.
-        if self.title == '':
+        if self.title == "":
             self.title = get_youtube_title(self.URL)
         self.stream_url = grab_link(self.URL)
 
@@ -94,20 +76,20 @@ class URLPlayer():
         """
         Extract the song data according to type
         """
-        if self.URL_type == 'youtube' or self.URL_type == 'ytmusic':
+        if self.URL_type == "youtube" or self.URL_type == "ytmusic":
             self._get_youtube_data_url()
-        elif self.URL_type == 'soundcloud':
+        elif self.URL_type == "soundcloud":
             self._get_soundcloud_data()
 
     def _extract_songObj(self):
         """
         Extract the data from the songObj.
         """
-        if self.URL_type == 'youtube':
+        if self.URL_type == "youtube":
             self.title = self.songObj.title
             self.URL = self.songObj.URL
             self._get_youtube_data_url()
-        elif self.URL_type == 'soundcloud':
+        elif self.URL_type == "soundcloud":
             self.title = self.songObj.title
             self.stream_url = self.songObj.URL
 
@@ -136,7 +118,7 @@ class URLPlayer():
                 self._dw()
         else:
             logger.info("Searching locally disabled.")
-            if self.stream_url == '':
+            if self.stream_url == "":
                 self._get_youtube_data_url()
 
         direct_to_play(self.stream_url, self.show_lyrics, self.title)
@@ -169,26 +151,26 @@ class URLPlayer():
         return self.URL
 
 
-class NamePlayer():
+class NamePlayer:
     """
     Player to particularly play songs by name.
     """
 
     def __init__(
-                self,
-                name=None,
-                dont_cache_search=False,
-                show_lyrics=False,
-                no_cache=False,
-                disable_kw=False
-                ):
+        self,
+        name=None,
+        dont_cache_search=False,
+        show_lyrics=False,
+        no_cache=False,
+        disable_kw=False,
+    ):
         self.name = name
         self.URL = None
         self.dont_cache_search = dont_cache_search
         self.no_cache = no_cache
         self.show_lyrics = show_lyrics
-        self.title = ''
-        self.stream_url = ''
+        self.title = ""
+        self.stream_url = ""
         self.disable_kw = disable_kw
 
     def _get_youtube_data_name(self):
@@ -261,17 +243,17 @@ class Player(URLPlayer, NamePlayer):
     """
 
     def __init__(
-                self,
-                data,
-                on_repeat,
-                datatype=None,
-                playlisttype=None,
-                show_lyrics=False,
-                dont_cache_search=False,
-                no_cache=False,
-                no_related=False,
-                disable_kw=False,
-                ):
+        self,
+        data,
+        on_repeat,
+        datatype=None,
+        playlisttype=None,
+        show_lyrics=False,
+        dont_cache_search=False,
+        no_cache=False,
+        no_related=False,
+        disable_kw=False,
+    ):
         """
         data can be anything of the above supported
         types.
@@ -285,18 +267,18 @@ class Player(URLPlayer, NamePlayer):
         - URL
         """
         URLPlayer.__init__(
-                            self,
-                            show_lyrics=show_lyrics,
-                            dont_cache_search=dont_cache_search,
-                            no_cache=no_cache
-                            )
+            self,
+            show_lyrics=show_lyrics,
+            dont_cache_search=dont_cache_search,
+            no_cache=no_cache,
+        )
         NamePlayer.__init__(
-                            self,
-                            show_lyrics=show_lyrics,
-                            dont_cache_search=dont_cache_search,
-                            no_cache=no_cache,
-                            disable_kw=disable_kw
-                            )
+            self,
+            show_lyrics=show_lyrics,
+            dont_cache_search=dont_cache_search,
+            no_cache=no_cache,
+            disable_kw=disable_kw,
+        )
         self._iterable_list = []
         self.data = data
         self.datatype = datatype
@@ -304,20 +286,16 @@ class Player(URLPlayer, NamePlayer):
         self.no_related = no_related
         self.on_repeat = on_repeat
         self._playlist_names = [
-                                'spotify',
-                                'youtube',
-                                'soundcloud',
-                                'billboard',
-                                'jiosaavn',
-                                'gaana',
-                                'cached',
-                                'youtubemusic'
-                              ]
-        self._datatypes = [
-                            'playlist',
-                            'song',
-                            'URL'
-                          ]
+            "spotify",
+            "youtube",
+            "soundcloud",
+            "billboard",
+            "jiosaavn",
+            "gaana",
+            "cached",
+            "youtubemusic",
+        ]
+        self._datatypes = ["playlist", "song", "URL"]
         self.show_lyrics = show_lyrics
         self.dont_cache_search = dont_cache_search
         self.no_cache = no_cache
@@ -338,7 +316,7 @@ class Player(URLPlayer, NamePlayer):
 
         # Check if URL is not path
         logger.debug(url)
-        if url != '':
+        if url != "":
             related_songs = get_data(url)
         else:
             return
@@ -355,13 +333,13 @@ class Player(URLPlayer, NamePlayer):
             logger.debug(self.playlisttype)
             logger.hold()
             if self.playlisttype.lower() not in self._playlist_names:
-                logger.critical('Passed playlist is not supported yet')
+                logger.critical("Passed playlist is not supported yet")
             else:
                 self.datatype = "playlist"
                 self._iterable_list = self.data
         elif self.datatype is not None:
             if self.datatype not in self._datatypes:
-                logger.warning('Datatype of playlist not within supported ones.')
+                logger.warning("Datatype of playlist not within supported ones.")
         else:
             self._determine_datatype()
 
@@ -386,10 +364,11 @@ class Player(URLPlayer, NamePlayer):
             logger.info("Repeating indefinitely")
             return 5000
         else:
-            logger.info("Repeating {} {}".format(
-                    self.on_repeat,
-                    'time' if self.on_repeat == 1 else 'times'
-            ))
+            logger.info(
+                "Repeating {} {}".format(
+                    self.on_repeat, "time" if self.on_repeat == 1 else "times"
+                )
+            )
             return self.on_repeat
 
     def play(self):
@@ -403,17 +382,17 @@ class Player(URLPlayer, NamePlayer):
 
         while on_repeat_time > 0:
             try:
-                if self.datatype == 'URL':
+                if self.datatype == "URL":
                     URL = self.play_url(self.data)
                 elif self.datatype == "song":
                     URL = self.play_name(self.data)
-                elif self.datatype == 'playlist':
+                elif self.datatype == "playlist":
                     for i in self._iterable_list:
                         # For different playlists the player needs to act
                         # differently
-                        if self.playlisttype == 'soundcloud':
+                        if self.playlisttype == "soundcloud":
                             self.play_url(i.URL, i)
-                        elif self.playlisttype == 'youtube':
+                        elif self.playlisttype == "youtube":
                             self.play_url(i.search_query, i)
                         else:
                             self.play_name(i.search_query)

@@ -1,4 +1,4 @@
-'''Scrap Youtube to get the related list from youtube'''
+"""Scrap Youtube to get the related list from youtube"""
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -6,19 +6,18 @@ import re
 from pathlib import Path
 import json
 
-from playx.playlist.playlistbase import (
-    SongMetadataBase, PlaylistBase
-)
+from playx.playlist.playlistbase import SongMetadataBase, PlaylistBase
 
 from playx.logger import Logger
 
-logger = Logger('YoutubeRelated')
+logger = Logger("YoutubeRelated")
 
 
 class YoutubeMetadata(SongMetadataBase):
     """
     Class to hold contents of the playlist.
     """
+
     def __init__(self, title):
         super().__init__()
         self.title = title
@@ -37,7 +36,7 @@ class YoutubeRelatedIE(PlaylistBase):
     def __init__(self, url):
         super().__init__()
         self.url = url
-        self.playlist_name = ''
+        self.playlist_name = ""
 
     def _not_name(self, name):
         """
@@ -47,7 +46,7 @@ class YoutubeRelatedIE(PlaylistBase):
         the extraction algo extracts the time of the playlist instead
         of the name, so we need to remove it from the list of songs.
         """
-        match = re.match(r'[0-9][0-9]?:[0-9][0-9]', name)
+        match = re.match(r"[0-9][0-9]?:[0-9][0-9]", name)
         if match is None:
             return False
         else:
@@ -55,16 +54,16 @@ class YoutubeRelatedIE(PlaylistBase):
 
     def extract_songs(self):
         chrome_options = Options()
-        chrome_options.add_argument('--headless')
+        chrome_options.add_argument("--headless")
         driver = webdriver.Chrome(options=chrome_options)
 
         driver.implicitly_wait(30)
         driver.get(self.url)
-        songs = driver.find_elements_by_tag_name('ytd-compact-video-renderer')
+        songs = driver.find_elements_by_tag_name("ytd-compact-video-renderer")
         logger.debug(str(len(songs)))
 
         for i in songs:
-            contents = i.text.split('\n')
+            contents = i.text.split("\n")
             song_name = contents[0]
             logger.debug(song_name)
             if not self._not_name(song_name):
@@ -78,7 +77,7 @@ def get_data(url):
     logger.debug("Checking if file is present.")
 
     CACHE_PATH = Path("~/.playx/playlist").expanduser()
-    FILE_NAME = "related_{}.json".format(url.split('\\=')[-1])
+    FILE_NAME = "related_{}.json".format(url.split("\\=")[-1])
     FILE_PATH = CACHE_PATH.joinpath(Path(FILE_NAME))
 
     logger.debug("Checking related playlist cache")
@@ -111,7 +110,7 @@ def save_data(url, data):
     Save the data in a json file so that it can be accessed later.
     """
     CACHE_PATH = Path("~/.playx/playlist").expanduser()
-    FILE_NAME = "related_{}.json".format(url.split('=')[-1])
+    FILE_NAME = "related_{}.json".format(url.split("=")[-1])
     FILE_PATH = CACHE_PATH.joinpath(Path(FILE_NAME))
 
     FILE_PATH.touch()
@@ -121,13 +120,13 @@ def save_data(url, data):
     for entity in data:
         data_.append(entity.title)
 
-    with open(FILE_PATH, 'w') as WSTREAM:
-        DATA = [{'URL': url}, {'data': data_}]
+    with open(FILE_PATH, "w") as WSTREAM:
+        DATA = [{"URL": url}, {"data": data_}]
         json.dump(DATA, WSTREAM)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # print(str(get_data('https://www.youtube.com/watch?v=xDbK1eZYVzg')))
-    d = get_data('https://www.youtube.com/watch?v=xDbK1eZYVzg')
+    d = get_data("https://www.youtube.com/watch?v=xDbK1eZYVzg")
     for i in d:
         print(i.title)

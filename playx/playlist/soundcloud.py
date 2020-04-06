@@ -3,20 +3,15 @@
 import requests
 import re
 
-from playx.playlist.playlistbase import (
-    PlaylistBase, SongMetadataBase
-)
+from playx.playlist.playlistbase import PlaylistBase, SongMetadataBase
 
-from playx.logger import (
-    Logger
-)
+from playx.logger import Logger
 
 # Setup logger
 logger = Logger("Soundcloud")
 
 
 class SoundCloudTrack(SongMetadataBase):
-
     def __init__(self, title, download_url, URL):
         super().__init__()
         self.title = title
@@ -42,38 +37,35 @@ class SoundCloudPlaylistExtractor(PlaylistBase):
 
     def __init__(self, URL, pl_start, pl_end):
         super().__init__(pl_start, pl_end)
-        self._clientID = 'LvWovRaJZlWCHql0bISuum8Bd2KX79mb'
+        self._clientID = "LvWovRaJZlWCHql0bISuum8Bd2KX79mb"
         self.URL = URL
-        self.set_ID = ''
-        self.API_URL = 'http://api.soundcloud.com/playlists/{}?client_id={}'
+        self.set_ID = ""
+        self.API_URL = "http://api.soundcloud.com/playlists/{}?client_id={}"
         self.list_content_tuple = []
-        self.set_name = ''
+        self.set_name = ""
 
     def _get_ID(self):
         """Get the playlists id."""
         r = requests.get(self.URL)
-        match = re.findall(
-                r'href="android-app://com\.soundcloud\.android.*?"',
-                r.text
-                )
+        match = re.findall(r'href="android-app://com\.soundcloud\.android.*?"', r.text)
         self.set_ID = re.sub(
-                r'playlists:|"',
-                '',
-                re.findall(r'playlists:.*?"', str(match))[0]
-                )
+            r'playlists:|"', "", re.findall(r'playlists:.*?"', str(match))[0]
+        )
 
     def get_tracks(self):
         """Get the tracks on the playlist by using the API."""
         self._get_ID()
         r = requests.get(self.API_URL.format(self.set_ID, self._clientID)).json()
-        self.set_name = r['permalink']
-        tracks = r['tracks']
+        self.set_name = r["permalink"]
+        tracks = r["tracks"]
 
         for i in tracks:
-            title = i['title']
-            download_url = i['download_url'] + '?client_id=' + self._clientID
-            stream_url = i['stream_url'] + '?client_id=' + self._clientID
-            self.list_content_tuple.append(SoundCloudTrack(title, download_url, stream_url))
+            title = i["title"]
+            download_url = i["download_url"] + "?client_id=" + self._clientID
+            stream_url = i["stream_url"] + "?client_id=" + self._clientID
+            self.list_content_tuple.append(
+                SoundCloudTrack(title, download_url, stream_url)
+            )
 
         self.strip_to_start_end()
 

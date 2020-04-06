@@ -2,13 +2,9 @@ from requests import get
 from bs4 import BeautifulSoup
 import re
 
-from playx.playlist.playlistbase import (
-    PlaylistBase, SongMetadataBase
-)
+from playx.playlist.playlistbase import PlaylistBase, SongMetadataBase
 
-from playx.logger import (
-    Logger
-)
+from playx.logger import Logger
 
 # Setup logger
 logger = Logger("Spotify")
@@ -17,7 +13,7 @@ logger = Logger("Spotify")
 class SpotifySong(SongMetadataBase):
     """Spotify songs container."""
 
-    def __init__(self, title='', artist='', album=''):
+    def __init__(self, title="", artist="", album=""):
         super().__init__()
         self.title = title
         self.artist = artist
@@ -29,7 +25,7 @@ class SpotifySong(SongMetadataBase):
         """
         Create a search querry.
         """
-        self.search_querry = self.title + ' ' + self.artist
+        self.search_querry = self.title + " " + self.artist
 
 
 class SpotifyIE(PlaylistBase):
@@ -39,41 +35,45 @@ class SpotifyIE(PlaylistBase):
         super().__init__(pl_start, pl_end)
         self.URL = URL
         self.list_content_tuple = []
-        self.playlist_name = ''
+        self.playlist_name = ""
 
     def get_data(self):
         r = get(self.URL)
-        soup = BeautifulSoup(r.text, 'html.parser')
-        s = soup.findAll(attrs={'class': 'track-name-wrapper'})
-        name = soup.findAll(attrs={'class': 'media-bd'})
+        soup = BeautifulSoup(r.text, "html.parser")
+        s = soup.findAll(attrs={"class": "track-name-wrapper"})
+        name = soup.findAll(attrs={"class": "media-bd"})
         name = re.sub(
-                    r'<span.*?>|</span>',
-                    '',
-                    re.findall(
-                            r'<span dir="auto">.*?</span>',
-                            str(name))[0]
-                    )
+            r"<span.*?>|</span>",
+            "",
+            re.findall(r'<span dir="auto">.*?</span>', str(name))[0],
+        )
         self.playlist_name = name
 
         for i in s:
-            title = re.sub(r'class="track-name".*?>|</span>',
-                            '',
-                            re.findall(r'class="track-name".*?</span>', str(i))[0])
+            title = re.sub(
+                r'class="track-name".*?>|</span>',
+                "",
+                re.findall(r'class="track-name".*?</span>', str(i))[0],
+            )
             # Some spotify playlists (mostly the ones by spotify) have one or
             # more videos in the playlist. In that case we will skip the
             # extraction of artist and album.
             try:
-                artist = re.sub(r'a href="/artist.*?<span dir=".*?>|</span>|</a>',
-                                '',
-                                re.findall(r'a href="/artist.*?</a>', str(i))[0])
+                artist = re.sub(
+                    r'a href="/artist.*?<span dir=".*?>|</span>|</a>',
+                    "",
+                    re.findall(r'a href="/artist.*?</a>', str(i))[0],
+                )
             except IndexError:
-                artist = ''
+                artist = ""
             try:
-                album = re.sub(r'a href="/album.*?<span dir=".*?>|</span>|</a>',
-                                '',
-                                re.findall(r'a href="/album.*?</a>', str(i))[0])
+                album = re.sub(
+                    r'a href="/album.*?<span dir=".*?>|</span>|</a>',
+                    "",
+                    re.findall(r'a href="/album.*?</a>', str(i))[0],
+                )
             except IndexError:
-                album = ''
+                album = ""
             self.list_content_tuple.append(SpotifySong(title, artist, album))
 
         self.strip_to_start_end()
