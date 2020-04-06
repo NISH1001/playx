@@ -2,9 +2,13 @@
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import re
 from pathlib import Path
 import json
+
+from youtube_dl import YoutubeDL
 
 from playx.playlist.playlistbase import SongMetadataBase, PlaylistBase
 
@@ -14,68 +18,19 @@ logger = Logger("YoutubeRelated")
 
 
 class YoutubeMetadata(SongMetadataBase):
-    """
-    Class to hold contents of the playlist.
-    """
-
-    def __init__(self, title):
+    def __init__(self, url=None):
         super().__init__()
-        self.title = title
-        self._create_search_querry()
+        self.url = url
+        self._create_search_query()
 
-    def _create_search_querry(self):
+    def _create_search_query(self):
         """
-        Create a search querry.
+        Update the search query using the passed URL.
         """
-        self.search_query = self.title
+        self.query = self.url
 
 
 class YoutubeRelatedIE(PlaylistBase):
-    """Youtube Related songs extractor."""
-
-    def __init__(self, url):
-        super().__init__()
-        self.url = url
-        self.playlist_name = ""
-
-    def _not_name(self, name):
-        """
-        Check the passed name to see if its actually a name of song.
-
-        While extracting sometimes playlists are suggested in which
-        the extraction algo extracts the time of the playlist instead
-        of the name, so we need to remove it from the list of songs.
-        """
-        match = re.match(r"[0-9][0-9]?:[0-9][0-9]", name)
-        if match is None:
-            return False
-        else:
-            return True
-
-    def extract_songs(self):
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("–disable-dev-shm-usage")
-        chrome_options.add_argument("--remote-debugging-port=9222")
-        driver = webdriver.Chrome(options=chrome_options)
-
-        driver.implicitly_wait(30)
-        driver.get(self.url)
-        songs = driver.find_elements_by_tag_name("ytd-compact-video-renderer")
-        logger.debug(str(len(songs)))
-
-        for i in songs:
-            contents = i.text.split("\n")
-            song_name = contents[0]
-            logger.debug(song_name)
-            if not self._not_name(song_name):
-                self.list_content_tuple.append(YoutubeMetadata(song_name))
-
-        driver.quit()
-
-
-class YoutubeRelatedIE2(PlaylistBase):
     """
     Get related songs using the YT music endpoint that
     automatically creates a mix based on the song.
@@ -85,14 +40,39 @@ class YoutubeRelatedIE2(PlaylistBase):
     """
     def __init__(self, URL):
         super().__init__()
-        self.url = url
+        self.url = self._update_URL(URL)
         self.playlist_name = ''
+        self.youtube_base = "https://www.youtube.com/watch?v={}"
 
     def _update_URL(self, url):
         """
-        Get the video ID from the URL and add it to 
+        Get the video ID from the URL and add it to
         the YoutubeMusic base URL.
         """
+        video_id = url.split("=")[-1]
+        return "https://music.youtube.com/watch?v={}".format(video_id)
+
+    def _get_playlist_data(self, url):
+        """
+        Use YoutubeDL to extract all the songs from the
+        passed URL.
+        """
+        ydl_opts = {
+            'quiet': True,
+            'nocheckcertificate': True,
+            'dump_single_json': True,
+            'extract_flat': True,
+        }
+
+        # Extract the info now
+        songs = YoutubeDL(ydl_opts).extract_info(url, False)
+
+        # Extract the songs into the MetaData class' objects
+        for song in songs["entries"]:
+            self.list_content_tuple.append(YoutubeMetadata(
+                self.youtube_base.format(song["url"])
+            ))
+        self.playlist_name = songs["title"]
 
     def _create_mix(self):
         """
@@ -112,8 +92,24 @@ class YoutubeRelatedIE2(PlaylistBase):
         chrome_options.add_argument("--remote-debugging-port=9222")
         driver = webdriver.Chrome(options=chrome_options)
 
-        driver.implicitly_wait(30)
         driver.get(self.url)
+        WebDriverWait(driver, 10).until(
+            lambda driver: driver.current_url != self.url
+        )
+
+        # The URL should now be updated
+        updated_url = driver.current_url
+        playlist_id = updated_url.split("=")[-1]
+        playlist_url = "https://www.youtube.com/playlist?list={}".format(
+            playlist_id
+        )
+        self._get_playlist_data(playlist_url)
+
+    def extract_songs(self):
+        """
+        Generic method to start all the fetching related work.
+        """
+        self._create_mix()
 
 
 def get_data(url):
@@ -171,8 +167,8 @@ def save_data(url, data):
 
 if __name__ == "__main__":
     print("Debugging ytrelated...")
-    url = "https://www.youtube.com/watch?v=MBhZCx_EUwI"
+    url = "https://www.youtube.com/watch?v=fdubeMFwuGs"
     print(f"url = {url}")
     d = get_data(url)
     for i in d:
-        print(i.title)
+        print(i.url)
