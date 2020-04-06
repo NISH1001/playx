@@ -94,7 +94,7 @@ class URLPlayer():
         """
         Extract the song data according to type
         """
-        if self.URL_type == 'youtube':
+        if self.URL_type == 'youtube' or self.URL_type == 'ytmusic':
             self._get_youtube_data_url()
         elif self.URL_type == 'soundcloud':
             self._get_soundcloud_data()
