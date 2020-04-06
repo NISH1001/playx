@@ -157,6 +157,12 @@ class URLPlayer():
                 return self.URL
 
         self.URL_type = url_type(self.URL)
+        logger.debug("Detected URL type as: {}".format(self.URL_type))
+
+        # Disable keywords if the url type is ytmusic
+        if self.URL_type == "ytmusic":
+            self.disable_kw = True
+
         if songObj is not None:
             self.songObj = songObj
         self._stream_from_url()
