@@ -75,6 +75,47 @@ class YoutubeRelatedIE(PlaylistBase):
         driver.quit()
 
 
+class YoutubeRelatedIE2(PlaylistBase):
+    """
+    Get related songs using the YT music endpoint that
+    automatically creates a mix based on the song.
+
+    We STRICTLY need a video ID or and YoutubeURL, a name
+    won't work.
+    """
+    def __init__(self, URL):
+        super().__init__()
+        self.url = url
+        self.playlist_name = ''
+
+    def _update_URL(self, url):
+        """
+        Get the video ID from the URL and add it to 
+        the YoutubeMusic base URL.
+        """
+
+    def _create_mix(self):
+        """
+        In order to get the playlist, we need to make a request
+        to youtube music.
+        YT Music uses JS to automatically update the page URL with
+        the playlist ID.
+        This is when we extract the list ID.
+
+        Since it does all of it using JS, we can't use requests or
+        someting similar.
+        """
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("–disable-dev-shm-usage")
+        chrome_options.add_argument("--remote-debugging-port=9222")
+        driver = webdriver.Chrome(options=chrome_options)
+
+        driver.implicitly_wait(30)
+        driver.get(self.url)
+
+
 def get_data(url):
     logger.debug("Extracting related songs")
     logger.debug("Checking if file is present.")
