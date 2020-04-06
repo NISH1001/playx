@@ -6,12 +6,16 @@ Disclaimer : Following contents are injurious to your mind
 due to all those crawling shit
 """
 
+import re
+import sys
+
 from bs4 import BeautifulSoup
+from dataclasses import dataclass
+
 import requests
 import youtube_dl
 from playx.stringutils import fix_title, is_song_url
 
-import re
 
 from playx.cache import Cache
 
@@ -26,18 +30,17 @@ logger = Logger("youtube")
 better_search_kw = [" audio", " full", " lyrics"]
 
 
+@dataclass
 class YoutubeMetadata:
     """A data store to store the information of a youtube video."""
 
-    def __init__self(self):
-        self.title = ""
-        self.url = ""
-        self.duration = ""
+    title: str = ""
+    url: str = ""
+    duration: str = ""
 
     def display(self):
         """Be informative."""
-        logger.info("Title: {}".format(self.title))
-        logger.info("Duration: {}".format(self.duration))
+        logger.info(str(self))
 
 
 def get_audio_URL(link):
@@ -97,10 +100,10 @@ def get_youtube_title(url):
     try:
         r = requests.get(url)
     except Exception as e:
-        logger.error('ERROR: {}'.format(e))
-        exit(-1)
-    title = re.findall(r'<title>.*?</title>', r.text)[0]
-    title = re.sub(r'title|>|<|/|\ ?-|\ ?YouTube', '', str(title))
+        logger.error("ERROR: {}".format(e))
+        sys.exit(-1)
+    title = re.findall(r"<title>.*?</title>", r.text)[0]
+    title = re.sub(r"title|>|<|/|\ ?-|\ ?YouTube", "", str(title))
     return title
     """
 
@@ -124,13 +127,12 @@ def get_youtube_title2(url):
 
 def add_better_search_kw(query):
     """
-    Add some keywords to the search querry to get better results.
+        Add some keywords to the search querry to get better results.
     """
     logger.debug("{}".format(query))
     if not is_song_url(query):
         for kw in better_search_kw:
             query += kw
-
     return query
 
 
@@ -145,7 +147,7 @@ def search_youtube(query, disable_kw=False):
         response = requests.get(url)
     except Exception as e:
         logger.error("ERROR: {}".format(e))
-        exit()
+        sys.exit()
     soup = BeautifulSoup(response.content, "html.parser")
 
     videos = []

@@ -55,6 +55,9 @@ class YoutubeRelatedIE(PlaylistBase):
     def extract_songs(self):
         chrome_options = Options()
         chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("–disable-dev-shm-usage")
+        chrome_options.add_argument("--remote-debugging-port=9222")
         driver = webdriver.Chrome(options=chrome_options)
 
         driver.implicitly_wait(30)
@@ -126,7 +129,9 @@ def save_data(url, data):
 
 
 if __name__ == "__main__":
-    # print(str(get_data('https://www.youtube.com/watch?v=xDbK1eZYVzg')))
-    d = get_data("https://www.youtube.com/watch?v=xDbK1eZYVzg")
+    print("Debugging ytrelated...")
+    url = "https://www.youtube.com/watch?v=MBhZCx_EUwI"
+    print(f"url = {url}")
+    d = get_data(url)
     for i in d:
         print(i.title)
