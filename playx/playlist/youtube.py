@@ -10,6 +10,7 @@ import re
 from playx.utility import exe
 
 from playx.playlist.playlistbase import PlaylistBase, SongMetadataBase
+from playx.stringutils import remove_punct
 
 from playx.logger import Logger
 
@@ -61,6 +62,7 @@ class YoutubePlaylist(PlaylistBase):
         name = str(name).replace("\n", "")
         name = "".join(re.findall(r">.*?<", name)).replace(">", "").replace("<", "")
         name = " ".join(re.findall(r"[^ ]+", name))
+        name = remove_punct(name)
         self.playlist_name = name
 
     def _is_connection_possible(self):
