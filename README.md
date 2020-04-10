@@ -229,6 +229,16 @@ Contributions are warmly welcome. Please do go through [CONTRIBUTING](https://gi
 
 ------------
 
+## Module-level Dependency Graph
+This is generated using [pydeps](https://github.com/thebjorn/pydeps). The codebase is kinda messy, isn't it? :D
+
+
+<h1 align=center>
+<img src="playx.svg" width=100%>
+</h1>
+
+------------
+
 ## TO-DO
 - ~~caching of downloaded songs (if the song exists locally, play it right away else play from youtube)~~
 - ~~speed up the whole **search->download->convert->play** process~~
