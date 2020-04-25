@@ -12,17 +12,13 @@ import numpy as np
 
 from collections import Counter
 
-from abc import (
-    ABC, abstractmethod
-)
+from abc import ABC, abstractmethod
 
-from playx.stringutils import (
-    remove_multiple_spaces,
-    remove_punct
-)
+from playx.stringutils import remove_multiple_spaces, remove_punct
 from playx.logger import Logger
 
-logger = Logger('autoplaylist')
+logger = Logger("autoplaylist")
+
 
 class AbstractAutoPlaylist(ABC):
     def __init__(self, log_path):
@@ -37,23 +33,25 @@ class AbstractAutoPlaylist(ABC):
         pass
 
     def info(self):
-        logger.info("Auto-Generating playlist with [{}] songs using [{}]".format(
-            len(self.data), self.__class__.__name__
-        ))
+        logger.info(
+            "Auto-Generating playlist with [{}] songs using [{}]".format(
+                len(self.data), self.__class__.__name__
+            )
+        )
 
     def get_timeseries_data(self, log_path):
         data = []
         with open(log_path) as f:
             for line in f:
                 line = line.strip().lower()
-                if 'playing' not in line:
+                if "playing" not in line:
                     continue
                 matches = re.findall(r"\[.*?\]", line)
                 module, timestamp = matches[0], matches[1]
                 try:
                     song = matches[2]
-                    ts = re.sub(r"[\[\]]+", '', timestamp)
-                    song = re.sub(r"[\[\]]+", '', song)
+                    ts = re.sub(r"[\[\]]+", "", timestamp)
+                    song = re.sub(r"[\[\]]+", "", song)
                     song = remove_punct(song)
                     song = remove_multiple_spaces(song)
                     data.append((ts.strip(), song.strip()))
@@ -61,11 +59,13 @@ class AbstractAutoPlaylist(ABC):
                     continue
         return data
 
+
 class CountBasedAutoPlaylist(AbstractAutoPlaylist):
     """
         A very simple auto playlist that makes use of frequency of the songs
         in the logs.
     """
+
     def __init__(self, log_path):
         super().__init__(log_path)
 
@@ -80,10 +80,11 @@ class CountBasedAutoPlaylist(AbstractAutoPlaylist):
 
     def write_to_file(self, songs, path):
         outpath = pathlib.Path(path).expanduser()
-        with open(outpath, 'w') as f:
+        with open(outpath, "w") as f:
             for s in songs:
                 f.write("{}\n".format(s))
         return outpath
+
 
 class MarkovBasedAutoPlaylist(AbstractAutoPlaylist):
     """
@@ -94,6 +95,7 @@ class MarkovBasedAutoPlaylist(AbstractAutoPlaylist):
         These songs act as seeds of some sort and we iteratively generate song songs
         using markov chain.
     """
+
     def __init__(self, log_path):
         super().__init__(log_path)
 
@@ -112,7 +114,7 @@ class MarkovBasedAutoPlaylist(AbstractAutoPlaylist):
 
         arr = np.array(c)
         # seed songs to use for markov chain
-        songs_seed = list(set(random.choices(songs_frequent, arr/arr.sum(), k=20)))
+        songs_seed = list(set(random.choices(songs_frequent, arr / arr.sum(), k=20)))
 
         for song in songs_seed:
             result.append(song)
@@ -169,6 +171,6 @@ class MarkovBasedAutoPlaylist(AbstractAutoPlaylist):
 def main():
     path = pathlib.Path("~/.playx/logs/log.cat").expanduser()
 
+
 if __name__ == "__main__":
     main()
-

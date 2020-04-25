@@ -5,9 +5,7 @@ defined.
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-from playx.playlist.playlistbase import (
-    PlaylistBase, SongMetadataBase
-)
+from playx.playlist.playlistbase import PlaylistBase, SongMetadataBase
 from playx.stringutils import remove_punct
 
 from playx.logger import Logger
@@ -19,7 +17,7 @@ logger = Logger("YouTubeMusic")
 class YtMusicMetadata(SongMetadataBase):
     """Store data of YouTube Music songs."""
 
-    def __init__(self, url='', title='', artist=''):
+    def __init__(self, url="", title="", artist=""):
         super().__init__()
         self.URL = url
         self.title = title
@@ -27,7 +25,7 @@ class YtMusicMetadata(SongMetadataBase):
         self._create_querry()
 
     def _create_querry(self):
-        self.search_querry = self.title + ' ' + self.artist
+        self.search_querry = self.title + " " + self.artist
 
 
 class YtMusicPlaylist(PlaylistBase):
@@ -43,29 +41,27 @@ class YtMusicPlaylist(PlaylistBase):
     def _preprocess_driver(self):
         """Do all the stuff required for the driver."""
         chrome_options = Options()
-        chrome_options.add_argument('--headless')
+        chrome_options.add_argument("--headless")
         self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.get(self.URL)
 
     def _extract_name(self):
         """Extract the name of the playlist."""
-        meta = self.driver.find_element_by_class_name('metadata')
-        self.playlist_name = meta.find_element_by_class_name('title').text
+        meta = self.driver.find_element_by_class_name("metadata")
+        self.playlist_name = meta.find_element_by_class_name("title").text
 
     def _extract_songs(self):
         """Extract the songs."""
 
         # Get all the songs first.
-        songs = self.driver.find_elements_by_class_name('flex-columns')
+        songs = self.driver.find_elements_by_class_name("flex-columns")
 
         for song in songs:
-            URL = song.find_element_by_tag_name('a').get_attribute('href')
-            title = song.find_element_by_class_name('title').text
-            artist = song.find_element_by_class_name('flex-column').text
+            URL = song.find_element_by_tag_name("a").get_attribute("href")
+            title = song.find_element_by_class_name("title").text
+            artist = song.find_element_by_class_name("flex-column").text
             artist = remove_punct(artist)
-            self.list_content_tuple.append(YtMusicMetadata(
-                                URL, title, artist
-                            ))
+            self.list_content_tuple.append(YtMusicMetadata(URL, title, artist))
 
         self.strip_to_start_end()
 

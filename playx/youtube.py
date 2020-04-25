@@ -93,6 +93,9 @@ def get_youtube_title(url):
     """
     Extract title of video from url.
     """
+    return get_youtube_title2(url)
+
+    """
     logger.debug("Extracting title of passed URL")
     try:
         r = requests.get(url)
@@ -102,6 +105,24 @@ def get_youtube_title(url):
     title = re.findall(r"<title>.*?</title>", r.text)[0]
     title = re.sub(r"title|>|<|/|\ ?-|\ ?YouTube", "", str(title))
     return title
+    """
+
+
+def get_youtube_title2(url):
+    """
+    Extract the title of the video using youtube_dl
+    """
+    opts = {"quiet": True}
+    ydl = youtube_dl.YoutubeDL(opts)
+    data = ydl.extract_info(url, False)
+
+    # Try to get the title
+    try:
+        title = data["title"]
+    except KeyError:
+        logger.error("Wasn't able to extract the title of the song.")
+
+    return title
 
 
 def add_better_search_kw(query):
@@ -109,7 +130,6 @@ def add_better_search_kw(query):
         Add some keywords to the search querry to get better results.
     """
     logger.debug("{}".format(query))
-    logger.hold()
     if not is_song_url(query):
         for kw in better_search_kw:
             query += kw

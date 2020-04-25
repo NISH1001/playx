@@ -6,13 +6,9 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
-from playx.playlist.playlistbase import (
-    PlaylistBase, SongMetadataBase
-)
+from playx.playlist.playlistbase import PlaylistBase, SongMetadataBase
 
-from playx.logger import (
-    Logger
-)
+from playx.logger import Logger
 
 # Setup logger
 logger = Logger("Gaana")
@@ -29,17 +25,13 @@ class SongMetadata(SongMetadataBase):
     """
 
     def __init__(
-                self,
-                artist_tuple=[],
-                title='',
-                track_seokey='',
-                album_seokey='',
-                ):
+        self, artist_tuple=[], title="", track_seokey="", album_seokey="",
+    ):
         super().__init__()
         self.title = title
         self.album_seokey = album_seokey
         self.track_seokey = track_seokey
-        self.artist_seokey = ''
+        self.artist_seokey = ""
         self.artist_tuple = artist_tuple
         self._update_artist()
         self._create_search_querry()
@@ -50,7 +42,7 @@ class SongMetadata(SongMetadataBase):
         """
         Remove letters like - and numbers from the searchquery
         """
-        self.search_querry = re.sub(r'-|[0-9]|&amp', ' ', self.search_querry)
+        self.search_querry = re.sub(r"-|[0-9]|&amp", " ", self.search_querry)
 
     def _update_artist(self):
         """
@@ -58,25 +50,24 @@ class SongMetadata(SongMetadataBase):
         then split it into a string.
         """
         for artist in self.artist_tuple:
-            self.artist_seokey += ' ' + artist['seokey']
+            self.artist_seokey += " " + artist["seokey"]
 
     def _create_search_querry(self):
         """
         Update the search querry of the base class.
         """
-        self.search_querry = self.track_seokey + '' + self.artist_seokey
+        self.search_querry = self.track_seokey + "" + self.artist_seokey
         self._remove_stopletters()
 
 
 class GaanaIE(PlaylistBase):
-
     def __init__(self, URL, pl_start, pl_end):
         super().__init__(pl_start, pl_end)
         self.URL = URL
-        self.API_URL = 'http://api.gaana.com/?type=playlist&subtype=playlist_detail&seokey={}&format=JSON'
-        self.playlist_seokey = ''
+        self.API_URL = "http://api.gaana.com/?type=playlist&subtype=playlist_detail&seokey={}&format=JSON"
+        self.playlist_seokey = ""
         self.list_content_tuple = []
-        self.playlist_name = ''
+        self.playlist_name = ""
         self._extract_playlist_seokey()
         self._get_name()
 
@@ -84,25 +75,25 @@ class GaanaIE(PlaylistBase):
         """
         The playlist seokey is the basename present in the URL.
         """
-        self.playlist_seokey = self.URL.split('/')[-1]
+        self.playlist_seokey = self.URL.split("/")[-1]
 
     def _get_name(self):
         """
         Extract the name of the playlist.
         """
         r = requests.get(self.URL)
-        s = BeautifulSoup(r.text, 'html.parser')
-        s = s.findAll(attrs={'class': '_t1'})
-        name = re.findall(r'<h1>.*?</h1>', str(s))[0]
-        name = re.sub(r'<|>|/|h1', '', name)
+        s = BeautifulSoup(r.text, "html.parser")
+        s = s.findAll(attrs={"class": "_t1"})
+        name = re.findall(r"<h1>.*?</h1>", str(s))[0]
+        name = re.sub(r"<|>|/|h1", "", name)
 
         # Now change first letters of words to uppercase
-        name_tuple = name.split(' ')
+        name_tuple = name.split(" ")
         for i in range(0, len(name_tuple)):
             first_letter = name_tuple[i][0]
             rest = name_tuple[i][1:]
             name_tuple[i] = first_letter.upper() + rest
-        name = ' '.join(name_tuple)
+        name = " ".join(name_tuple)
 
         self.playlist_name = name
 
@@ -111,20 +102,17 @@ class GaanaIE(PlaylistBase):
         Extract playlist data by using the API.
         """
         r = requests.get(self.API_URL.format(self.playlist_seokey)).json()
-        tracks = r['tracks']
+        tracks = r["tracks"]
         logger.debug(type(tracks))
 
         for track in tracks:
-            track_title = track['track_title']
-            track_seokey = track['seokey']
-            album_seokey = track['albumseokey']
-            artist = track['artist']
-            self.list_content_tuple.append(SongMetadata(
-                                                        artist,
-                                                        track_title,
-                                                        track_seokey,
-                                                        album_seokey
-                                                       ))
+            track_title = track["track_title"]
+            track_seokey = track["seokey"]
+            album_seokey = track["albumseokey"]
+            artist = track["artist"]
+            self.list_content_tuple.append(
+                SongMetadata(artist, track_title, track_seokey, album_seokey)
+            )
 
         self.strip_to_start_end()
 
