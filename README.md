@@ -224,6 +224,24 @@ Structure is like:
 
 ------------
 
+## Having Issues? (We're not perfect!)
+
+### First try cleaning the broken cache as
+```bash
+playx --clean
+```
+
+### See The Partial Log 
+Log is found at `logs/partial_log`
+
+### See Playlist File
+Files can be found inside `playlist/`. Chances are there might be empty links or names.
+
+### Please Create An Issue In GitHub here
+
+
+------------
+
 ## Contributions
 Contributions are warmly welcome. Please do go through [CONTRIBUTING](https://github.com/NISH1001/playx/blob/develop/CONTRIBUTING.md).
 
@@ -261,24 +279,4 @@ This is generated using [pydeps](https://github.com/thebjorn/pydeps). The codeba
 , playlist, logger)
 - Thanks to [Mirza Zulfan](https://github.com/mirzazulfan) for logo for `playx`. It's neat (and cool)
 - Thanks to [Mattwmaster58](https://github.com/Mattwmaster58) for creating packaging structure with setup file
-
-
-## !! Beware Of Copy-Cat !!
-Recently (as of June 26, 2019 onwards), there seems to be a specific repo which is an exact copy of this project.  
-The person has literally copied everything from this project and re-branded as his own in his own repository.  
-The copy-cat repository can be found here:  
-https://github.com/roshancode/layx
-
-
-**Here are things I find it violating the license**:  
-- The person has creted his own repository named `layx`.
-- There's no accreditation given to this original repository.
-- There's no license in his repository and hence violates the terms and conditions of MIT license embedded in this project.
-- He hasn't forked this repository. It's just taking everything from here and pushing to his own. Thus a copy-cat it is.
-
-
-This is a serious matter for not only this repository but also other open-source projects where developers around the globe put 
-their efforts (in terms of time, thought processes and actual code) and such copy-cat (or rip-off) are there sitting without giving 
-any accreditation. This sucks!
-
-
+- A good blog by Deepjyoti about copyright infringement and licensing issues we encountered for playx can be found [here](https://deepjyoti30.github.io/blog/github-and-people-who-steal).
