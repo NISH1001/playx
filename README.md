@@ -237,6 +237,12 @@ Log is found at `logs/partial_log`
 ### See Playlist File
 Files can be found inside `playlist/`. Chances are there might be empty links or names.
 
+### Selenium Web Driver Issue
+Maybe you don't have the chromedriver that's required to crawl.  
+One example of how we use chromedriver is [here](https://github.com/NISH1001/playx/blob/develop/playx/playlist/ytrelated.py#L126).
+
+Not having proper setup of the driver may result in empty playlists, especially related playlist one.
+
 ### Please Create An Issue In GitHub here
 
 
