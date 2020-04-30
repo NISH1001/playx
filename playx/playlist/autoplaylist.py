@@ -8,7 +8,6 @@
 import pathlib
 import re
 import random
-import numpy as np
 
 from collections import Counter
 
@@ -16,6 +15,7 @@ from abc import ABC, abstractmethod
 
 from playx.stringutils import remove_multiple_spaces, remove_punct
 from playx.logger import Logger
+from playx.utility import softmax
 
 logger = Logger("autoplaylist")
 
@@ -112,9 +112,9 @@ class MarkovBasedAutoPlaylist(AbstractAutoPlaylist):
         songs_frequent, c = zip(*counter.most_common())
         result = []
 
-        arr = np.array(c)
+        probs = softmax(c)
         # seed songs to use for markov chain
-        songs_seed = list(set(random.choices(songs_frequent, arr / arr.sum(), k=20)))
+        songs_seed = list(set(random.choices(songs_frequent, probs, k=20)))
 
         for song in songs_seed:
             result.append(song)
