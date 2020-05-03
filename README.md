@@ -226,10 +226,22 @@ Structure is like:
 
 ## Having Issues? (We're not perfect!)
 
-### First try cleaning the broken cache as
+### First update youtube-dl
+[youtube-dl](https://github.com/ytdl-org/youtube-dl) is the core through which we fetch stream urls for any song or any YT playlist.  
+So, update it first
+
+```bash
+pip install -U youtube-dl
+```
+
+youtube-dl keeps on rolling out updates actively because the YouTube keeps on updating its internals for html. So, the parser/crawler should be updated periodically.
+
+### Second try cleaning the broken cache as
 ```bash
 playx --clean
 ```
+Chances are you have a url in the `urls.json` but the local mp3 might not exist in `~/.playx/songs/`.
+So, cleaning and running the playx might mitigate that.
 
 ### See The Partial Log 
 Log is found at `logs/partial_log`
