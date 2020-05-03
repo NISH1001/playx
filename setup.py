@@ -1,5 +1,7 @@
 from setuptools import setup
 
+exec(open("playx/version.py").read())
+
 setup(
     name="playx",
     packages=["playx", "playx.playlist"],
@@ -9,7 +11,7 @@ setup(
     long_description="Search and play any song from terminal seamlessly.",
     url="http://github.com/NISH1001/playx",
     entry_points={"console_scripts": ["playx = playx.main:main"]},
-    version="1.5.2",
+    version=__version__,
     license="MIT",
     install_requires=["youtube_dl", "requests", "beautifulsoup4", "selenium", "lxml",],
 )

@@ -1,3 +1,5 @@
+from .version import __version__
+
 name = "playx"
 
 __all__ = [

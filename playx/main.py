@@ -6,6 +6,7 @@
 
 import argparse
 
+from .version import __version__
 from playx.logger import Logger
 
 from playx.cache import Cache, clean_url_cache
@@ -31,6 +32,7 @@ def parse():
                                      the github\
                                      (https://github.com/NISH1001/playx) page"
     )
+    parser.add_argument("--version", action="version", version=__version__)
     parser.add_argument(
         "song",
         help="Name or youtube link of song to download",
