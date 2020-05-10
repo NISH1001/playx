@@ -46,6 +46,8 @@ Play any songs that come in your mind.
   python setup.py install
   ```
 
+  This method is the recommended one.
+
 ------------
 
 ## Requirements/Dependencies
@@ -66,6 +68,13 @@ Play any songs that come in your mind.
 > For *arch linux*, you can use **pacman** package manager accordingly.
 > Numpy is used for Markov-Chain based playlist.
 
+
+------------
+
+## Releases
+These releases are almost stable.
+
+- [v1.5.2-approximate-void](https://github.com/NISH1001/playx/releases/tag/v1.5.2-approximate-void)
 
 ------------
 
