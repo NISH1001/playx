@@ -119,7 +119,7 @@ optional arguments:
   -r, --no-related      Disable playing related songs extracted from YouTube
   -k, --disable-kw      Disable addition of keywords while searching the song on YouTube.
   -c, --clean           Clean(fix) broken references
-  --sync-pl PLAYLIST    Sync the playlists. Pass the name as arguement. If all the playlists are to be synced, just pass [All].
+  --sync-pl PLAYLIST    Sync the playlists. Pass the name as argument. If all the playlists are to be synced, just pass [All].
   -l, --lyrics          Show lyircs of the song.
   --shuffle             Shuffle the playlist in case it is one, else the option will have no effect.
   --repeat [NUMBER]     Put the passed entity on repeat , be it a playlist or a song. If an arg is not passed, infinite loop is considered. (default = Infinite)
