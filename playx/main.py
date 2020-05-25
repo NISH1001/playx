@@ -109,7 +109,7 @@ def parse():
         default=None,
         type=str,
         help="Sync the playlists. Pass the name as\
-                        arguement. If all the playlists are to be \
+                        argument. If all the playlists are to be \
                         synced, just pass [All].",
         metavar="PLAYLIST",
     )
