@@ -68,11 +68,7 @@ class BillboardIE:
     def get_name_of_chart(self):
         """Get the name of the chart from the webpage."""
         name = self.soup.findAll("h1", attrs={"class": "charts-hero__chart-name"})
-        name = re.sub(
-            r">|<",
-            "",
-            re.findall(r">.*<", re.findall(r"<span.*/span>", str(name[0]))[0])[0],
-        )
+        name = name[0].findAll('span')[0].contents[0]
         logger.debug(name)
         self.chart_name = name
 
