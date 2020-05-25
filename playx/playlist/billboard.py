@@ -28,7 +28,7 @@ class Song(SongMetadataBase):
         super().__init__()
         self.title = title
         self.artist = artist
-        self.rank = 0
+        self.rank = rank
         self._create_search_querry()
         self._remove_duplicates()
 
@@ -36,7 +36,7 @@ class Song(SongMetadataBase):
         """
         Create a search querry using the title and the artist name.
         """
-        self.search_querry = self.title + " " + self.artist
+        self.search_query = self.title + " " + self.artist
 
 
 class BillboardIE:
@@ -78,46 +78,24 @@ class BillboardIE:
 
     def get_chart(self):
         """New method to extract billboard chart data."""
-        chart_contents = self.soup.findAll("li", attrs={"class": "chart-list__element"})
+        chart_contents = self.soup.findAll(
+                            "li",
+                            attrs={"class": "chart-list__element"}
+                        )
 
         for chart_element in chart_contents:
-            rank = re.sub(
-                r">|<",
-                "",
-                re.findall(
-                    r">.*<",
-                    str(
-                        chart_element.findAll(
-                            "span", attrs={"class": "chart-element__rank__number"}
-                        )[0]
-                    ),
-                )[0],
-            )
-            track = re.sub(
-                r">|<",
-                "",
-                re.findall(
-                    r">.*<",
-                    str(
-                        chart_element.findAll(
-                            "span", attrs={"class": "chart-element__information__song"}
-                        )[0]
-                    ),
-                )[0],
-            )
-            artist = re.sub(
-                r">|<",
-                "",
-                re.findall(
-                    r">.*<",
-                    str(
-                        chart_element.findAll(
-                            "span",
-                            attrs={"class": "chart-element__information__artist"},
-                        )[0]
-                    ),
-                )[0],
-            )
+            rank = chart_element.findAll(
+                            'span',
+                            attrs={'class': 'chart-element__rank__number'}
+                        )[0].contents[0]
+            track = chart_element.findAll(
+                            'span',
+                            attrs={'class': 'chart-element__information__song'}
+                        )[0].contents[0]
+            artist = chart_element.findAll(
+                            'span',
+                            attrs={'class': 'chart-element__information__artist'}
+                        )[0].contents[0]
             self.chart.append(Song(track, artist, rank))
 
 
