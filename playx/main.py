@@ -275,9 +275,17 @@ def main():
 
     # first check for auto playlist
     elif args.auto:
-        # ap = CountBasedAutoPlaylist('~/.playx/logs/log.cat')
-        ap = MarkovBasedAutoPlaylist("~/.playx/logs/log.cat")
-        song = ap.generate()
+        try:
+            # ap = CountBasedAutoPlaylist('~/.playx/logs/log.cat')
+            log_path = "~/.playx/logs/log.cat"
+            ap = MarkovBasedAutoPlaylist(log_path)
+            song = ap.generate()
+        except (AssertionError):
+            logger.info("Unable to generate playlist...")
+            logger.info(
+                f"Either log at [{log_path}] is not in existence or is a pure void... :/"
+            )
+            exit(0)
     else:
         song = ""
 

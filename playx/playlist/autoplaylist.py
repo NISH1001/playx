@@ -23,6 +23,7 @@ logger = Logger("autoplaylist")
 class AbstractAutoPlaylist(ABC):
     def __init__(self, log_path):
         self.log_path = pathlib.Path(log_path).expanduser()
+        assert self.log_path.exists()
         self.data = []
 
     @abstractmethod
@@ -44,6 +45,8 @@ class AbstractAutoPlaylist(ABC):
         with open(log_path) as f:
             for line in f:
                 line = line.strip().lower()
+                if not line:
+                    continue
                 if "playing" not in line:
                     continue
                 matches = re.findall(r"\[.*?\]", line)
@@ -71,6 +74,7 @@ class CountBasedAutoPlaylist(AbstractAutoPlaylist):
 
     def generate(self):
         data = self.get_timeseries_data(self.log_path)
+        assert data
         ts, songs = zip(*data)
         counter = Counter(songs)
         songs_frequent, c = zip(*counter.most_common())
@@ -101,6 +105,7 @@ class MarkovBasedAutoPlaylist(AbstractAutoPlaylist):
 
     def generate(self):
         data = self.get_timeseries_data(self.log_path)
+        assert data
         ts, songs = zip(*data)
 
         # build trie and probabilities
