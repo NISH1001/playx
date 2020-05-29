@@ -299,6 +299,7 @@ This is generated using [pydeps](https://github.com/thebjorn/pydeps). The codeba
 - ~~local search based on term matching~~
 - use Factorization Machines to improve auto-playlist
 - use logs to create simple recommendations
+- Add 3rd-party integration like Spotify (using authentication mechanism). [Priority - Low]
 
 
 ## Acknowledgements
