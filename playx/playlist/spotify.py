@@ -40,6 +40,9 @@ class SpotifyIE(PlaylistBase):
     def get_data(self):
         r = get(self.URL)
         soup = BeautifulSoup(r.text, "html.parser")
+        text = "Spotify is currently not available in your country."
+        if text in str(soup):
+            raise ValueError(text)
         s = soup.findAll(attrs={"class": "track-name-wrapper"})
         name = soup.findAll(attrs={"class": "media-bd"})
         name = re.sub(

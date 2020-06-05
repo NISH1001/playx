@@ -206,17 +206,22 @@ def playx(parser, args, song):
     logger.debug(args.no_related)
     playlist = Playlist(song, args.pl_start, args.pl_end, args.shuffle)
     if playlist.is_playlist():
-        data = playlist.get_data()
-        player = Player(
-            data,
-            playlisttype=playlist.type,
-            show_lyrics=args.lyrics,
-            dont_cache_search=args.skip_cached,
-            no_cache=args.no_cache,
-            no_related=args.no_related,
-            on_repeat=args.repeat,
-        )
-        player.play()
+        try:
+            data = playlist.get_data()
+            player = Player(
+                data,
+                playlisttype=playlist.type,
+                show_lyrics=args.lyrics,
+                dont_cache_search=args.skip_cached,
+                no_cache=args.no_cache,
+                no_related=args.no_related,
+                on_repeat=args.repeat,
+            )
+            player.play()
+        except ValueError as e:
+            logger.info(str(e))
+        except IndexError:
+            logger.info("Something went wrong. Maybe a nearby supernova xploded... :D")
     elif not song:
         parser.print_help()
     else:
