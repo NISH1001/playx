@@ -18,14 +18,14 @@ class SongMetadata(SongMetadataBase):
         super().__init__()
         self.title = title
         self.subtitle = subtitle
-        self._create_search_querry()
+        self._create_search_query()
         self._remove_duplicates()
 
-    def _create_search_querry(self):
+    def _create_search_query(self):
         """
         Create a search querry.
         """
-        self.search_querry = self.title + " " + self.subtitle
+        self.search_query = self.title + " " + self.subtitle
 
 
 class JioSaavnIE(PlaylistBase):

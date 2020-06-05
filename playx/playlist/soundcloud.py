@@ -18,11 +18,11 @@ class SoundCloudTrack(SongMetadataBase):
         self.download_url = download_url
         self.URL = URL
 
-    def _create_search_querry(self):
+    def _create_search_query(self):
         """
-        Create a search querry.
+        Create a search query.
         """
-        self.search_querry = self.URL
+        self.search_query = self.URL
 
 
 class SoundCloudPlaylistExtractor(PlaylistBase):

@@ -18,14 +18,14 @@ class SpotifySong(SongMetadataBase):
         self.title = title
         self.artist = artist
         self.album = album
-        self._create_search_querry()
+        self._create_search_query()
         self._remove_duplicates()
 
-    def _create_search_querry(self):
+    def _create_search_query(self):
         """
         Create a search querry.
         """
-        self.search_querry = self.title + " " + self.artist
+        self.search_query = self.title + " " + self.artist
 
 
 class SpotifyIE(PlaylistBase):

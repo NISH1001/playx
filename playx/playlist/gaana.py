@@ -34,7 +34,7 @@ class SongMetadata(SongMetadataBase):
         self.artist_seokey = ""
         self.artist_tuple = artist_tuple
         self._update_artist()
-        self._create_search_querry()
+        self._create_search_query()
         self._remove_duplicates()
         self._remove_stopletters()
 
@@ -42,7 +42,7 @@ class SongMetadata(SongMetadataBase):
         """
         Remove letters like - and numbers from the searchquery
         """
-        self.search_querry = re.sub(r"-|[0-9]|&amp", " ", self.search_querry)
+        self.search_query = re.sub(r"-|[0-9]|&amp", " ", self.search_querry)
 
     def _update_artist(self):
         """
@@ -52,11 +52,11 @@ class SongMetadata(SongMetadataBase):
         for artist in self.artist_tuple:
             self.artist_seokey += " " + artist["seokey"]
 
-    def _create_search_querry(self):
+    def _create_search_query(self):
         """
         Update the search querry of the base class.
         """
-        self.search_querry = self.track_seokey + "" + self.artist_seokey
+        self.search_query = self.track_seokey + "" + self.artist_seokey
         self._remove_stopletters()
 
 
