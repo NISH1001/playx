@@ -5,6 +5,7 @@ import re
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 from pathlib import Path
 import json
 
@@ -99,9 +100,14 @@ class YoutubeRelatedIE(PlaylistBase):
         someting similar.
         """
         logger.info("Using YTMusic Method")
+        logger.debug(self.url)
         driver = self._get_driver()
         driver.get(self.url)
-        WebDriverWait(driver, 10).until(lambda driver: driver.current_url != self.url)
+
+        try:
+            WebDriverWait(driver, 10).until(lambda driver: driver.current_url != self.url)
+        except TimeoutException:
+            raise DownloadError("Timeout exception occurred")
 
         # The URL should now be updated
         updated_url = driver.current_url
