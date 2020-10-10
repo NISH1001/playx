@@ -14,6 +14,7 @@ from dataclasses import dataclass
 
 import requests
 import youtube_dl
+from youtube_search import YoutubeSearch
 from playx.stringutils import fix_title, is_song_url
 
 
@@ -143,31 +144,18 @@ def search_youtube(query, disable_kw=False):
         query = add_better_search_kw(query)
     logger.debug("Searching youtube for :: {}".format(query))
     base_url = "https://www.youtube.com"
-    url = base_url + "//results?sp=EgIQAVAU&q=" + query
-    try:
-        response = requests.get(url)
-    except Exception as e:
-        logger.error("ERROR: {}".format(e))
-        sys.exit()
-    soup = BeautifulSoup(response.content, "html.parser")
 
+    # Use youtube_search to search youtube for the query
+    results = YoutubeSearch(query, max_results=10).to_dict()
     videos = []
-    for tile in soup.find_all(attrs={"class": "yt-lockup-tile"}):
-        yt_uix_tile = tile.find(attrs={"class": "yt-uix-tile-link"})
+
+    for result in results:
         youtube_metadata = YoutubeMetadata()
-        youtube_metadata.url = base_url + yt_uix_tile["href"]
-        youtube_metadata.title = yt_uix_tile["title"]
-        description = tile.find("div", {"class": "yt-lockup-description"})
-        youtube_metadata.description = (
-            description.get_text().strip()
-            if description
-            else "No description available"
-        )
-        duration = tile.find("span", {"class": "video-time"})
-        youtube_metadata.duration = (
-            duration.get_text() if duration else "unknown duration"
-        )
+        youtube_metadata.title = result['title']
+        youtube_metadata.url = base_url + result['url_suffix']
+        youtube_metadata.duration = result['duration']
         videos.append(youtube_metadata)
+
     return videos
 
 
