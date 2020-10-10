@@ -13,5 +13,12 @@ setup(
     entry_points={"console_scripts": ["playx = playx.main:main"]},
     version=__version__,
     license="MIT",
-    install_requires=["youtube_dl", "requests", "beautifulsoup4", "selenium", "lxml", "youtube_search"],
+    install_requires=[
+        "youtube_dl",
+        "requests",
+        "beautifulsoup4",
+        "selenium",
+        "lxml",
+        "youtube_search",
+    ],
 )
