@@ -105,7 +105,9 @@ class YoutubeRelatedIE(PlaylistBase):
         driver.get(self.url)
 
         try:
-            WebDriverWait(driver, 10).until(lambda driver: driver.current_url != self.url)
+            WebDriverWait(driver, 10).until(
+                lambda driver: driver.current_url != self.url
+            )
         except TimeoutException:
             raise DownloadError("Timeout exception occurred")
 
