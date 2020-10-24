@@ -137,15 +137,13 @@ Logger:
 ### Example
 **Play by song name**
 ```bash
-playx man sold world nirvana
+playx <song name>
 ```
-This plays the song titled "The man who sold the world by Nirvana"  
   
 **Play by youtube link**  
 ```bash
-playx https://www.youtube.com/watch?v=4zLfCnGVeL4
+playx <YT url>
 ```
-This plays the song *The Sound of Silence*.   
 
 **Play by soundcloud links**
 ```sh
@@ -155,15 +153,13 @@ This plays soundcloud [track](https://api.soundcloud.com/tracks/232673157)
   
 **Play from youtube playlist**  
 ```bash
-playx https://www.youtube.com/playlist?list=PLwg22VSCR0W6cwuCKUJSkX72xEvYXS0Zx
+playx <YT playlist URL>
 ```
-This plays the songs from my personal (and public) playlist named *Chilld and Wisdom*.
 
 **Play from a Billboard Chart**
 ```sh
 playx hot-100
 ```
-This plays the songs from Billboards [hot-100](https://www.billboard.com/charts/hot-100) chart. The billboard charts can be found [here](https://www.billboard.com/charts)  
 
 **Play from spotify playlist**
 ```sh
@@ -185,10 +181,8 @@ This plays songs from the JioSaavn [playlist](https://www.jiosaavn.com/featured/
 
 **Play from YouTube Music Playlist**
 ```sh
-playx https://music.youtube.com/playlist?list=PL4fGSI1pDJn4pTWyM3t61lOyZ6_4jcNOw
+playx <YT Music playlist url>
 ```
-
-This plays songs from this [playlist](https://music.youtube.com/playlist?list=PL4fGSI1pDJn4pTWyM3t61lOyZ6_4jcNOw)
 
 **Play from local playlist**
 
@@ -209,7 +203,7 @@ This will automatically generate a playlist by using the frequency of songs play
 
 **Term-Based Search**
 ```bash
-playx --rsearch pink floyd
+playx --rsearch <search terms>
 ```
 This will automatically generate a playlist of cached songs containing the provided terms.
   
@@ -226,7 +220,7 @@ Structure is like:
     |- playxlist/
 ```
 
-*songs*: This stores all the songs downloaded by `playx`  
+*songs*: This stores all the songs
 *logs*: This stores the log for user activities of songs that are searched and played with creation date. This will be used for recommendation of songs in future version
 *playlist*: This stores all the cached playlists files.
 *playxlist*: Stores all the playxlist files.
